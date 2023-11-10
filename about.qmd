@@ -1,0 +1,45 @@
+---
+title: "Hakkımızda"
+image: cropped-pencil-918449_960_720.webp
+about:
+  template: marquee
+  links:
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/veridefteri
+    - icon: linkedin
+      text: LinkedIn
+      href: https://linkedin.com
+    - icon: github
+      text: Github
+      href: https://github.com
+
+---
+
+Veri Bilimi ya da Yapay Öğrenme konusunda -çoğu İngilizce olmakla birlikte- pek çok kaynak mevcut. Ancak veri temizlerken, tahmin modeli çuvalladığında ya da eksik bir sütun yüzünden işler sarpa sarınca yapılacakları derli toplu bir yerde bulmak oldukça güç. Kaldı ki herkesin tecrübeyle biriktirdiği, yastık altında sakladığı bir sürü notu var. İşte bunları konuşurken Veri Defteri diye bir sayfa kurmaya karar verdik. Hem o notları toplayalım, hem de Veri Bilimi ve Yapay Öğrenme konularında duyuruların, parlak fikirlerin, veri kümelerinin yer aldığı bir sayfa yapalım dedik. Veri Defteri her ne kadar üçümüzün başının altından çıktıysa da, zaman içinde tanıdık-tanımadık, hesap-kitap işlerine meraklı arkadaşların da bize destek vereceğini düşündük. Lütfen haberlerinizi, yazdıklarınızı ve önerilerinizi bizden eksik etmeyin.
+
+----
+
+::: {layout-ncol=2}
+![](ilker.webp){fig-align="right"  width=300}
+
+
+İlker Birbil, doktora çalışmasını 2002 yılında North Carolina State Üniversitesi’nde Endüstri Mühendisliği ana dalı ile Yöneylem Araştırması ve Matematik yan dallarında tamamlamıştır. Ardından 2002 - 2004 yılları arasında Erasmus Yönetim Araştırma Enstitüsü’nde doktora sonrası araştırma bursu ile çalışmalarını sürdüren İlker Birbil, 2004-2017 yılları arasında Sabancı Üniversitesi’nde öğretim üyesi olarak çalışmıştır. Halen Erasmus Üniversitesi Rotterdam'da veri bilimi ve optimizasyon öğretim üyesi olarak görev almaktadır. Matematiksel programlama alanında algoritma tasarımı genel başlığı altında toplanabilecek kuramsal ve uygulamalı pek çok çalışması vardır. Bir süre Radikal gazetesinde, son dönemde de BirGün Pazar'da bilim politikası ve üniversiteler üzerine yazıları yayımlanmıştır. Ayrıca akademik hayat üzerine yazıların yer aldığı Bol Bilim isimli sayfanın kurucularından biridir.
+:::
+
+----
+
+::: {layout-ncol=2}
+![](birol.webp){fig-align="right"  width=300}
+
+Birol Yüceoğlu, lisans ve yüksek lisans eğitimini Sabancı Üniversitesi Endüstri Mühendisliği bölümünde tamamladı. Doktora eğitimini 2015 yılında Maastricht Üniversitesi'nde Yöneylem Araştırması üzerine yaptı. Halen Migros T.A.Ş. Ar-Ge Merkezi'nde çalışmakta ve Sabancı Üniversitesi Veri Analitiği Tezsiz Yüksek Lisans programında ders vermektedir. Araştırma alanları veri analizi uygulamaları, çizge teorisi ve tamsayı programlamadır.
+:::
+
+----
+
+::: {layout-ncol=2}
+
+![](kaan.webp){fig-align="right"  width=300}
+
+Kaan Öztürk, fizik lisans ve yüksek lisans derecelerini Boğaziçi Üniversitesi'nden, fizik doktora derecesini Rice Üniversitesi'nden aldı. Işık ve Yeditepe üniversitelerinin bilişim bölümlerinde öğretim üyesi olarak görev yaptı. 2015-2016 döneminde TÜBİTAK desteğiyle Rice Üniversitesi'nde ziyaretçi araştırmacı, 2016-2017 döneminde ise Sabancı Üniversitesi'nde doktoraüstü araştırmacı olarak çalıştı. 2017-2019 arasında Boğaziçi Üniversitesi Bilgisayar Mühendisliği bölümünde programlamaya giriş dersleri verdi. 2019'dan beri özel sektörde veri bilimi uzmanı olarak çalışıyor.
+:::
