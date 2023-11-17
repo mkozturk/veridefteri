@@ -1,12 +1,9 @@
 ---
 title: Dosya okuma ve yazma
 author: Kaan Öztürk
-jupyter: python3
 ---
 
-Yazı dizimizin bu bölümünde, dosya okuma ve yazma yöntemlerinden bahsedeceğiz. Önce herhangi bir özel şekilde yapılanmamış olan düz metin dosyalarını işlemeyi göreceğiz. Ardından _csv_ modülüyle CSV biçiminde yapılanmış dosyaları okuyup yazmayı inceleyeceğiz. JSON, ZIP, PDF, Word, Excel, HTML dosyalarının işlenmesine kısaca değineceğiz. Son olarak, Python oturumunda yarattığımız nesneleri ikili (binary) formda dosyaya kaydetmemizi ve sonra dosyadan tekrar yüklememizi sağlayan _pickle_ modülünün kullanımını özetleyeceğiz.
-
-Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.
+Yazı dizimizin bu bölümünde, dosya okuma ve yazma yöntemlerinden bahsedeceğiz. Önce herhangi bir özel şekilde yapılanmamış olan düz metin dosyalarını işlemeyi göreceğiz. Ardından `csv` modülüyle CSV biçiminde yapılanmış dosyaları okuyup yazmayı inceleyeceğiz. JSON, ZIP, PDF, Word, Excel, HTML dosyalarının işlenmesine kısaca değineceğiz. Son olarak, Python oturumunda yarattığımız nesneleri ikili (binary) formda dosyaya kaydetmemizi ve sonra dosyadan tekrar yüklememizi sağlayan `pickle` modülünün kullanımını özetleyeceğiz.
 
 ## Genel dosya okuma/yazma
 
@@ -70,9 +67,9 @@ for satır in f:
 f.close()
 ```
 
-with ... as
----
-Yukarıda, dosyayı `open()` ile açtıktan sonra `close()` metoduyla kapatmak gerektiğini söyledik. Bu basit bir kural olsa da, karmaşık programlar içinde gözden kaçabiliyor. Dosya açma/kapama işlemini daha düzenli hale getirmek için Python programcıları _context manager_ denen bir yapı kullanırlar. Bir context manager oluşturmak için `with` komutu kullanılır.
+### Context manager `with ... as`
+
+Yukarıda, dosyayı `open()` ile açtıktan sonra `close()` metoduyla kapatmak gerektiğini söyledik. Bu basit bir kural olsa da, karmaşık programlar içinde gözden kaçabiliyor. Dosya açma/kapama işlemini daha düzenli hale getirmek için Python programcıları _context manager_ denen bir yapı kullanırlar. Bir context manager oluşturmak için `with ... as` komutu kullanılır.
 
 ```{python}
 with open("deneme.txt") as f:
@@ -201,8 +198,7 @@ CSV dosyalarını veri analizi paketi _pandas_ ile de okumak ve yazmak mümkünd
 
 Pandas'ın `read_csv()` fonksiyonu dosyanın içeriğini bir veri çerçevesi olarak okur; ardından bu veri çerçevesinden çeşitli satırlar veya sütunlar alınabilir. Pandas kullanımı bu notların kapsamı dışında olduğu için ayrıntıya girmiyorum.
 
-Diğer dosya formatları
-====
+## Diğer dosya formatları
 
 Birçok dosya biçimi için Python'da özelleşmiş kütüphaneler vardır. Bunların bazılarına değinelim.
 
@@ -309,8 +305,8 @@ with zipfile.ZipFile('arsiv.zip') as z:
 
 Bir ZIP arşivindeki bir dosyayı açarak diske kaydetmek için `extract()`, arşivdeki bütün dosyaları açmak için `extractall()` fonksiyonları kullanabiliriz.
 
-Değişkenlerimizi kaydetmek: pickle
-====
+## Değişkenlerimizi kaydetmek: pickle
+
 Bir oturumda hazırladığınız değişkenleri, oturumu kapattığınızda kaybetmemek isterseniz bunları ikili (binary) bir veri yapısı haline getirip diske kaydetmeniz gerekir. Bu işi standart kütüphanedeki [_pickle_ modülü](https://docs.python.org/3/library/pickle.html) ile yapabilirsiniz. Neredeyse bütün Python nesnelerini (kendi tanımladığımız nesne sınıfları dahil) dosyaya kaydetmeniz ve sonra tekrar okumanız mümkündür. Bu işleme _serialization_ adı verilir.
 
 Birkaç değişken tanımlayalım.
