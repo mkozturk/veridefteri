@@ -1,0 +1,7 @@
+---
+title: Veri Bilimciler İçin Python Ekosistemi
+author: Kaan Öztürk
+date: Oct. 30, 2017
+categories:
+    - Başlangıç
+---

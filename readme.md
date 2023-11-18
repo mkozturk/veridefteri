@@ -17,7 +17,7 @@ Quarto, kod içeren belgeleri çalıştıracaktır. Bunun için bir hesaplama or
 
 Ardından `requirements.txt` kullanarak gerekli paketleri yeni sanal ortama kurun.
 
-    $ pip install -r requirement.txt
+    (.venv)$ pip install -r requirement.txt
 
 Eğer yazınız için yeni bir kütüphane gerekiyorsa `requirements.txt` içine ekleyip işlemi tekrarlayın. Yeni halini github reposuna push etmeyi unutmayın.
 
@@ -29,24 +29,18 @@ Jupyter notebook (`ipynb`) belgelerini de doğrudan alabilir. Web sitesini hazı
 
 ### Dosya düzeni
 
-Quarto, `posts/` dizini altındaki `.qmd` veya `.ipynb` belgelerini birer blog yazısına dönüştürür. Yeni bir yazı eklediğinizde, yazıyı ve ilgili belgelerini (resim, modül, data vs) bir altdizinle bunun altına koyun:
+Quarto, `posts/` dizini altındaki `.qmd` veya `.ipynb` belgelerini birer blog yazısına dönüştürür. Yazılar
+`posts/<yıl>/<ay>/<gün>/<yazı-basligi>/index.qmd` yapısıyla düzenlenmelidir. Örneğin
 
-    posts/
-        2022/
-            blog_yazısı_1/
-                blog_yazim.qmd
-                fig1.png
-                fig2.png
-            blog_yazısı_2/
-                ikinci_blog_yazim.qmd
-        2023/
-            hede_/
-                hede_nedir.qmd
-                img/
-            hodo/
-                neden_hodo.ipynb
+`posts/2017/10/30/jupyter-notebook-nedir/index.qmd`
 
-Çok sık yazı yazmadığımız için yazıları yıllık bölümlere ayırmak yeterli. Ama hiç bölmemek bulmayı zorlaştırır. Bu dizin yapısının web sitesinin dizeniyle ilgisi olmayacak.
+Bu şekilde yazı, `veridefteri.com/posts/2017/10/30/jupyter-notebook-nedir/` URL'sinde yayınlanacak. Böylece orijinal Wordpress URL'lerimize yakın bir yapı olacak. (`posts/` parçası hariç)
+
+Yazıyla ilgili dosyaları (resim, modül, data vs) yazıyla aynı dizine, veya bir altdizine koyabilirsiniz.
+
+Jupyter belgesini `qmd`'ye çevirmek için:
+
+`$ quarto convert my_notebook.ipynb --output index.qmd`
 
 ### Metaveriler
 Her yazının en üstünde yazının başlığı, yazarı, tarihi ve kategorilerini belirten, üç çizgiyle başlayıp biten, YAML formatında metaveri bulunmalı. Örneğin
@@ -83,4 +77,6 @@ Alternatif olarak tarayıcınızda `_site/index.html` sayfasını açarak önizl
 
 ## Yazıyı yayınlamak
 
-Ayrıntıları site yayına hazır hale geldiği zaman belirleyeceğiz. Şimdilik düzenlenmiş yazıları repoya push edelim.
+Siteyi Github Pages ile host edeceğiz. Yayınlama için ayrıntılı bilgi şurada:
+
+https://quarto.org/docs/publishing/github-pages.html#publish-command

@@ -1,0 +1,8 @@
+---
+title: Jupyter Notebook - R ve Julia
+author: İlker Birbil
+categories:
+    - Başlangıç
+    - Genel
+date: Nov. 12, 2017
+---
