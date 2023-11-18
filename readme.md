@@ -30,15 +30,15 @@ Jupyter notebook (`ipynb`) belgelerini de doğrudan alabilir. Web sitesini hazı
 ### Dosya düzeni
 
 Quarto, `posts/` dizini altındaki `.qmd` veya `.ipynb` belgelerini birer blog yazısına dönüştürür. Yazılar
-`posts/<yıl>/<ay>/<gün>/<yazı-basligi>/index.qmd` yapısıyla düzenlenmelidir. Örneğin
+`posts/<yıl>/<ay>/<gün>/<yazı-basligi>/index.ipynb` yapısıyla düzenlenmelidir. Örneğin
 
-`posts/2017/10/30/jupyter-notebook-nedir/index.qmd`
+`posts/2017/10/30/jupyter-notebook-nedir/index.ipynb`
 
 Bu şekilde yazı, `veridefteri.com/posts/2017/10/30/jupyter-notebook-nedir/` URL'sinde yayınlanacak. Böylece orijinal Wordpress URL'lerimize yakın bir yapı olacak. (`posts/` parçası hariç)
 
 Yazıyla ilgili dosyaları (resim, modül, data vs) yazıyla aynı dizine, veya bir altdizine koyabilirsiniz.
 
-Jupyter belgesini `qmd`'ye çevirmek için:
+Alternatif olarak `index.qmd` kullanılabilir. Jupyter belgesini `qmd`'ye çevirmek için:
 
 `$ quarto convert my_notebook.ipynb --output index.qmd`
 
@@ -52,6 +52,8 @@ Her yazının en üstünde yazının başlığı, yazarı, tarihi ve kategoriler
     categories:
         - yapay öğrenme
     ---
+
+Bu metaveri qmd formatındaki dosyanın başına eklenebilir. Belgeniz ipynb formatındaysa en başa "raw" bir metin hücresi olarak eklenmelidir (markdown hücresi olmaz).
 
 `posts/_metadata.yml` dosyasındaki metaveriler bütün yazılara uygulanır.
 
