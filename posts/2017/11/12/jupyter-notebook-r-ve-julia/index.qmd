@@ -1,8 +1,10 @@
 ---
-title: Jupyter Notebook - R ve Julia
-author: İlker Birbil
+title: "[TODO] Jupyter Notebook - R ve Julia"
+author: "İlker Birbil"
 categories:
     - Başlangıç
     - Genel
+image: 6502c-walnut-963665_1280.jpg
 date: Nov. 12, 2017
 ---
+

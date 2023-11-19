@@ -2,6 +2,7 @@
 title: Groupby
 author: Birol Yüceoğlu
 date: Oct. 30, 2017
+image: ee392-puzzle-2778019_1280.jpg
 categories:
     - pandas
     - veri önişleme
