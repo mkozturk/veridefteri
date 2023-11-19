@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-01-06">
+
+<title>Veri Defteri - Python Programlamaya Giriş 7 - Fonksiyonlar</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 7 - Fonksiyonlar</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 6, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Python Programlamaya Giriş yazı dizimize Python fonksiyonlarının temelleriyle devam ediyoruz. Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<p>Yazı dizimizin şimdiye kadarki bölümlerinde bir programı inşa etmek için gereken bütün yapı taşlarını gördük. <em>Prosedürel programlama</em> denen paradigma içinde programlar birbiri arkasından işlenir, bir karar verilmesi gerektiğinde program akışı iki yoldan birini seçer, veya bir döngü içindeki bir kod parçası tekrarlanır.</p>
+<p>Teorik olarak, her türlü programı yazmak için bu yapılar yeterli. Ancak, Yogi Berra’nın dediği gibi: Teoride teori ve pratik arasında fark yoktur, ama pratikte vardır.</p>
+<p>Kod yazarken işlemleri sık sık farklı yerlerde tekrarlamamız gerekir. Söz gelişi, bir yatırımın belli bir dönem sonunda bileşik faizle ne miktara ulaştığını yazmak için bir döngü yazabiliriz. Bu tür bir işlemi büyük bir program içinde değişik yerlerde (mesela farklı yatırım araçları için) kullanmamız gerekebilir. Programcılar böyle tekrarlanan işler için aynı kodu tekrar tekrar yazmaktansa, bunları bir <em>fonksiyon</em> (prosedür veya yordam olarak da bilinir) olarak paketleyip kullanmayı tercih ederler. Fonksiyon kullanmak sayesinde:</p>
+<ul>
+<li>Aynı kodu defalarca yazmak gerekmez.</li>
+<li>Tekrarlama yüzünden doğacak hatalar ortadan kalkar.</li>
+<li>Bellek (RAM) gereksiz yere dolmaz. Kod parçası onlarca kere tekrarlanmak yerine bir kere yazılır.</li>
+<li>Programcı küçük ayrıntılara tekrar tekrar kafa yormak zorunda kalmaz.</li>
+<li>İşleri küçük birimlere bölmek, programlama hatalarını bulmayı kolaylaştırır.</li>
+<li>Programlama dilinin çekirdek tanımında bulunmayan üst seviye işlemleri tek komutla yapmayı sağlar.</li>
+<li>Fonksiyon kütüphaneleri, uzmanlaşmış programcılar tarafından hızlı ve verimli hale getirilebilir.</li>
+</ul>
+<p>Bu faydalar sadece Python değil, her türlü programlama dili için geçerlidir tabii.</p>
+<p>Bir fonksiyon bir kara kutu gibi düşünülebilir: Aldığı <em>parametre</em>ler onun girdisi, verdiği (“döndürdüğü”) değer ise çıktısıdır. Fonksiyonlara istediğiniz sayıda parametre verebilirsiniz. Parametre almayan ve/veya geriye bir değer vermeyen fonksiyonlar da olabilir.</p>
+<section id="kütüphane-fonksiyonları-kullanma" class="level2">
+<h2 class="anchored" data-anchor-id="kütüphane-fonksiyonları-kullanma">Kütüphane fonksiyonları kullanma</h2>
+<p>Bir <em>kütüphane</em> belli bir işlev için hazırlanan fonksiyonların topluluğudur. Bir kütüphane matematik fonksiyonlarını toplarken, başka bir kütüphane kelime işleme, bir başkası ağ iletişimi, bir başkası oyun modülleri barındırıyor olabilir. Kütüphaneler bir dilin resmi tanımına dahil olabilir ve kurulumda beraber gelebilir (bu durumda onlara <em>standart kütüphane</em> denir), veya üçüncü kişiler tarafından hazırlanmış olabilir.</p>
+<p>Python dili çok zengin bir <a href="https://docs.python.org/3/library/index.html">standart kütüphaneye</a> sahiptir. Matematik işlemleri, istatistik işlemleri, gün ve saat işlemleri, dosya sıkıştırma, internet protokolleri, HTML, işletim sistemi yönetimi, grafik arayüz oluşturma, ve daha bir çok işlem için gereken hazır fonksiyonlar Python ile birlikte gelir. Bunların dışında yüzlerce başka kütüphane de mevcuttur, istediğinizde bunları sisteminize kurup kullanabilirsiniz. Daha sonraki yazılarda kendi kütüphanelerimizi nasıl oluşturacağımızı da göreceğiz. Bu yazıda sadece matematik fonksiyonları kütüphanesini örnek olarak kullanacağız.</p>
+<p>Kütüphaneler diskimize kurulu olarak hazır bekliyor olsalar da, onları kullanmak için önce <code>import</code> komutuyla yorumlayıcıya yüklememiz gerekir.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( math.sqrt(<span class="dv">2</span>) )</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( math.sin(math.pi<span class="op">/</span><span class="dv">2</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.4142135623730951
+1.0</code></pre>
+</div>
+</div>
+<p>Burada <code>math.sqrt(2)</code> ifadesi bir fonksiyon çağrısıdır. Matematik modülü <code>math</code> içindeki karekök fonksiyonu <code>sqrt</code> çağrılır ve 2 argümanı verilir. Aradaki nokta bir <em>üyelik</em> belirtir; <code>sqrt</code> fonksiyonu <code>math</code> modülünün altındadır. Keza <code>math.sin</code> aynı modülün altındaki sinüs fonksiyonudur, <code>math.pi</code> ise <span class="math inline">\(\pi\)</span> sayısıdır.</p>
+<p>Siz ayrıca <code>pi</code> veya <code>sqrt</code> isimli değişkenler veya fonksiyonlar tanımlamış olsanız da, onlar ile bu isimler karışmaz; <code>pi</code> ile <code>math.pi</code> farklıdır. Burada <code>math</code> bir <em>isim alanı</em> (namespace) oluşturur; kendi tanımlarını ayrı tutar.</p>
+<p>Yükleme sırasında modülün adını değiştirebiliriz. Özellikle uzun isimli modülleri daha kısa isimle kullanmak için bu özellik faydalı olur.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math <span class="im">as</span> m</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( m.sqrt(<span class="dv">2</span>) )</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( m.sin(m.pi<span class="op">/</span><span class="dv">2</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.4142135623730951
+1.0</code></pre>
+</div>
+</div>
+<p>Veya, modüldeki bütün isimlere ihtiyacınız yoksa, onları mevcut isim alanınıza tek tek belirleyerek alabilirsiniz. İsim değiştirme burada da geçerlidir. Modül içindeki isimleri değiştirerek alabilirsiniz.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sqrt, sin</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> pi <span class="im">as</span> π</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( sqrt(<span class="dv">2</span>) )</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>( sin(π<span class="op">/</span><span class="dv">2</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.4142135623730951
+1.0</code></pre>
+</div>
+</div>
+<p>(Jupyter defterinin kod hücresinde <span class="math inline">\(\pi\)</span> yazmak için <code>\pi</code> yazın ve <code>Tab</code> tuşuna basın.)</p>
+<p>Başka bir alternatif, modüldeki bütün isimleri mevcut isim alanına yüklemektir.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>cos(pi), tan(pi<span class="op">/</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>(-1.0, 0.9999999999999999)</code></pre>
+</div>
+</div>
+<p>Ancak bu usül Python programcıları tarafından tavsiye edilmez. Bir modül adı kullanmak, ister <code>math</code> ister kısaca <code>m</code>, bir isim alanı yaratır ve isim çatışmalarını engeller. Varsayalım ki <code>pi</code> veya <code>tan</code> değişkenlerini kodunuzda bir yerlerde önceden başka bir anlamda tanımladınız. Modülü <code>import *</code> ile yüklemekle önceki tanımları silersiniz, ve kodunuz biraz karmaşık ise bunu farketmeyebilirsiniz bile. Özellikle büyük modüllerde pek çok değişik isim gizli olabilir ve neyi sildiğinizi farketmeyebilirsiniz bile. En doğrusu, birazcık daha fazla yazmayı göze alıp bir modül ismi kullanmaktır.</p>
+<p>Bir modülde tanımlı bütün isimlere <code>dir</code> fonksiyonuyla erişilebilir.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="bu">dir</span>(math)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>['__doc__',
+ '__file__',
+ '__loader__',
+ '__name__',
+ '__package__',
+ '__spec__',
+ 'acos',
+ 'acosh',
+ 'asin',
+ 'asinh',
+ 'atan',
+ 'atan2',
+ 'atanh',
+ 'ceil',
+ 'copysign',
+ 'cos',
+ 'cosh',
+ 'degrees',
+ 'e',
+ 'erf',
+ 'erfc',
+ 'exp',
+ 'expm1',
+ 'fabs',
+ 'factorial',
+ 'floor',
+ 'fmod',
+ 'frexp',
+ 'fsum',
+ 'gamma',
+ 'gcd',
+ 'hypot',
+ 'inf',
+ 'isclose',
+ 'isfinite',
+ 'isinf',
+ 'isnan',
+ 'ldexp',
+ 'lgamma',
+ 'log',
+ 'log10',
+ 'log1p',
+ 'log2',
+ 'modf',
+ 'nan',
+ 'pi',
+ 'pow',
+ 'radians',
+ 'sin',
+ 'sinh',
+ 'sqrt',
+ 'tan',
+ 'tanh',
+ 'tau',
+ 'trunc']</code></pre>
+</div>
+</div>
+<p>Modüldeki belli bir fonksiyonun nasıl kullanıldığını hatırlamanız gerektiğinde <code>help</code> fonksiyonunu kullanabilirsiniz. Bu işlemle, fonksiyonun içine gömülü <em>belgeleme dizesi</em> (docstring) ekrana yazılır. Belgeleme dizelerinin nasıl oluşturulacağını bu yazının sonunda okuyabilirsiniz.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">help</span>(sin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Help on built-in function sin in module math:
+
+sin(...)
+    sin(x)
+    
+    Return the sine of x (measured in radians).
+</code></pre>
+</div>
+</div>
+</section>
+<section id="fonksiyon-tanımlama" class="level2">
+<h2 class="anchored" data-anchor-id="fonksiyon-tanımlama">Fonksiyon tanımlama</h2>
+<p>Şimdi kendimiz nasıl fonksiyon yaratabileceğimizi görelim. Python’da fonksiyonlar <code>def</code> kelimesiyle tanımlanır. Mesela:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f1(x):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>f1(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>f1(<span class="st">"merhaba"</span>), f1(<span class="fl">3.0</span><span class="op">*</span><span class="fl">4.25</span>), f1( (<span class="dv">2</span>,<span class="dv">37</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>merhaba
+12.75
+(2, 37)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>(None, None, None)</code></pre>
+</div>
+</div>
+<p>Bu fonksiyon basit bir iş yapıyor, aldığı parametreyi olduğu gibi ekrana basıyor. Herhangi bir nesne alabildiğine dikkat edin. Fonksiyonun geri verdiği bir değer yok. Bu yüzden yukarıdaki komutta çıktı hücresinde <code>(None, None, None)</code> görüyoruz.</p>
+<p>Fonksiyonların bir değer geri vermesi istiyorsak <code>return</code> komutunu kullanırız. Bu komut, arkasından gelen ifadenin değerinin, fonksiyonu çağıran programa bildirilmesini sağlar ve fonksiyonun çalışmasını bitirir.</p>
+<p>Aşağıdaki fonksiyon aldığı iki parametreye çarpma işlemini uygular ve sonucu geri verir:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> carp(a,b):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a<span class="op">*</span>b</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>carp(<span class="dv">2</span>,<span class="op">-</span><span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>-14</code></pre>
+</div>
+</div>
+<p>Geri verilen değeri daha sonraki bir işlemde kullanmak için bir değişkene atayabilirsiniz.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> carp(<span class="dv">2</span>, <span class="op">-</span><span class="dv">7</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">+</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>-11</code></pre>
+</div>
+</div>
+<p>C, C++, Fortran, Java gibi daha katı dillerden farklı olarak, Python’da fonksiyon tanımlarken, parametrelerin ne tipte (tamsayı, kayan noktalı sayı, dize, liste, vs.) olduğu belirtilmez. Bu özellik sayesinde Python programları farklı veri tipleriyle işlem yapma kolaylığı sağlar. Mesela <code>carp</code> bir dize ile bir tamsayı almaya itiraz etmez. Çarpma işlemini bu iki tiple tanımlandığı gibi yapıp sonucu geri verir.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>carp(<span class="st">"merhaba"</span>,<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>'merhabamerhabamerhaba'</code></pre>
+</div>
+</div>
+<p>Ama bu kolaylığın bir bedeli vardır: Fonksiyonun içinde, kullandığınız veri tipleri ile ilgili işlemlerin uyumlu olması gereklidir. Sözgelişi, iki dizeyi “çarpmak” bir hata mesajına yol açar, çünkü dizeler arasında <code>*</code> işlemi tanımlı değildir.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>carp(<span class="st">"merhaba"</span>,<span class="st">"dunya"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>TypeError: can't multiply sequence by non-int of type 'str'</code></pre>
+</div>
+</div>
+<p>Böyle hatalardan kaçınmak için birkaç yol vardır. Bunlardan biri <code>assert</code> komutu ile belli şartların sağlanıp sağlanmadığını önceden yoklamak, bir diğer ise fonksiyonun içinde <em>istisna işlemi</em> (“exception handling”) yapmaktır. Böylece belli bir hata (meselâ yukarıdaki gibi <em>TypeError</em>) oluştuğunda, programı durdurmadan akışı düzenlemek mümkün olur. Bu konulara sonraki bölümlerde yer vereceğiz.</p>
+</section>
+<section id="birkaç-tane-değer-geri-verme" class="level2">
+<h2 class="anchored" data-anchor-id="birkaç-tane-değer-geri-verme">Birkaç tane değer geri verme</h2>
+<p>Fonksiyonlar her tipte nesne geri verebilirler. Bir çokuz nesnesi veren bir fonksiyon kullanarak, birden fazla değer çıkarma davranışı taklit edilebilir:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x, y):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">+</span>y, x<span class="op">-</span>y</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>toplam, fark <span class="op">=</span> f(<span class="dv">3</span>,<span class="dv">5</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Toplam = </span><span class="sc">{}</span><span class="st">, Fark = </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(toplam,fark))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Toplam = 8, Fark = -2</code></pre>
+</div>
+</div>
+</section>
+<section id="fonksiyon-veren-fonksiyonlar" class="level2">
+<h2 class="anchored" data-anchor-id="fonksiyon-veren-fonksiyonlar">Fonksiyon veren fonksiyonlar</h2>
+<p>Python dinamik bir dildir: Programın işleyişi sırasında komutlar yeni nesnelerin üretilmesini ve işlenmesini sağlar. Fonksiyonlar da dinamik olarak <code>def</code> komutuyla yaratılır. Buna karşılık, C gibi derlenen diller böyle davranmaz. Bu tür dillerde fonksiyonlar, program henüz çalıştırılmadan, derleme aşamasında yaratılır ve işletilebilir ikili koda gömülür. Python gibi dillerin dinamik yapısı sayesinde, fonksiyonların başka komutlar ve bloklar içinde, mesela sadece bir şart doğru olduğunda tanımlanmasını sağlayabiliriz.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>test <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> test:</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> f1(): <span class="bu">print</span>(<span class="dv">5</span>)</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> f2(): <span class="bu">print</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>f1()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>f2()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'f2' is not defined</code></pre>
+</div>
+</div>
+<p>Bir fonksiyon tanımlanmasında, önce belirttiğimiz kod parçasını içeren bir <em>fonksiyon nesnesi</em> yaratılır, sonra bu nesne ona verdiğimiz isme bağlanır. Bu anlamda <code>def</code> komutu atama (<code>=</code>) işlemi gibi çalışır. Bunun bir yan faydası, varolan bir fonksiyona başka isimler verebilme imkânıdır.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>yenifonk <span class="op">=</span> f1</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>yenifonk()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5</code></pre>
+</div>
+</div>
+<p>İki ismin de aynı nesneye işaret ettiğini <code>is</code> komutuyla doğrulayabiliriz.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>yenifonk <span class="kw">is</span> f1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>Yine aynı dinamik özellik sayesinde, <em>fonksiyon veren fonksiyonlar</em> (“fonksiyon fabrikaları”) tanımlanabilir.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kuvvetfonk(n):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fonk(x):</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> x<span class="op">**</span>n</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fonk</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Buradaki <code>kuvvetfonk</code> fonksiyonu, aldığı parametreyi kullanarak yarattığı bir fonksiyon nesnesini verir. Bu fonksiyon nesnesine bir isim atayıp bu isimle çalıştırabiliriz.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>kare <span class="op">=</span> kuvvetfonk(<span class="dv">2</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>kup <span class="op">=</span> kuvvetfonk(<span class="dv">3</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>kare(<span class="dv">5</span>), kup(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>(25, 125)</code></pre>
+</div>
+</div>
+<p>Aslında bu fonksiyon nesneleri bir isme atamadan da çağrılabilir, ama her seferinde bu fonksiyonlar baştan yaratılacağı için hesaplama açısından verimsiz olur.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>kuvvetfonk(<span class="dv">2</span>)(<span class="dv">5</span>), kuvvetfonk(<span class="dv">3</span>)(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>(25, 125)</code></pre>
+</div>
+</div>
+</section>
+<section id="fonksiyon-alan-fonksiyonlar" class="level2">
+<h2 class="anchored" data-anchor-id="fonksiyon-alan-fonksiyonlar">Fonksiyon alan fonksiyonlar</h2>
+<p>Fonksiyonlar, başka fonksiyonları parametre olarak alabilirler. Basit bir örnek olarak, <span class="math inline">\(\sum_{i=a}^{b} f(i)\)</span> toplamını veren bir fonksiyon yazalım.</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fntoplam(f, a, b):</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    i <span class="op">=</span> a</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    toplam <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> i<span class="op">&lt;=</span>b:</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>        toplam <span class="op">+=</span> f(i)</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> toplam</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f1(x):</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">1.0</span><span class="op">/</span>x</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f2(x):</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fl">2.0</span><span class="op">**-</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>fntoplam(f1, <span class="dv">1</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>2.9289682539682538</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>fntoplam(f2, <span class="dv">1</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>0.9990234375</code></pre>
+</div>
+</div>
+</section>
+<section id="değiştirilebilir-parametreler" class="level2">
+<h2 class="anchored" data-anchor-id="değiştirilebilir-parametreler">Değiştirilebilir parametreler</h2>
+<p>Fonksiyonlara, listeler gibi değiştirilebilir (mutable) parametreler veriyorsanız, ve bunlar fonksiyon içinde değiştiriliyorsa, bu değişiklik kalıcı olur.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    x[<span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">10</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>f(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[-10, 2, 3]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>[-10, 2, 3]</code></pre>
+</div>
+</div>
+</section>
+<section id="değişken-ufku-yerel-ve-global-değişkenler" class="level2">
+<h2 class="anchored" data-anchor-id="değişken-ufku-yerel-ve-global-değişkenler">Değişken ufku, yerel ve global değişkenler</h2>
+<p>Bir fonksiyon blokunun dışında ve içinde aynı isimde değişkenler kullanırsanız, içeride olanın değeri kullanılır olur. Fonksiyon, dıştaki değişkenin değerini değiştirmez.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f():</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>f()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>20</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>10</code></pre>
+</div>
+</div>
+<p>Python bu iki <code>x</code> ismini farklı değişkenler olarak görür. İkinci <code>x</code> bir <em>yerel</em> değişkendir ve sadece <code>f</code> fonksiyonu içinde tanımlıdır. Birincisi ise <em>global</em> görünürlüğe sahiptir; aşağısında tanımlanan bütün fonksiyonlarda kullanılabilir. Yukarıdaki örnekte <code>f</code> fonksiyonu tanımı altında <code>x=20</code> satırını silersek fonksiyon ekrana global <code>x</code> değeri olan 10’u basacaktır.</p>
+<p>Bir seviye daha karmaşık bir örnek olarak, <code>f</code> fonksiyonu içinde başka bir fonksiyon tanımlayalım.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"x ="</span>,x)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f():</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"f içinde x ="</span>,x)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> g():</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"g içinde x ="</span>, x)</span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>    g()</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>f()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x = 10
+f içinde x = 20
+g içinde x = 30</code></pre>
+</div>
+</div>
+<p>Bir değişken ismine atanmış değerin tespit edilmesi için genel kural şöyledir: Önce program akışının bulunduğu blok içinde bir tanım yapılmış mı diye bakılır. Eğer en içteki blokta bir tanım bulunmazsa, onu çevreleyen dış bloka, yoksa onun da dış blokuna bakılır. En dış bloka gelindiğinde <em>global</em> değişkenler içinde olup olmadığına bakılır. En son olarak öntanımlı (“built-in”) isimler kontrol edilir.</p>
+<p>Peki, diyelim ki tam tersini istiyoruz. Yani, bir fonksiyon içinde, fonksiyonun dışında tanımlanmış bir değişkene yeni bir değer atamak istiyoruz. Somut olarak, iki önceki örnekte, fonksiyon çalıştıktan sonra <code>x</code>’in 20 olmasını istiyoruz. Bunu, fonksiyon içinde <code>global</code> komutuyla sağlarız.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f():</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> x</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>f()</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"x ="</span>,x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>x = 20</code></pre>
+</div>
+</div>
+<p>Ancak, global değişkenlerden mümkün olduğunca kaçınmak gerekir. Fonksiyonlara giriş bilgisini parametrelerle sağlamak ve çıkış değerini <code>return</code> komutu aracılığıyla almak daha iyidir. Böylece fonksiyonların düzgün bir akış içinde çalışmasını, bileşenlerin birbirine kolayca bağlanan modüler bir yapıda olmasını, “aldığı belli verdiği belli” olmasını sağlarız. Bu şekilde programlar daha okunaklı ve anlaşılır olur. Global değişkenler ise hem giriş hem çıkış kanalı oldukları için bu akışı bozarlar. Globallerin fazla kullanıldığı programları hem okumak zordur, hem de bilgi akışının karışık bir yumak haline gelmesi mümkündür, hata yapma ihtimali artar. Fonksiyonlara veriyi her zaman fonksiyon parametreleriyle vermeye çalışın.</p>
+</section>
+<section id="belgeleme-dizeleri" class="level2">
+<h2 class="anchored" data-anchor-id="belgeleme-dizeleri">Belgeleme dizeleri</h2>
+<p>Fonksiyon tanımına bir belgeleme dizesi (docstring) eklemek mümkündür. Bir belgeleme dizesi, fonksiyon başlığının hemen altında başlayıp biten bir açıklama metnidir. Normal bir Python dizesinden hiç bir farkı yoktur, ama genellikle üç tırnak (<code>"""</code>) ile sınırlandırılırlar, böylece birkaç satıra yayılabilirler. Fonksiyonun çalışmasını etkilemezler. Birçok Python aracı, sözgelişi etkileşimli <em>help</em> fonksiyonu bu dizeleri otomatik olarak alıp kullanabilir.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fntoplam(f, a, b):</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""f(a) + f(a+1) + ... + f(b) toplamını döndürür."""</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    i <span class="op">=</span> a</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    toplam <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> i<span class="op">&lt;=</span>b:</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>        toplam <span class="op">+=</span> f(i)</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>        i <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> toplam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="bu">help</span>(fntoplam)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Help on function fntoplam in module __main__:
+
+fntoplam(f, a, b)
+    f(a) + f(a+1) + ... + f(b) toplamını döndürür.
+</code></pre>
+</div>
+</div>
+<p>Bütünleşik geliştirme ortamlarında (IDE’lerde) çalışırken, fonksiyonu yazdığınız sırada bu belgeleme dizesine ulaşabilirsiniz. Sözgelişi Jupyter defterinde <code>Shift-Tab</code> basarsanız bir yardım penceresi açılır.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/ddc4cda7-1-jupyter_online_help.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">jupyter_online_help.png</figcaption>
+</figure>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

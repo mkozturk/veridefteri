@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-02-23">
+
+<title>Veri Defteri - Python Programlamaya Giriş 16 - Dize Biçimlendirme</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 16 - Dize Biçimlendirme</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 23, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><em>Python Programlamaya Giriş</em> dizimizin <a href="http://www.veridefteri.com/2018/02/17/python-programlamaya-giris-15-dize-metodlari/">bir önceki bölümünde</a> dizelerle yapılabilecek işlemleri ve yaygın dize metodlarını özetledik. Bu yazıda dize metodlarından biri olan <code>format()</code> ile dize biçimlendirmeyi daha ayrıntılı işleyeceğiz. Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<p>Birçok durumda bir değişkende barındırılan bir değeri uygun bir biçimde düzenleyerek ekrana basmamız gerekir. Bu düzenlemeler ve biçimlendirmeler örneğin şöyle olabilirler: * Bir kalıp dize içindeki boşlukları doldurmak, <code>İsim:...., Yaş:....</code> gibi. * Sayıları ondalıktan sonra sabit sayıda basamakla vermek: <code>9.340, -18.731</code> gibi. * Sayıları sıfırlarla doldurmak: <code>099.45, 001.12</code> gibi. * Tablo halinde basılan listeleri hizalı olarak, belli boşluklar ayırarak basmak. * Tablo içeriklerini sağa veya sola yaslamak, ortalamak.</p>
+<p>Bu tür düzenlemeler için Python’da kapsamlı bir mini-dil mevcut. Bu tür düzenlemeler, <code>format()</code> metoduyla beraber şu şekilde kullanılır:</p>
+<pre><code>"&lt;kalıp dizesi&gt;".format(&lt;değerler&gt;)</code></pre>
+<p>Dize biçimlendirmenin bütün ayrıntıları için <a href="https://docs.python.org/3/library/string.html#formatstrings">Python belgelerine</a> bakabilirsiniz.</p>
+<section id="konumla-yerleştirme-ve-isimle-yerleştirme" class="level2">
+<h2 class="anchored" data-anchor-id="konumla-yerleştirme-ve-isimle-yerleştirme">Konumla yerleştirme ve isimle yerleştirme</h2>
+<p>En basit kullanımda, <code>format()</code>’a verilen değerler, kalıp dizesinin içinde küme parantezleri (<code>{}</code>) ile bırakılan boşluklara sırayla yerleştirilir.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">"İsim: {}, Telefon: {}, Boy: {} m"</span>.<span class="bu">format</span>(<span class="st">"Kaan"</span>, <span class="st">"5555"</span>, <span class="fl">1.80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>'İsim: Kaan, Telefon: 5555, Boy: 1.8 m'</code></pre>
+</div>
+</div>
+<p>Yukarıdaki örnekte birinci boşluğa birinci değer (<code>"Kaan"</code>), ikinci boşluğa ikinci değer (<code>"5555"</code>), üçüncü boşluğa da üçüncü değer (1.80) yerleştirildi. Bu sırayı değiştirmek için, küme parantezlerinin içine arzu ettiğimiz konum numaralarını koyabiliriz.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">"İsim: {0}, Boy: {2} m, Telefon: {1}"</span>.<span class="bu">format</span>(<span class="st">"Kaan"</span>, <span class="st">"5555"</span>, <span class="fl">1.80</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>'İsim: Kaan, Boy: 1.8 m, Telefon: 5555'</code></pre>
+</div>
+</div>
+<p>Başka bir yol da, yer tutuculara isim vermek ve <code>format()</code>’a bu isimlerle parametreler vermektir.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Alıcı Adı: {isim}, Yaşı: {yaş}, Şehir: {şehir}"</span>.<span class="bu">format</span>(yaş<span class="op">=</span><span class="dv">32</span>, isim<span class="op">=</span><span class="st">"Fatma"</span>, şehir<span class="op">=</span><span class="st">"Tekirdağ"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>'Alıcı Adı: Fatma, Yaşı: 32, Şehir: Tekirdağ'</code></pre>
+</div>
+</div>
+<p>Örneklerden gördüğümüz gibi, <code>format()</code> fonksiyonu kalıp dizesindeki boşluklarla değerleri eşleştirirken, fonksiyonlardaki <a href="http://www.veridefteri.com/2018/01/10/python-programlamaya-giris-fonksiyon-parametreleri/">parametre eşleştirme</a> kurallarını kullanıyor. İlk gördüğümüz örnek <em>konumla eşleştirmeye</em> denk iken, son örneğimiz <em>isimle eşleştirme</em> yapıyor.</p>
+<p>Bu sebepten, fonksiyon çağrılarındaki <em>parametre çözme</em> kuralları da aynen uygulanabilir. Mesela:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> (<span class="st">"Kaan"</span>,<span class="st">"5555"</span>,<span class="fl">1.80</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">"İsim: {}, Telefon: {}, Boy: {} m"</span>.<span class="bu">format</span>(<span class="op">*</span>p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>'İsim: Kaan, Telefon: 5555, Boy: 1.8 m'</code></pre>
+</div>
+</div>
+<p>Biraz daha gelişkin bir örnek olarak, önceden hazırlanmış bir veri listesi üzerinden döngü çalıştıralım.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>liste <span class="op">=</span> [</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Kaan"</span>,<span class="st">"5555"</span>,<span class="fl">1.80</span>), </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Meral"</span>,<span class="st">"5628"</span>,<span class="fl">1.50</span>),</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"Ziya"</span>,<span class="st">"9879"</span>,<span class="fl">1.40</span>)]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> liste:</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"İsim: </span><span class="sc">{0}</span><span class="st">, Boy: </span><span class="sc">{2}</span><span class="st"> m, Telefon: </span><span class="sc">{1}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="op">*</span>p))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>İsim: Kaan, Boy: 1.8 m, Telefon: 5555
+İsim: Meral, Boy: 1.5 m, Telefon: 5628
+İsim: Ziya, Boy: 1.4 m, Telefon: 9879</code></pre>
+</div>
+</div>
+<p>Verileri çokuzlar olarak değil de sözlük olarak saklıyor olabiliriz. O zaman sözlüklerde kullandığımız parametre çözme yöntemi geçerli olur.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> <span class="bu">dict</span>(isim<span class="op">=</span><span class="st">"Filiz"</span>, yaş<span class="op">=</span><span class="dv">55</span>, şehir<span class="op">=</span><span class="st">"İstanbul"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">"Alıcı Adı: {isim}, Yaşı: {yaş}, Şehir: {şehir}"</span>.<span class="bu">format</span>(<span class="op">**</span>D)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>'Alıcı Adı: Filiz, Yaşı: 55, Şehir: İstanbul'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>liste <span class="op">=</span> [</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"isim"</span>: <span class="st">"Filiz"</span>, <span class="st">"yaş"</span>:<span class="st">"55"</span>, <span class="st">"şehir"</span>:<span class="st">"İstanbul"</span>}, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"isim"</span>: <span class="st">"Meral"</span>, <span class="st">"yaş"</span>:<span class="st">"40"</span>, <span class="st">"şehir"</span>:<span class="st">"Ankara"</span>},</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"isim"</span>: <span class="st">"Ziya"</span>,  <span class="st">"yaş"</span>:<span class="st">"10"</span>, <span class="st">"şehir"</span>:<span class="st">"Bursa"</span>}</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> D <span class="kw">in</span> liste:</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Alıcı Adı: </span><span class="sc">{isim}</span><span class="st">, Yaşı: {yaş}, Şehir: {şehir}"</span>.<span class="bu">format</span>(<span class="op">**</span>D))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Alıcı Adı: Filiz, Yaşı: 55, Şehir: İstanbul
+Alıcı Adı: Meral, Yaşı: 40, Şehir: Ankara
+Alıcı Adı: Ziya, Yaşı: 10, Şehir: Bursa</code></pre>
+</div>
+</div>
+<p><code>format()</code>’a verilen parametre bir liste veya sözlük ise, kalıp dizesinde indeksleme uygulanabilir.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>listem <span class="op">=</span> [<span class="dv">3</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">9</span>]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">"İlk eleman: {0[0]}, son eleman: {0[3]}"</span>.<span class="bu">format</span>(listem)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>'İlk eleman: 3, son eleman: 9'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>kayıt <span class="op">=</span> {<span class="st">"isim"</span>:<span class="st">"Kaan"</span>, <span class="st">"boy"</span>:<span class="fl">1.80</span>, <span class="st">"telefon"</span>:<span class="st">"5555"</span>}</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co">"İsim: {D[isim]}, Tel: {D[telefon]}, Boy: {D[boy]}"</span>.<span class="bu">format</span>(D<span class="op">=</span>kayıt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>'İsim: Kaan, Tel: 5555, Boy: 1.8'</code></pre>
+</div>
+</div>
+</section>
+<section id="yana-yaslama-ve-ortalama" class="level2">
+<h2 class="anchored" data-anchor-id="yana-yaslama-ve-ortalama">Yana yaslama ve ortalama</h2>
+<p>Dizeleri biçimlendirirken, alt alta olan dizelerin belli bir hizada olmasını sağlamak isteyebiliriz. Bunun için, dizenin basılacağı yerde kaç karakterlik alan ayrılacağını belirlememiz, sağa veya sola yaslamamız, veya ortalamamız mümkündür.</p>
+<p>Önce hizalama yapılmayan bir örnek görelim:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>isimler <span class="op">=</span> [<span class="st">"Ziya"</span>, <span class="st">"Meral"</span>, <span class="st">"Hüsamettin"</span>, <span class="st">"Zebercet"</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>yaşlar <span class="op">=</span> [<span class="dv">9</span>, <span class="dv">32</span>, <span class="dv">45</span>, <span class="dv">28</span>]</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>şehirler <span class="op">=</span> [<span class="st">"İstanbul"</span>, <span class="st">"Ankara"</span>, <span class="st">"Van"</span>, <span class="st">"Diyarbakır"</span>]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y, ş <span class="kw">in</span> <span class="bu">zip</span>(isimler, yaşlar, şehirler):</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Alıcı Adı: </span><span class="sc">{}</span><span class="st">, Yaşı: </span><span class="sc">{}</span><span class="st">, Şehir: </span><span class="sc">{}</span><span class="st">"</span>.<span class="bu">format</span>(i, y, ş))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Alıcı Adı: Ziya, Yaşı: 9, Şehir: İstanbul
+Alıcı Adı: Meral, Yaşı: 32, Şehir: Ankara
+Alıcı Adı: Hüsamettin, Yaşı: 45, Şehir: Van
+Alıcı Adı: Zebercet, Yaşı: 28, Şehir: Diyarbakır</code></pre>
+</div>
+</div>
+<p>Kalıp dizesinde yer tutucuları (mesela) <code>{:10}</code> biçiminde yazmakla 10 karakter genişlikte bir alan ayırmış oluruz. Aksi belirtilmedikçe dizeler sola, sayılar ise sağa yaslanır.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y, ş <span class="kw">in</span> <span class="bu">zip</span>(isimler, yaşlar, şehirler):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Alıcı Adı: </span><span class="sc">{:11}</span><span class="st"> Yaşı: </span><span class="sc">{:3}</span><span class="st"> Şehir: </span><span class="sc">{:10}</span><span class="st">"</span>.<span class="bu">format</span>(i, y, ş))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Alıcı Adı: Ziya        Yaşı:   9 Şehir: İstanbul  
+Alıcı Adı: Meral       Yaşı:  32 Şehir: Ankara    
+Alıcı Adı: Hüsamettin  Yaşı:  45 Şehir: Van       
+Alıcı Adı: Zebercet    Yaşı:  28 Şehir: Diyarbakır</code></pre>
+</div>
+</div>
+<p>Sola yaslanmış olarak basmak için <code>{:&lt;10}</code>, sağa yaslanmış olarak basmak için <code>{:&gt;10}</code>, ortalanmış olarak basmak içinse <code>{:^10}</code> yazımı kullanırız.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y, ş <span class="kw">in</span> <span class="bu">zip</span>(isimler, yaşlar, şehirler):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Alıcı Adı: </span><span class="sc">{:&gt;11}</span><span class="st"> Yaşı: </span><span class="sc">{:&lt;3}</span><span class="st"> Şehir: </span><span class="sc">{:^10}</span><span class="st">"</span>.<span class="bu">format</span>(i, y, ş))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Alıcı Adı:        Ziya Yaşı: 9   Şehir:  İstanbul 
+Alıcı Adı:       Meral Yaşı: 32  Şehir:   Ankara  
+Alıcı Adı:  Hüsamettin Yaşı: 45  Şehir:    Van    
+Alıcı Adı:    Zebercet Yaşı: 28  Şehir: Diyarbakır</code></pre>
+</div>
+</div>
+<p>Boş bırakılan yerleri bir karakterle doldurmak istiyorsak, bu karakteri <code>:</code> işaretinden hemen sonra koyarız. Mesela, <code>*</code> işaretiyle doldurmak için:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> isimler:</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="sc">{:*&gt;11}</span><span class="st">"</span>.<span class="bu">format</span>(i))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>*******Ziya
+******Meral
+*Hüsamettin
+***Zebercet</code></pre>
+</div>
+</div>
+<p>Yer tutucuları indeksle veya isimle eşleştirmek istediğimizde, iki nokta üstüste işaretinden önce indeksi veya ismi yazarız; <code>{0:10}</code> veya <code>{isim:10}</code> gibi.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y, ş <span class="kw">in</span> <span class="bu">zip</span>(isimler, yaşlar, şehirler):</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"</span><span class="sc">{1:3}</span><span class="st"> yaşındaki </span><span class="sc">{0:11}</span><span class="st"> isimli alıcı </span><span class="sc">{2:10}</span><span class="st"> şehrinde oturuyor."</span>.<span class="bu">format</span>(i, y, ş))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  9 yaşındaki Ziya        isimli alıcı İstanbul   şehrinde oturuyor.
+ 32 yaşındaki Meral       isimli alıcı Ankara     şehrinde oturuyor.
+ 45 yaşındaki Hüsamettin  isimli alıcı Van        şehrinde oturuyor.
+ 28 yaşındaki Zebercet    isimli alıcı Diyarbakır şehrinde oturuyor.</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y, ş <span class="kw">in</span> <span class="bu">zip</span>(isimler, yaşlar, şehirler):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"{yaş:3} yaşındaki </span><span class="sc">{isim:11}</span><span class="st"> isimli alıcı {şehir:10} şehrinde oturuyor."</span>.<span class="bu">format</span>(isim<span class="op">=</span>i, yaş<span class="op">=</span>y, şehir<span class="op">=</span>ş))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  9 yaşındaki Ziya        isimli alıcı İstanbul   şehrinde oturuyor.
+ 32 yaşındaki Meral       isimli alıcı Ankara     şehrinde oturuyor.
+ 45 yaşındaki Hüsamettin  isimli alıcı Van        şehrinde oturuyor.
+ 28 yaşındaki Zebercet    isimli alıcı Diyarbakır şehrinde oturuyor.</code></pre>
+</div>
+</div>
+<p>Genel olarak, kalıp dizesindeki yer tutucunun içinde <code>:</code> işaretinin solunda eşleştirme bilgisi (indeks veya isim) yer alır; sağında ise o değerin nasıl biçimlendirileceğinin bilgisi bulunur.</p>
+</section>
+<section id="sayı-biçimlendirme" class="level2">
+<h2 class="anchored" data-anchor-id="sayı-biçimlendirme">Sayı biçimlendirme</h2>
+<p>Yer tutucu içine bir sayı koyacağımız zaman, tamsayılarda <code>{:d}</code>, ondalıklı sayılarda ise <code>{:f}</code> kodlarını kullanırız.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Yaş: {:d}, Boy: {:f}"</span>.<span class="bu">format</span>(<span class="dv">42</span>, <span class="fl">1.76</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'Yaş: 42, Boy: 1.760000'</code></pre>
+</div>
+</div>
+<p>Belli miktarda, söz gelişi 5 karakterlik yer ayırmak için <code>{:5d}</code> yazımını kullanabiliriz. Ondalıklı sayılar için <code>{:5.2f}</code> yazımı, noktadan sonra 2 basamak olmak üzere en az 5 karakterlik yer ayrılmasını sağlar (ondalık noktası dahil). Türkçeye uygun olarak virgüllerle ayırma yöntemi için bir sonraki bölüme bakın.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Yaş: {:5d}, Boy: {:5.3f}"</span>.<span class="bu">format</span>(<span class="dv">42</span>, <span class="fl">1.76</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>'Yaş:    42, Boy: 1.760'</code></pre>
+</div>
+</div>
+<p>Ayırdığımız alanda, sayının değerini değiştirmeden boşlukların sıfırlarla doldurulmasını istiyorsak <code>{:05d}</code> veya <code>{05.3f}</code> gibi yazımlar kullanırız.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Yaş: {:05d}, Boy: {:06.3f}"</span>.<span class="bu">format</span>(<span class="dv">42</span>, <span class="fl">1.76</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>'Yaş: 00042, Boy: 01.760'</code></pre>
+</div>
+</div>
+<p>Negatif sayıların başına her zaman eksi gelir; pozitif sayıların da her zaman artı ile başlaması için <code>{:+d}</code> yazımını kullanırız.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">"{:+d}, {:+d}"</span>.<span class="bu">format</span>(<span class="dv">42</span>, <span class="op">-</span><span class="dv">45</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>'+42, -45'</code></pre>
+</div>
+</div>
+<p>Bir sayıyı ikili, sekizli, onaltılı tabanda göstermek için sırasıyla <code>b</code>, <code>o</code>, <code>x</code> kullanırız.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Onluk tabanda </span><span class="sc">{:d}</span><span class="ch">\n</span><span class="st">İkili tabanda </span><span class="sc">{:b}</span><span class="ch">\n</span><span class="st">Sekizli tabanda </span><span class="sc">{:o}</span><span class="ch">\n</span><span class="st">Onaltılı tabanda </span><span class="sc">{:x}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="dv">42</span>,<span class="dv">42</span>,<span class="dv">42</span>,<span class="dv">42</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Onluk tabanda 42
+İkili tabanda 101010
+Sekizli tabanda 52
+Onaltılı tabanda 2a</code></pre>
+</div>
+</div>
+<p>Bu dönüşümleri yapınca sayının tabanının da belli olmasını istersek <code>#b</code>, <code>#o</code>, <code>#x</code> kullanırız. Bu kodlar sayının başına sırasıyla <code>"0b"</code>, <code>"0o"</code>, <code>"0x"</code> konmasını sağlar.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Onluk tabanda </span><span class="sc">{:d}</span><span class="ch">\n</span><span class="st">İkili tabanda </span><span class="sc">{:#b}</span><span class="ch">\n</span><span class="st">Sekizli tabanda </span><span class="sc">{:#o}</span><span class="ch">\n</span><span class="st">Onaltılı tabanda </span><span class="sc">{:#x}</span><span class="st">"</span>.<span class="bu">format</span>(<span class="dv">42</span>,<span class="dv">42</span>,<span class="dv">42</span>,<span class="dv">42</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Onluk tabanda 42
+İkili tabanda 0b101010
+Sekizli tabanda 0o52
+Onaltılı tabanda 0x2a</code></pre>
+</div>
+</div>
+<p>Büyük sayıları virgülle üçer basamaklı ayırmak için <code>{:,}</code> kullanırız (Türkçeye uygun olarak noktalarla ayırmak için sonraki bölüme bakın).</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">"{:,}"</span>.<span class="bu">format</span>(<span class="dv">123456789</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>'123,456,789'</code></pre>
+</div>
+</div>
+<p>Ondalıklı sayıları göstermek için şu kodlar kullanılabilir: * <code>{:f}</code> veya <code>{:F}</code> (fixed): Ondalıktan sonra sabit sayıda basamak (varsayılan 6). * <code>{:e}</code> veya <code>{:E}</code> (exponential): Sayıyı bilimsel notasyonda gösterir; üsteli <code>"e"</code> veya <code>"E"</code> harfinden sonra koyar. * <code>{:g}</code> veya <code>{:G}</code> (genel): Yerine göre <code>f</code> veya <code>e</code>. Belirli bir basamak sayısını (varsayılan 6) verecek şekilde yuvarlar; sayının büyüklüğüne göre <code>f</code> veya <code>e</code> biçimine getirir. * <code>{:%}</code>: Sayıyı 100 ile çarpar ve sonuna yüzde işareti koyar.</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">12345.6789</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sabit biçim: </span><span class="sc">{:f}</span><span class="st">, </span><span class="sc">{:F}</span><span class="st">"</span>.<span class="bu">format</span>(x,x))</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Üstel biçim: </span><span class="sc">{:e}</span><span class="st">, </span><span class="sc">{:E}</span><span class="st">"</span>.<span class="bu">format</span>(x,x))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Genel biçim: </span><span class="sc">{:g}</span><span class="st">, </span><span class="sc">{:G}</span><span class="st">"</span>.<span class="bu">format</span>(x,x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sabit biçim: 12345.678900, 12345.678900
+Üstel biçim: 1.234568e+04, 1.234568E+04
+Genel biçim: 12345.7, 12345.7</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">12345.6789</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sabit biçim: </span><span class="sc">{:4.2f}</span><span class="st">, </span><span class="sc">{:4.4F}</span><span class="st">"</span>.<span class="bu">format</span>(x,x))</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Üstel biçim: </span><span class="sc">{:1.3e}</span><span class="st">, </span><span class="sc">{:1.4E}</span><span class="st">"</span>.<span class="bu">format</span>(x,x))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Genel biçim: </span><span class="sc">{:.10g}</span><span class="st">, </span><span class="sc">{:.2G}</span><span class="st">"</span>.<span class="bu">format</span>(x,x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sabit biçim: 12345.68, 12345.6789
+Üstel biçim: 1.235e+04, 1.2346E+04
+Genel biçim: 12345.6789, 1.2E+04</code></pre>
+</div>
+</div>
+<p>Yüzdeleri gösterirken <code>%</code> kodunu kullanabiliriz.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>geçen <span class="op">=</span> <span class="dv">57</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>başvuran <span class="op">=</span> <span class="dv">245</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Başarı oranı {:.2%}"</span>.<span class="bu">format</span>(geçen<span class="op">/</span>başvuran)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>'Başarı oranı 23.27%'</code></pre>
+</div>
+</div>
+</section>
+<section id="sayıları-türk-standartlarında-biçimlendirmek" class="level2">
+<h2 class="anchored" data-anchor-id="sayıları-türk-standartlarında-biçimlendirmek">Sayıları Türk standartlarında biçimlendirmek</h2>
+<p>Yukarıdaki örneklerde, Amerikan standardına uygun olarak, sayı grupları virgülle ayrıldı ve ondalık için nokta kullanıldı. Oysa Türkiye’deki sayı yazma standartlarında sayı grupları noktayla ayrılır, ondalık için ise virgül kullanılır. Türk standartlarına uygun biçimlendirme yapmak için biraz dolaylı bir yoldan gidip, yerelleştirme işlemleri için kullanılan <code>locale</code> kütüphanesini kullanmamız gerekir.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> locale</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>loc <span class="op">=</span> locale.getlocale()</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>locale.setlocale(locale.LC_ALL,<span class="st">"tr_TR.UTF-8"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>'tr_TR.UTF-8'</code></pre>
+</div>
+</div>
+<p>Yerelleştirme ayarlarını yapsak da, bu ayarlar <code>str.format</code> metodunu etkilemeyecektir. Bunun yerine, <code>locale.format</code> fonksiyonunu kullanmalıyız. Bu fonksiyonun dize biçimleme sintaksı <a href="https://docs.python.org/2/library/stdtypes.html#string-formatting">eski usül</a> olarak bilinir. Basit bir örnek olarak:</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>locale.<span class="bu">format</span>(<span class="st">"</span><span class="sc">%f</span><span class="st">"</span>, <span class="fl">1234567.89</span>, grouping<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>'1.234.567,890000'</code></pre>
+</div>
+</div>
+<p>Şimdi de virgülden sonra 3 hane olmak üzere toplam 13 karakterlik yer ayırarak biçimlendirelim.</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>locale.<span class="bu">format</span>(<span class="st">"</span><span class="sc">%013.3f</span><span class="st">"</span>, <span class="fl">1234567.89</span>, grouping<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>'001.234.567,890'</code></pre>
+</div>
+</div>
+<p><code>locale.format()</code> sadece bir tek biçim dizesi alır (<code>%f</code> veya <code>%d</code> gibi). Daha geniş bir kalıp kullanmak için <code>locale.format_string()</code> fonksiyonunu kullanmamız gerekir.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>isimler <span class="op">=</span> [<span class="st">"Ziya"</span>, <span class="st">"Meral"</span>, <span class="st">"Hüsamettin"</span>, <span class="st">"Zebercet"</span>]</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>boylar <span class="op">=</span> [<span class="fl">1.42</span>, <span class="fl">1.50</span>, <span class="fl">1.74</span>, <span class="fl">1.81</span>]</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>maaşlar <span class="op">=</span> [<span class="fl">100.73</span>, <span class="fl">5555.62</span>, <span class="fl">12446.43</span>, <span class="fl">2300.12</span>]</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, b, m <span class="kw">in</span> <span class="bu">zip</span>(isimler, boylar, maaşlar):</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(locale.format_string(<span class="st">"İsim: </span><span class="sc">%-12s</span><span class="st"> Boy: </span><span class="sc">%6.2f</span><span class="st"> Maaş: </span><span class="sc">%10.2f</span><span class="st">"</span>, (i,b,m), grouping<span class="op">=</span><span class="va">True</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>İsim: Ziya         Boy:   1,42 Maaş:     100,73
+İsim: Meral        Boy:   1,50 Maaş:   5.555,62
+İsim: Hüsamettin   Boy:   1,74 Maaş:  12.446,43
+İsim: Zebercet     Boy:   1,81 Maaş:   2.300,12</code></pre>
+</div>
+</div>
+<p>Ne yazık ki <code>locale.format_string()</code> sadece daha sınırlı olan eski usül biçimlendirme sintaksıyla çalışıyor. Yine de, ileri Python sürümlerinde yeni usule geçilmesi muhtemeldir.</p>
+<p>Sayıların biçimlerini yerelleştirmeyi, son kullanıma yönelik raporlar üretme amacıyla sınırlı tutmanız iyi olur. Bu amaç dışında, mesela veriler bir dosyaya yazıp sonradan okumayı hedefliyorsanız yerel ayarları değil varsayılan ayarları (Amerikan standardını) kullanın. Dosyadaki verilerde, söz gelişi, ondalıklar virgülle ayrılmışsa, sonradan veri dosyasını okumakta sorunlar yaşayabilirsiniz. Yazılım paketlerindeki otomatik araçların çoğu Amerikan tarzı sayı yazımını temel alır. Bunun etrafından dolaşmak mümkündür ama hem dolambaçlıdır hem de sorunlara gebedir.</p>
+</section>
+<section id="nesne-içi-değişkenleri-kullanmak" class="level2">
+<h2 class="anchored" data-anchor-id="nesne-içi-değişkenleri-kullanmak">Nesne içi değişkenleri kullanmak</h2>
+<p>Nesnelerin iç değişkenleri (“attributes”) kalıp dizede kullanılabilir. Örneğin, karmaşık sayıların gerçek kısımları <code>real</code>, sanal kısımları <code>imag</code> isimli iç değişkenlerde saklanır.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> <span class="dv">3</span><span class="op">+</span><span class="ot">2j</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>z.real, z.imag</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>(3.0, 2.0)</code></pre>
+</div>
+</div>
+<p>Dize biçimlendirmede bu iç değişkenlerin isimlerini doğrudan kullanabiliriz.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co">"Gerçek kısım {0.real}, sanal kısım {0.imag}"</span>.<span class="bu">format</span>(<span class="dv">3</span><span class="op">+</span><span class="ot">2j</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<pre><code>'Gerçek kısım 3.0, sanal kısım 2.0'</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Birol Yüceoğlu">
+<meta name="dcterms.date" content="2017-11-07">
+
+<title>Veri Defteri - Aşırı Öğrenme ve Eksik Öğrenme</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Aşırı Öğrenme ve Eksik Öğrenme</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">yapay öğrenme</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Birol Yüceoğlu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 7, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><img src="wall-e-1872683_640.webp" class="img-fluid"></p>
+<p>Makine öğrenmesi uygulamalarında temel amaç eldeki veriden örüntüler öğrenmek, bu örüntüleri kullanarak değer oluşturmaktır. Örnek olarak müşterilerin özelliklerine bakarak terk edecek ya da kampanyanızdan yararlanacak müşterileri tahmin etmeye çalışabilirsiniz. Bir tavsiye sistemi kurarak müşterilerinize ilgilenecekleri ürünleri önermeye çalışabilirsiniz. Ya da bir bölgedeki evlerin özelliklerine ve fiyatlarına bakarak ilgilendiğiniz evin fiyatının düşük ya da yüksek olup olmadığını yorumlamak isteyebilirsiniz. Bulacağınız örüntüler gerçek hakkında size ipucu verecek modellere denk geliyor. Gerçeği tam olarak tahmin etmeniz imkansız olsa da model kurarken kaçınmanız gereken iki hata tipi var. Bu Veri Defteri’nde <em>Aşırı Öğrenme</em> (overfitting) ve <em>Eksik Öğrenme</em> (underfitting) kavramlarından bahsedeceğiz.</p>
+<ul>
+<li><em>Eksik Öğrenme</em>: Modelin gözlemlerdeki örüntüyü eksik yakalaması durumuna denir. Örnek olarak karekök fonksiyonunu ya da ikinci dereceden bir denklemi bir doğru ile yakınsamayı gösterebiliriz.</li>
+<li><em>Aşırı Öğrenme</em>: Modelin örüntüler yerine gözlemleri öğrenmeye başlamasıdır. Bu durumda öğrenme için kullandığınız veri setini öğrenirsiniz. Ancak bu şekilde oluşturacağınız modeller yeni ve daha önceden görmediğiniz gözlemlerle karşılaştığında başarılı bir tahmin yapma olasılığınızı azaltır.</li>
+</ul>
+<p>Bu kavramlara bir kaç örnekle bakmayı deneyelim. İlk olarak kullanacağımız paketleri yükleyelim.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Aşağıdaki iki satır uyarı mesajlarını kapatmaya yarıyor</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>warnings.simplefilter(<span class="st">"ignore"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Veri setini bölmek için</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Kullanacağımız doğrusal bağlanım (linear regression) ve gradient boosting yöntemleri</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> GradientBoostingClassifier</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#Yapay sınıflandırma verisi oluşturmak için gerekli bir fonksiyon</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_classification</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#Sonuçları değerlendirmek için gerekli fonksiyonlar</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error, accuracy_score</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#Veriyi istediğimiz dereceden değişkenlerden oluşturmak için PolynomialFeatures kullanacağız.</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Kavramları göstermek için yapay bir veri seti oluşturalım. Çıktı ile girdi arasında doğrusal bir ilişki kurduğum için doğrusal bağlanım yöntemiyle bu veri setindeki örüntüyü öğrenmeye çalışacağız. İlk olarak 75 gözlemden oluşan bir yapay veri seti oluşturalım. <code>train_test_split()</code> fonksiyonu veriyi öğrenme (training) ve sınama (testing) için iki kümeye ayıracak.</p>
+<p>Kuracağımız ilişki <span class="math inline">\(y = 2.5 x + \epsilon\)</span> şeklinde olacak. Burada en sondaki terim rassal olarak eklediğimiz bir gürültüye (noise) denk geliyor.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>num_obs <span class="op">=</span> <span class="dv">75</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Random seed her bilgisayarda aynı sonucu elde etmek için kullanılan bir fonksiyon. </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Ancak versiyon değişiklikleri gibi nedenlerle farklı sonuçlar elde edebilirsiniz.</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.random.rand(num_obs)<span class="op">*</span><span class="dv">10</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">2.5</span> <span class="op">*</span> X <span class="op">+</span> np.random.randn(num_obs)<span class="op">*</span><span class="dv">2</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Veriyi %80 öğrenme ve %20 sınama şeklinde ikiye ayırıyoruz.</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X,y, train_size <span class="op">=</span> <span class="fl">0.8</span>, random_state <span class="op">=</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Örüntüyü görmek için bir serpme (<code>scatter</code>) grafiği kullanalım.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train,y_train)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-4-output-1.png" width="641" height="633"></p>
+</div>
+</div>
+<p>Gördüğümüz gibi veri setinde girdi ve çıktı arasında doğrusal bir ilişki var. <em>x</em> değeri bir birim arttığında <em>y</em> değişkeninin değeri yaklaşık olarak 2.5 birim artıyor. Bir doğrusal bağlanım (linear regression) modeliyle bu ilişkiyle ilgili bilgileri elde edebiliriz. Bu amaçla <code>LinearRegression()</code> fonksiyonunu kullanacağız.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Modeli oluşturalım.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression()</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#X_train ve y_train değerleriyle modeli eğitelim. </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#.reshape(-1,1) kısmı tek boyutlu değişkenlerle çalıştığımız için gerekli olan bir fonksiyon.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>lr.fit(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>),y_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Kesişim (Intercept): "</span> <span class="op">+</span> <span class="bu">str</span>(lr.intercept_))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Eğim (Slope): "</span> <span class="op">+</span> <span class="bu">str</span>(lr.coef_[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Kesişim (Intercept): [0.82241911]
+Eğim (Slope): [2.43747185]</code></pre>
+</div>
+</div>
+<p>Modele göre <em>x</em> değişkeninin değeri bir birim arttığı zaman <em>y</em> değişkeninin değeri 2.44 birim artıyor. Bu da bizim oluşturduğumuz örüntüye (2.5<em>x</em>) oldukça yakın bir değer. <em>x</em> değeri sıfıra eşit olduğunda ise <em>y</em> değeri 0.82 oluyor. Bu bilgiyi test edeceğimiz veri setinde kullanarak sonuçları değerlendirebiliriz.</p>
+<p>Aşağıdaki şekilde mavi noktalar öğrenme verisini, kırmızı noktalar sınama verisini ve yeşil çizgi de elde ettiğimiz modelin çıktısını temsil ediyor.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ile 10 arasındaki değerler için modelin sonuçlarını elde edelim.</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>line_X <span class="op">=</span> np.arange(<span class="dv">0</span>,<span class="dv">11</span>, <span class="fl">0.1</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>line_y <span class="op">=</span> lr.predict(line_X.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train,y_train, alpha <span class="op">=</span> <span class="fl">0.5</span>, label <span class="op">=</span> <span class="st">'Öğrenme'</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test, c<span class="op">=</span><span class="st">'red'</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>, label <span class="op">=</span> <span class="st">'Sınama'</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>plt.plot(line_X, line_y, c<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">3</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label <span class="op">=</span> <span class="st">'Doğrusal Bağlanım'</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>plt.legend(loc <span class="op">=</span> <span class="dv">4</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" width="641" height="633"></p>
+</div>
+</div>
+<p>Gördüğümüz gibi doğrusal bağlanım sınama verisini başarıyla tahmin edebiliyor.</p>
+<p>Aşırı Öğrenme ve Eksik Öğrenme kavramlarını anlatmak için veride doğrusal olmayan bir ilişki oluşturalım. Kullanacağımız yeni modelde ilişkiyi bu şekilde değiştiriyoruz: <span class="math inline">\(y' = y + 80 y^2 - 4 y^3\)</span>. Ben doğrusal olmayan örüntüyü daha belirgin hale getirmek için yeni çıktıları hesaplarken eski çıktı değerlerini kullanmayı tercih ettim.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>y_train <span class="op">=</span> y_train <span class="op">+</span>  <span class="dv">80</span><span class="op">*</span> np.power(y_train, <span class="dv">2</span>) <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> np.power(y_train, <span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> X_test <span class="op">+</span>  <span class="dv">80</span><span class="op">*</span> np.power(y_test, <span class="dv">2</span>) <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> np.power(y_test, <span class="dv">3</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tekrar bir doğrusal bağlanımla modelin öğrenme yeteneğini inceleyelim. Öğrenme yeteneğini daha objektif bir şekilde incelemek için de karesel ortalama hatanın kareköküne (root mean square error, RMSE) bakacağız. Karesel ortalama hata hesaplanırken gözlemin gerçek değeriyle model sonucu elde edilen tahmin arasındaki farkların karelerinin ortalaması alınır ve bu değerin karekökü hesaplanır. Bu şekilde tahmin ettiğimiz değerlerle gerçek gözlemlerin birbirinden ne kadar uzak olduğu bilgisi elde edilir. Kabaca bu değerin düşük olması modelin tahmin yeteneğinin güçlü olduğunu işaret eder diyebiliriz.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Modeli oluşturuyoruz.</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#X ve y değerleriyle modelin öğrenmesini sağlıyoruz.</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>lr.fit(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>),y_train)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Modelin sonucunu görmek için 0 ve 10 aralığında tahmin yapıyoruz.</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>line_y <span class="op">=</span> lr.predict(line_X.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_train, lr.predict(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))))))</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_test, lr.predict(X_test.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))))))</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train,y_train, alpha <span class="op">=</span> <span class="fl">0.3</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test, c<span class="op">=</span><span class="st">'red'</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>plt.plot(line_X, line_y, c<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.ylim((<span class="op">-</span><span class="dv">30000</span>, <span class="dv">10000</span>))</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 5204.605138576858
+Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 4694.645928019619</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-2.png" width="677" height="638"></p>
+</div>
+</div>
+<p>Doğrusal bağlanım tek bir değişkenle üçüncü dereceden bir denklemi öğrenemedi. İkinci ve üçüncü dereceden değişkenler eklersek modelin öğrenme yeteneği artacaktır. Bu değişkenleri eklemek için <code>PolynomialFeatures()</code> fonksiyonunu kullanıyoruz. Öncelikle ikinci dereceden değişkenler oluşturalım.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree değerini iki yaparak x ve x^2 değişkenlerini modele ekliyoruz.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pf <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span><span class="dv">2</span>, include_bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Polynomial features fit/transform fonksiyonlarını kullanıyor.</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>X_train_new <span class="op">=</span> pf.fit_transform(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>X_test_new <span class="op">=</span> pf.transform(X_test.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ve 10 değerleri arasında bağlanım değerlerini çizdirmek için kullanacağız.</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>line_X_new <span class="op">=</span> pf.transform(line_X.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Modeli oluşturup öğrenmesini sağlıyoruz.</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>lr.fit(X_train_new,y_train)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_train, lr.predict(X_train_new)))))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_test, lr.predict(X_test_new)))))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ve 10 değerleri arasında bağlanım değerlerini çizdirmek için kullanacağız.</span></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>line_y <span class="op">=</span> lr.predict(line_X_new)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train,y_train, alpha <span class="op">=</span> <span class="fl">0.3</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test, c<span class="op">=</span><span class="st">'red'</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.plot(line_X, line_y, c<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>plt.ylim((<span class="op">-</span><span class="dv">30000</span>, <span class="dv">10000</span>))</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 3414.8825409044716
+Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 2199.330416057473</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-2.png" width="677" height="638"></p>
+</div>
+</div>
+<p>İkinci dereceden değişkenler sayesinde hem öğrenme hem de sınama veri setinde hatayı azaltmayı başardık. Ancak örüntüyü tam olarak yakalayamadığımız da açık. Şimdi bir de üçüncü dereceden değişkenleri deneyelim.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree değerini üç yaparak x, x^2 ve x^3 değişkenlerini modele ekliyoruz.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>pf <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span><span class="dv">3</span>, include_bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Polynomial features fit/transform fonksiyonlarını kullanıyor.</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>X_train_new <span class="op">=</span> pf.fit_transform(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>X_test_new <span class="op">=</span> pf.transform(X_test.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ve 10 değerleri arasında bağlanım değerlerini çizdirmek için kullanacağız.</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>line_X_new <span class="op">=</span> pf.transform(line_X.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Modeli oluşturup öğrenmesini sağlıyoruz.</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression()</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>lr.fit(X_train_new,y_train)</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_train, lr.predict(X_train_new)))))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_test, lr.predict(X_test_new)))))</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ve 10 değerleri arasında bağlanım değerlerini çizdirmek için kullanacağız.</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>line_y <span class="op">=</span> lr.predict(line_X_new)</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train,y_train, alpha <span class="op">=</span> <span class="fl">0.3</span>)</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test, c<span class="op">=</span><span class="st">'red'</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>)</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>plt.plot(line_X, line_y, c<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.ylim((<span class="op">-</span><span class="dv">30000</span>, <span class="dv">10000</span>))</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 2751.4685999151775
+Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 1238.2399802882837</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-10-output-2.png" width="677" height="638"></p>
+</div>
+</div>
+<p>Hatayı azaltmayı başardık. Değişken sayısını arttırırsak daha iyi sonuçlar elde edeceğiz gibi duruyor. Belki de on beşinci dereceden değişkenleri modele ekleyerek daha iyi bir sonuç elde edebiliriz.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Degree değerini on beş yapıyoruz.</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pf <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span><span class="dv">15</span>, include_bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Polynomial features fit/transform fonksiyonlarını kullanıyor.</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>X_train_new <span class="op">=</span> pf.fit_transform(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>X_test_new <span class="op">=</span> pf.transform(X_test.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ve 10 değerleri arasında bağlanım değerlerini çizdirmek için kullanacağız.</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>line_X_new <span class="op">=</span> pf.transform(line_X.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Modeli oluşturup öğrenmesini sağlıyoruz.</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> LinearRegression()</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>lr.fit(X_train_new,y_train)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_train, lr.predict(X_train_new)))))</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): "</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>      <span class="op">+</span> <span class="bu">str</span>(np.sqrt(mean_squared_error(y_test, lr.predict(X_test_new)))))</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="co">#0 ve 10 değerleri arasında bağlanım değerlerini çizdirmek için kullanacağız.</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>line_y <span class="op">=</span> lr.predict(line_X_new)</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">8</span>))</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train,y_train, alpha <span class="op">=</span> <span class="fl">0.3</span>)</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test, c<span class="op">=</span><span class="st">'red'</span>, alpha <span class="op">=</span> <span class="fl">0.7</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>plt.plot(line_X, line_y, c<span class="op">=</span><span class="st">'green'</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>plt.ylim((<span class="op">-</span><span class="dv">30000</span>, <span class="dv">10000</span>))</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Öğrenme verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 2194.1279169602035
+Sınama verisinde karesel ortalama hata (Root Mean Square Error, RMSE): 13654.583865130366</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-2.png" width="677" height="638"></p>
+</div>
+</div>
+<p>Şekilde gördüğümüz gibi model veriyi çok başarılı bir şekilde öğrenmeyi başardı. Öğrenme verisindeki hata da düşmüş durumda. Ama aynı şeyi sınama verisi için söyleyemeyiz. Sınama verisinde hatanın tam tersine arttığını görüyoruz. Şimdi <code>PolynomialFeatures</code> altındaki <code>degree</code> (derece) değişkeninin birden 15’e çıkararak her bir değer için hataların durumuna bakalım.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Karesel Ortalama Hata değerleri, öğrenme ve sınama veri setleri için</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>score_train <span class="op">=</span> np.zeros(<span class="dv">16</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>score_test <span class="op">=</span> np.zeros(<span class="dv">16</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#1 ile 15 arasında dereceyi değiştirerek sonuçları tutuyoruz.</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">16</span>):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    pf <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span>i, include_bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    X_train_new <span class="op">=</span> pf.fit_transform(X_train.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>    X_test_new <span class="op">=</span> pf.transform(X_test.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>    lr <span class="op">=</span> LinearRegression()</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    lr.fit(X_train_new,y_train)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    score_train[i] <span class="op">=</span> np.sqrt(mean_squared_error(y_train, lr.predict(X_train_new)))</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    score_test[i] <span class="op">=</span> np.sqrt(mean_squared_error(y_test, lr.predict(X_test_new)))</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Sonuçları daha güzel çizmek için ilk değeri boş bırakıyoruz</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>score_test[<span class="dv">0</span>] <span class="op">=</span> np.nan</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>score_train[<span class="dv">0</span>] <span class="op">=</span> np.nan</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>plt.plot(score_train, color <span class="op">=</span> <span class="st">'blue'</span>, label <span class="op">=</span> <span class="st">'Öğrenme'</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>plt.plot(score_test, color <span class="op">=</span> <span class="st">'red'</span>, label <span class="op">=</span> <span class="st">'Sınama'</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Derece'</span>)</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'RMSE'</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-1.png" width="833" height="429"></p>
+</div>
+</div>
+<p>Gördüğümüz gibi <code>PolynomialFeatures</code> altındaki derece sayısını arttırdıkça öğrenme veri setini daha iyi öğreniyoruz. Ancak öğrendiğimiz örüntüler sınama verisinde işimize yaramıyor. Üçüncü dereceden itibaren hata artıyor. Dokuzuncu derecedeki düşüş de muhtemelen bir örüntüden çok şansla ilgili.</p>
+<p>Aşırı Öğrenme ve Eksik Öğrenme sınıflandırma problemlerinde de karşımıza çıkabilecek bir durum. Bunu da yine yapay bir veri seti üzerinde inceleyelim. Bu amaçla <code>scikit-learn</code> altındaki <code>make_classification()</code> fonksiyonunu kullanacağız.</p>
+<p>Öğrenme algoritması olarak <code>GradientBoostingClassifier()</code> yöntemini seçtik. Bu yöntem iterasyonlarla ilerleyen bir yöntem. Her iterasyonda bir önceki iterasyonun hatalarını düzeltmeyi amaçlıyor. İterasyon sayısının öğrenme yeteneğindeki etkisine bakalım. Değerlendirme için isabetlilik (accuracy) değerine bakacağız. Bu da modelin yaptığı doğru tahminin yüzdesine denk geliyor.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3000 örnek ve 100 öznitelikten oluşan bir veri seti oluşturuyoruz. </span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># flip_y değeri sayesinde etiketlerin %25'inin değerini değiştiriyoruz. Bu sayede daha zor bir problem elde edeceğiz.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>X,y <span class="op">=</span> make_classification(n_samples <span class="op">=</span> <span class="dv">3000</span>, n_features<span class="op">=</span><span class="dv">100</span>, flip_y <span class="op">=</span> <span class="fl">0.25</span>, random_state<span class="op">=</span> <span class="dv">100</span> )</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Veriyi öğrenme ve sınama veri setlerine ayırıyoruz.</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X,y,train_size <span class="op">=</span> <span class="fl">0.80</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Öğrenme için iteratif bir yöntem olan GradientBoosting'i kullanacağız.</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">#İterasyon sayısını az tuttuğumuzda yeterince öğrenememe, fazla tuttuğumuzda ise ezberleme durumu ortaya çıkabilir.</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">#200 iterasyon kullanarak modeli ouşturup öğrenmesini sağlayalım.</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Modelin performansını değerlendirmek için doğru tahmin yüzdesini (accuracy) kullanacağız.</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>clf <span class="op">=</span> GradientBoostingClassifier(n_estimators <span class="op">=</span> <span class="dv">200</span>, random_state<span class="op">=</span> <span class="dv">0</span> )</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>clf.fit(X_train, y_train)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Öğrenme versinde isabetlilik: '</span> <span class="op">+</span> <span class="bu">str</span>(accuracy_score(clf.predict(X_train),y_train)))</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Sınama verisinde isabetlilik: '</span> <span class="op">+</span> <span class="bu">str</span>(accuracy_score(clf.predict(X_test),y_test)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Öğrenme versinde isabetlilik: 0.935
+Sınama verisinde isabetlilik: 0.8066666666666666</code></pre>
+</div>
+</div>
+<p>Gördüğümüz gibi öğrenme verisinde isabetlilik gayet yüksekken, sınama verisinde bu değer daha düşük. Bu normal bir durum olsa da aradaki fark aşırı öğrenmeye işaret ediyor olabilir. Şimdi bir de her iterasyonda ne olduğunu inceleyelim.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># İsabetlilik değerlerini içeren diziler</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>score_test <span class="op">=</span> np.zeros((<span class="dv">200</span>,), dtype<span class="op">=</span>np.float64)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>score_train <span class="op">=</span> np.zeros((<span class="dv">200</span>,), dtype<span class="op">=</span>np.float64)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#İsabetlilik değerlerini dolduruyoruz. Staged_predict fonksiyonu her iterasyonun sonuçlarını döndürmek için kullanılıyor.</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y_pred <span class="kw">in</span> <span class="bu">enumerate</span>(clf.staged_predict(X_test)):</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    score_test[i] <span class="op">=</span> accuracy_score(y_test, y_pred)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, y_pred <span class="kw">in</span> <span class="bu">enumerate</span>(clf.staged_predict(X_train)):</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    score_train[i] <span class="op">=</span> accuracy_score(y_train, y_pred)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Enbüyük isabetlilik değeri: '</span> <span class="op">+</span> <span class="bu">str</span>(score_test.<span class="bu">max</span>()) )</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Enbüyük isabetlilik değerinin elde edildiği iterasyon: '</span> <span class="op">+</span> <span class="bu">str</span>(score_test.argmax()) )</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize <span class="op">=</span> (<span class="dv">10</span>,<span class="dv">5</span>))</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>plt.plot(score_train, label<span class="op">=</span><span class="st">'Öğrenme'</span>, c<span class="op">=</span> <span class="st">'blue'</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>plt.plot(score_test, label<span class="op">=</span><span class="st">'Sınama'</span>, c <span class="op">=</span> <span class="st">'red'</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>plt.ylim((<span class="fl">0.8</span>,<span class="fl">0.95</span>))</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'İterasyon'</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'İsabetlilik'</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Enbüyük isabetlilik değeri: 0.8166666666666667
+Enbüyük isabetlilik değerinin elde edildiği iterasyon: 46</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-14-output-2.png" width="821" height="432"></p>
+</div>
+</div>
+<p>Gördüğümüz gibi öğrenme verisinde hatamız gitgide düşüyor. Muhtemelen iterasyon sayısını arttırırsak öğrenme verisini tamamen doğru bir şekilde öğrenebileceğiz. Gerçi buna öğrenmek yerine ezberlemek demek daha doğru. Sınama verisinde en iyi isabetliliği 46. iterasyonda elde ediyoruz. Bu iterasyondan önce ve sonra isabetlilik değerleri daha düşük. Öncesinde veriyi öğrendiğimizi (underfitting) sonrasında ise ezberlediğimizi (overfitting) söyleyebiliriz. Bu örnekte fark küçük de olsa gerçek uygulamalarda bu dengeyi başarılı bir şekilde tutturmak projenizin başarısını belirleyen faktör olabilir.</p>
+<p>Bu Veri Defteri’ni <a href="https://github.com/sibirbil/VeriDefteri">github</a> dizininde bulabilirsiniz.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

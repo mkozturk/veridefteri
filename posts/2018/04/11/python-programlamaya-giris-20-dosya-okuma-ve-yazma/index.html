@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-04-11">
+
+<title>Veri Defteri - Python Programlamaya Giriş 20 - Dosya okuma ve yazma</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 20 - Dosya okuma ve yazma</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">April 11, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Yazı dizimizin bu bölümünde, dosya okuma ve yazma yöntemlerinden bahsedeceğiz. Önce herhangi bir özel şekilde yapılanmamış olan düz metin dosyalarını işlemeyi göreceğiz. Ardından <code>csv</code> modülüyle CSV biçiminde yapılanmış dosyaları okuyup yazmayı inceleyeceğiz. JSON, ZIP, PDF, Word, Excel, HTML dosyalarının işlenmesine kısaca değineceğiz. Son olarak, Python oturumunda yarattığımız nesneleri ikili (binary) formda dosyaya kaydetmemizi ve sonra dosyadan tekrar yüklememizi sağlayan <code>pickle</code> modülünün kullanımını özetleyeceğiz.</p>
+<section id="genel-dosya-okumayazma" class="level2">
+<h2 class="anchored" data-anchor-id="genel-dosya-okumayazma">Genel dosya okuma/yazma</h2>
+<section id="dosya-okumak" class="level3">
+<h3 class="anchored" data-anchor-id="dosya-okumak">Dosya okumak</h3>
+<p>Öncelikle, IPython sihirleriyle <em>deneme.txt</em> isimli bir dosya yaratalım (Jupyter kullanmıyorsanız aşağıdaki metni bir metin editörüne kopyalayıp <em>deneme.txt</em> ismiyle çalışma dizininize kaydedebilirsiniz).</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile deneme.txt</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Ey Türk Gençliği<span class="op">!</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>Birinci vazifen, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Türk istiklâlini, Türk Cumhuriyeti<span class="st">'ni, </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="er">ilelebet muhafaza ve müdafaa etmektir.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Writing deneme.txt</code></pre>
+</div>
+</div>
+<p>Bir dosyayı açmak için <code>open()</code> fonksiyonunu kullanırız. En basit halinde <code>open()</code> mevcut bir metin dosyasını okumak için açar ve bir dosya nesnesi döndürür.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">"deneme.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dosya nesnesinin <code>read()</code> metodu dosya içeriğini tek bir dize halinde döndürür.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>f.read()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="69">
+<pre><code>"Ey Türk Gençliği!\nBirinci vazifen, \nTürk istiklâlini, Türk Cumhuriyeti'ni, \nilelebet muhafaza ve müdafaa etmektir.\n"</code></pre>
+</div>
+</div>
+<p>Açılmış dosyalarla işimiz bittiğinde kapatmamız gerekir, yoksa bellekte birikip yer işgal edebilirler.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>readlines()</code> metodu, satırlardan oluşan bir liste döndürür:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">"deneme.txt"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>f.readlines()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="71">
+<pre><code>['Ey Türk Gençliği!\n',
+ 'Birinci vazifen, \n',
+ "Türk istiklâlini, Türk Cumhuriyeti'ni, \n",
+ 'ilelebet muhafaza ve müdafaa etmektir.\n']</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bir dosya nesnesi bir <em>iteratördür</em>; bütün dosyayı bir kerede belleğe yüklemez, ama talep geldikçe satırları birer birer verir. <code>readline()</code> metodu dosyadaki mevcut satırı okumak için kullanılır. Her yeni <code>readline()</code> çağrısı bir sonraki satırı getirir.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">"deneme.txt"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>f.readline()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="73">
+<pre><code>'Ey Türk Gençliği!\n'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>f.readline()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="74">
+<pre><code>'Birinci vazifen, \n'</code></pre>
+</div>
+</div>
+<p>Dosya nesnesi bir iteratör olduğu için <code>for</code> döngüsünde kullanılabilir. Bir dosyayı satır satır işlemek için şöyle bir döngü kurulur.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> satır <span class="kw">in</span> f:</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(satır.upper(),end<span class="op">=</span><span class="st">""</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>TÜRK ISTIKLÂLINI, TÜRK CUMHURIYETI'NI, 
+ILELEBET MUHAFAZA VE MÜDAFAA ETMEKTIR.</code></pre>
+</div>
+</div>
+</section>
+<section id="context-manager-with-...-as" class="level3">
+<h3 class="anchored" data-anchor-id="context-manager-with-...-as">Context manager <code>with ... as</code></h3>
+<p>Yukarıda, dosyayı <code>open()</code> ile açtıktan sonra <code>close()</code> metoduyla kapatmak gerektiğini söyledik. Bu basit bir kural olsa da, karmaşık programlar içinde gözden kaçabiliyor. Dosya açma/kapama işlemini daha düzenli hale getirmek için Python programcıları <em>context manager</em> denen bir yapı kullanırlar. Bir context manager oluşturmak için <code>with ... as</code> komutu kullanılır.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"deneme.txt"</span>) <span class="im">as</span> f:</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ey Türk Gençliği!
+Birinci vazifen, 
+Türk istiklâlini, Türk Cumhuriyeti'ni, 
+ilelebet muhafaza ve müdafaa etmektir.
+</code></pre>
+</div>
+</div>
+<p>Context manager ayrı ve geniş bir konudur, ayrıntısı için <a href="https://docs.python.org/3/reference/compound_stmts.html#with">Python belgelerine</a> bakabilirsiniz. Bizim açımızdan önemli olan, burada <code>with</code> bloku bitince dosyanın otomatik olarak kapatılmasıdır. Dosyanın kapanmış olduğunu, dosya nesnesinin <code>closed</code> değişkeninin durumuyla kontrol edebiliriz.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>f.closed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="77">
+<pre><code>True</code></pre>
+</div>
+</div>
+</section>
+<section id="dosyaya-yazmak" class="level3">
+<h3 class="anchored" data-anchor-id="dosyaya-yazmak">Dosyaya yazmak</h3>
+<p>Bir dosyaya yazmak için <code>open()</code> fonksiyonunda <code>"w"</code> (write) modunu kullanırız.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="bu">open</span>(<span class="st">"deneme2.txt"</span>, <span class="st">"w"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bu komutla, mevcut dizinde <em>deneme2.txt</em> dosyası yoksa yaratılır, varsa mevcut içeriği silinip üstüne yeni veri yazılır. Açılan dosyaya bir dize yazmak için <code>write()</code> metodu kullanılır.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>f.write(<span class="st">"ABCDE</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>f.write(<span class="st">"123456</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>f.write(<span class="st">"wxyz</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dosyayı açarak, veya <code>%cat</code> sihirini kullanarak içeriğine bakabiliriz.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>cat deneme2.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ABCDE
+123456
+wxyz</code></pre>
+</div>
+</div>
+<p>Aynısını bir context manager ile de yapabiliriz:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"deneme2.txt"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"ABCDE</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"123456</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"wxyz</span><span class="ch">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dosyada mevcut bulunan verileri silmeden, yeni verilerin dosyanın altına eklenmesini istersek dosyayı <code>"a"</code> (append) modunda açmalıyız.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"deneme2.txt"</span>, <span class="st">"a"</span>) <span class="im">as</span> f:</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"Yeni satır 1</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    f.write(<span class="st">"Yeni satır 2</span><span class="ch">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>cat deneme2.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ABCDE
+123456
+wxyz
+Yeni satır 1
+Yeni satır 2</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="csv-dosya-biçimi" class="level2">
+<h2 class="anchored" data-anchor-id="csv-dosya-biçimi">CSV dosya biçimi</h2>
+<p>Bir çok veri dosyasında veriler tablo halinde, her satırda bir <em>kayıt</em> ve her sütunda o kayda ait bir <em>alan</em> olacak şekilde düzenlenmişlerdir. Alanlar birbirlerinden boşlukla, virgülle, veya başka bir karakterle ayrılabilir. Bu tür bir dosya düzenine CSV (comma-separated values, virgülle ayrılmış değerler) adı verilir. CSV biçimindeki dosyaları okumak için yukarıda açıkladığımız genel yöntemleri kullanmak mümkünse de, Python’un <code>csv</code> modülü işleri basitleştirir. Sözgelişi MS Excel ve benzeri bir hesap tablosunu CSV biçiminde kaydedip, verileri Python ile okuyabilirsiniz; veya Python’la üretilen verileri CSV dosyası olarak kaydedip hesap tablosu uygulamasıyla açabilirsiniz.</p>
+<section id="csv-okuma" class="level3">
+<h3 class="anchored" data-anchor-id="csv-okuma">CSV okuma</h3>
+<p>Önce bir örnek veri dosyası hazırlayalım.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile ornek.csv</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="co">"Potter, H"</span>,<span class="dv">37</span>,<span class="st">"Londra, İngiltere"</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co">"Granger, H"</span>,<span class="dv">36</span>,<span class="st">"Sydney, Avustralya"</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co">"Weasley, Bill"</span>,<span class="dv">45</span>,<span class="st">"Bükreş, Romanya"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Writing ornek.csv</code></pre>
+</div>
+</div>
+<p>Bu örnekte isim ve adres alanı değerlerinin tırnak içinde yazıldığına dikkat edin. Eğer tırnak kullanılmasaydı, alanları virgülle ayırma kuralı bize <code>"Potter"</code>, <code>"H"</code>, <code>37</code>, <code>"Londra"</code>, <code>"İngiltere"</code> gibi beş ayrı alan verirdi.</p>
+<p>Bir CSV dosyasını açtıktan sonra, <code>csv</code> modülündeki <code>reader()</code> fonksiyonunu kullanarak onu satır satır okuyacak bir iteratör nesnesi yaratırız. Sonra bu iteratör nesnesi üzerinde bir döngüyle dosyayı tarayabiliriz.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> csv</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"ornek.csv"</span>) <span class="im">as</span> f:</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    okur <span class="op">=</span> csv.reader(f)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> satır <span class="kw">in</span> okur:</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(satır)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Potter, H', '37', 'Londra, İngiltere']
+['Granger, H', '36', 'Sydney, Avustralya']
+['Weasley, Bill', '45', 'Bükreş, Romanya']</code></pre>
+</div>
+</div>
+<p>Veya dosyamızda alan ayırıcı olarak boşluk karakteri, alan gruplama için bölü işareti (<code>/</code>) kullanılmış olabilir. Bu durumda <code>reader()</code> fonksiyonundaki <code>delimiter</code> ve <code>quotechar</code> parametrelerini değiştirerek dosyayı doğru şekilde alabiliriz.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile ornek2.csv</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>Potter, H<span class="op">/</span> <span class="dv">37</span> <span class="op">/</span>Londra, İngiltere<span class="op">/</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>Granger, H<span class="op">/</span> <span class="dv">36</span> <span class="op">/</span>Sydney, Avustralya<span class="op">/</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="op">/</span>Weasley, Bill<span class="op">/</span> <span class="dv">45</span> <span class="op">/</span>Bükreş, Romanya<span class="op">/</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Writing ornek2.csv</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"ornek2.csv"</span>) <span class="im">as</span> f:</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    okur <span class="op">=</span> csv.reader(f, delimiter<span class="op">=</span><span class="st">" "</span>, quotechar<span class="op">=</span><span class="st">"/"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> satır <span class="kw">in</span> okur:</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(satır)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Potter, H', '37', 'Londra, İngiltere']
+['Granger, H', '36', 'Sydney, Avustralya']
+['Weasley, Bill', '45', 'Bükreş, Romanya']</code></pre>
+</div>
+</div>
+<p>Görüldüğü gibi, bir CSV dosyasında alan ayırma, gruplama, satır sonu karakterleri için farklı tercihler olabilir. Her bir tercih kümesine bir <em>lehçe</em> (dialect) adı veriliyor. <code>csv.reader()</code> için varsayılan lehçe olan <code>"excel"</code>, MS Excel ile üretilen CSV dosyalarını okumaya ayarlıdır. Ancak yukarıda gördüğümüz gibi bu tercihler kolaylıkla değiştirilebilir.</p>
+<p>Eğer özel bir CSV biçimini sık sık kullanıyorsanız, o lehçeye özel bir <code>Dialect</code> nesnesi oluşturup <code>reader()</code> ile birlikte kullanabilirsiniz. Bunun ayrıntılarını <a href="https://docs.python.org/3/library/csv.html">Python belgelerinden</a> öğrenebilirsiniz.</p>
+</section>
+<section id="csv-yazma" class="level3">
+<h3 class="anchored" data-anchor-id="csv-yazma">CSV yazma</h3>
+<p>Elimizdeki verileri bir CSV dosyasına yazmak için önce <code>csv</code> modülünün <code>writer()</code> fonksiyonuyla bir yazıcı nesnesi yaratırız. Yazıcı nesnesi verilen veriyi kullanılan “lehçe”ye uygun şekilde bir dizeye dönüştürür ve dosyaya yazar. Yazılacak dosyayı <code>open()</code> ile açarken <code>newline=""</code> parametresi vermemiz gerekir.</p>
+<p>Yazıcı nesnesinin <code>writerow()</code> metodu yazılacak satırı bir liste olarak alır.</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"ornek3.csv"</span>, <span class="st">"w"</span>, newline<span class="op">=</span><span class="st">""</span>) <span class="im">as</span> f:</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    yazıcı <span class="op">=</span> csv.writer(f)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    yazıcı.writerow([<span class="st">'Potter, H'</span>, <span class="st">'37'</span>, <span class="st">'Londra, İngiltere'</span>])</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    yazıcı.writerow([<span class="st">'Granger, H'</span>, <span class="st">'36'</span>, <span class="st">'Sydney, Avustralya'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dosyanın içeriğine bakarak doğru yazılıp yazılmadığını kontrol edelim</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>cat ornek3.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>"Potter, H",37,"Londra, İngiltere"
+"Granger, H",36,"Sydney, Avustralya"</code></pre>
+</div>
+</div>
+</section>
+<section id="pandas-ile-csv-okuma" class="level3">
+<h3 class="anchored" data-anchor-id="pandas-ile-csv-okuma">Pandas ile CSV okuma</h3>
+<p>CSV dosyalarını veri analizi paketi <em>pandas</em> ile de okumak ve yazmak mümkündür. Pandas ile CSV okumak hem daha basittir, hem de <code>csv</code> modülünde bulunmayan sözgelişi veri içindeki yorumları elemek, sadece istenen sütunları almak gibi ince ayarlara da imkan verir.</p>
+<p>Pandas’ın <code>read_csv()</code> fonksiyonu dosyanın içeriğini bir veri çerçevesi olarak okur; ardından bu veri çerçevesinden çeşitli satırlar veya sütunlar alınabilir. Pandas kullanımı bu notların kapsamı dışında olduğu için ayrıntıya girmiyorum.</p>
+</section>
+</section>
+<section id="diğer-dosya-formatları" class="level2">
+<h2 class="anchored" data-anchor-id="diğer-dosya-formatları">Diğer dosya formatları</h2>
+<p>Birçok dosya biçimi için Python’da özelleşmiş kütüphaneler vardır. Bunların bazılarına değinelim.</p>
+<section id="json" class="level3">
+<h3 class="anchored" data-anchor-id="json">JSON</h3>
+<p>Birçok internet hizmeti API’si, sorgulama sonuçlarını JSON biçiminde bir dosya olarak verir (sözgelişi daha önce <a href="http://www.veridefteri.com/2018/01/23/foursquare-api/">Foursquare</a>, <a href="http://www.veridefteri.com/2018/03/22/weather-underground-api/">Weather Underground</a> ve <a href="http://www.veridefteri.com/2017/12/13/veri-defteri-ben-seviyor-cok/">Star Wars</a> API’lerini JSON verilerini incelemiştik). Python standart kütüphanesindeki <code>json</code> modülü, JSON biçimli bir dosyayı okuyup bir Python sözlük veya listesine dönüştüren, ve Python nesnelerinden JSON biçimli bir dosya oluşturan fonksiyonları içerir.</p>
+<p><a href="https://www.mockaroo.com/">Mockaroo</a> sitesini kullanarak yalancı veri içeren küçük bir JSON dosyası üretelim.</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile yalanci_veri.json</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>[{</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"id"</span>: <span class="dv">1</span>,</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"first_name"</span>: <span class="st">"Fredia"</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"last_name"</span>: <span class="st">"Waith"</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"email"</span>: <span class="st">"fwaith0@tamu.edu"</span></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>}, {</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"id"</span>: <span class="dv">2</span>,</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"first_name"</span>: <span class="st">"Rafaello"</span>,</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"last_name"</span>: <span class="st">"Rowthorn"</span>,</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"email"</span>: <span class="st">"rrowthorn1@stanford.edu"</span></span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>}, {</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"id"</span>: <span class="dv">3</span>,</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"first_name"</span>: <span class="st">"Harriette"</span>,</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"last_name"</span>: <span class="st">"Patters"</span>,</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"email"</span>: <span class="st">"hpatters2@samsung.com"</span></span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>}]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Writing yalanci_veri.json</code></pre>
+</div>
+</div>
+<p>Şimdi bu dosyayı açıp, içeriğini yorumlayalım ve bir Python nesnesine aktaralım.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"yalanci_veri.json"</span>) <span class="im">as</span> f:</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>    yalanciveriler <span class="op">=</span> json.load(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bu işlem sonucunda bir sözlükler listesi elde etmiş oluruz. Bilindik indeksleme işlemleriyle tek tek elemanlara ulaşabiliriz.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>yalanciveriler[<span class="dv">1</span>][<span class="st">"first_name"</span>], yalanciveriler[<span class="dv">1</span>][<span class="st">"email"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="92">
+<pre><code>('Rafaello', 'rrowthorn1@stanford.edu')</code></pre>
+</div>
+</div>
+<p>Şimdi JSON dosyası yazmayı görelim. Elimizdeki veriye bir satır daha ekleyelim ve nesnenin yeni halini <code>json.dump()</code> ile dosyaya yazalım.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>yalanciveriler.append(</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"id"</span>: <span class="dv">4</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"first_name"</span>: <span class="st">"Giffer"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"last_name"</span>: <span class="st">"Dur"</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"email"</span>: <span class="st">"gdur2@cnbc.com"</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"yalanci_veri.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>    json.dump(yalanciveriler,f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dosyanın içeriğine bakarak beklediğimiz şekilde yazıldığını görebiliyoruz.</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>cat yalanci_veri.json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[{"id": 1, "first_name": "Fredia", "last_name": "Waith", "email": "fwaith0@tamu.edu"}, {"id": 2, "first_name": "Rafaello", "last_name": "Rowthorn", "email": "rrowthorn1@stanford.edu"}, {"id": 3, "first_name": "Harriette", "last_name": "Patters", "email": "hpatters2@samsung.com"}, {"id": 4, "first_name": "Giffer", "last_name": "Dur", "email": "gdur2@cnbc.com"}]</code></pre>
+</div>
+</div>
+</section>
+<section id="html" class="level3">
+<h3 class="anchored" data-anchor-id="html">HTML</h3>
+<p>HTML dosyaları zaten düz metinden oluştuğu için onları okumakta teknik bir zorluk yok. HTML işlemede asıl istenen şey <em>parsing</em>, yani çeşitli HTML elemanlarına erişebilmektir. Söz gelişi, bir HTML’deki bağlantıları almak, tablo veriyi okumak gibi işlemler yapmamız gerekebilir. Bu tür işlemler bu yazı dizisinin kapsamını aşıyor. İlgilenenler, en çok kullanılan araçlardan biri olan <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/"><em>Beautiful Soup</em> modülüyle</a> denemeler yapabilirler.</p>
+</section>
+<section id="excel" class="level3">
+<h3 class="anchored" data-anchor-id="excel">Excel</h3>
+<p>MS Excel dosyalarını CSV olarak kaydederseniz <em>CSV okuma/yazma</em> kısmındaki yöntemleri kullanabilirsiniz. Bunu istemiyorsanız, veya tablodaki verileriniz bu işleme uygun değilse, veya birden fazla yapraktan oluşuyorsa, Excel dosyasını doğrudan açmak için <a href="http://xlrd.readthedocs.io/en/latest/"><em>xlrd</em> modülünü</a> kullanabilirsiniz.</p>
+<p>Daha geniş özelliklere sahip bir paket olan <a href="http://pyexcel.readthedocs.io/en/latest/"><em>pyexcel</em></a> ile hem okuma hem de yazmayı daha kolay işlemlerle yapabilirsiniz.</p>
+<p><em>Pandas</em> paketinin <code>read_excel()</code> fonksiyonu ile bir Excel dosyasını doğrudan okuyarak bir veri çerçevesi haline getirebilirsiniz. Kullanımına bir örnek görmek için <a href="http://www.veridefteri.com/2017/10/30/groupby/">“Groupby” yazımıza</a> bakabilirsiniz. Word</p>
+<hr>
+<p>MS Word belgelerinin içinden metin almak, belge yaratmak ve varolan belgeye içerik eklemek için <a href="https://python-docx.readthedocs.io/en/latest/index.html"><em>python-docx</em></a> modülü kullanılabilir. Örnekler için Al Sweigart’ın <em>Automate The Boring Stuff with Python</em> <a href="https://automatetheboringstuff.com/chapter13/">kitabına</a> bakabilirsiniz.</p>
+</section>
+<section id="pdf" class="level3">
+<h3 class="anchored" data-anchor-id="pdf">PDF</h3>
+<p>PDF dosyalarından bilgi almak, PDF dosyası yaratmak, mevcut dosyada değişiklik yapmak gibi işler için <a href="https://pythonhosted.org/PyPDF2/"><em>pyPDF2</em></a> modülünü kullanabilirsiniz. Sweigart’ın <em>Automate The Boring Stuff with Python</em> [kitabında] (https://automatetheboringstuff.com/chapter13/) bu modülün kullanımına dair açıklayıcı örnekler bulabilirsiniz.</p>
+</section>
+<section id="zip" class="level3">
+<h3 class="anchored" data-anchor-id="zip">ZIP</h3>
+<p>Python standart kütüphanesindeki <a href="https://docs.python.org/3/library/zipfile.html"><em>zipfile</em> modülü</a>, ZIP formatında sıkıştırma ve açma fonksiyonları sağlar. Basit bir örnek olarak, yukarıda kullandığımız <em>deneme.txt</em> ve <em>yalanci_veri.json</em> dosyalarını sıkıştırarak bir arşiv dosyası oluşturalım.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">"arsiv.zip"</span>,<span class="st">"w"</span>) <span class="im">as</span> z:</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    z.write(<span class="st">"deneme.txt"</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    z.write(<span class="st">"yalanci_veri.json"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Mevcut bir arşive bir dosya eklemek istiyorsak, <code>ZipFile()</code> fonksiyonunun açılma modunu <code>"w"</code> yerine <code>"a"</code> yaparız.</p>
+<p><code>ZipFile()</code> fonksiyonu, yukarıda gördüğümüz <code>open()</code> gibi çalışır. Arşivi açmak için <code>ZipFile()</code> fonksiyonunu okuma modunda kullanırız, ve arşiv dosyası nesnesine ait <code>open()</code> metoduyla dosyayı açarız. Açılan dosyanın içeriği <code>read()</code>, <code>readline()</code> veya <code>readlines()</code> metodlarıyla okunabilir. Bu metodlar kodlanmış dizeler döndürdüğü için <code>decode()</code> dize metoduyla Unicode’a çevrilmelidir.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">'arsiv.zip'</span>) <span class="im">as</span> z:</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> z.<span class="bu">open</span>(<span class="st">'deneme.txt'</span>) <span class="im">as</span> f:</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(f.read().decode(<span class="st">"utf-8"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Ey Türk Gençliği!
+Birinci vazifen, 
+Türk istiklâlini, Türk Cumhuriyeti'ni, 
+ilelebet muhafaza ve müdafaa etmektir.
+</code></pre>
+</div>
+</div>
+<p>Bir ZIP arşivindeki bir dosyayı açarak diske kaydetmek için <code>extract()</code>, arşivdeki bütün dosyaları açmak için <code>extractall()</code> fonksiyonları kullanabiliriz.</p>
+</section>
+</section>
+<section id="değişkenlerimizi-kaydetmek-pickle" class="level2">
+<h2 class="anchored" data-anchor-id="değişkenlerimizi-kaydetmek-pickle">Değişkenlerimizi kaydetmek: pickle</h2>
+<p>Bir oturumda hazırladığınız değişkenleri, oturumu kapattığınızda kaybetmemek isterseniz bunları ikili (binary) bir veri yapısı haline getirip diske kaydetmeniz gerekir. Bu işi standart kütüphanedeki <a href="https://docs.python.org/3/library/pickle.html"><em>pickle</em> modülü</a> ile yapabilirsiniz. Neredeyse bütün Python nesnelerini (kendi tanımladığımız nesne sınıfları dahil) dosyaya kaydetmeniz ve sonra tekrar okumanız mümkündür. Bu işleme <em>serialization</em> adı verilir.</p>
+<p>Birkaç değişken tanımlayalım.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="fl">3.14159</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">4</span>]</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>D <span class="op">=</span> {<span class="st">"abc"</span>: <span class="dv">123</span>, <span class="st">"def"</span>: <span class="dv">456</span>}</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fon(x):</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">*</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Verileri kaydetmek istediğimiz dosyayı ikili yazma modunda açalım ve <em>pickle</em> modülündeki <code>dump()</code> fonksiyonuyla değişkenleri dosyaya ekleyelim.</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pickle</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"data.p"</span>, <span class="st">"wb"</span>) <span class="im">as</span> f:</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>    pickle.dump(x,f)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>    pickle.dump(L,f)</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>    pickle.dump(D,f)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>    pickle.dump(fon,f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Değişkenleri dosyadan okumak için <code>load()</code> fonksiyonunu kullanırız. Nesneler dosyaya kondukları sırayla geri alınırlar. Değişkenlerin orijinal adını kullanmamız gerekmez.</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"data.p"</span>, <span class="st">"rb"</span>) <span class="im">as</span> f:</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> pickle.load(f)</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(y)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    J <span class="op">=</span> pickle.load(f)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(J)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> pickle.load(f)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(F)</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> pickle.load(f)</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(G(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3.14159
+[1, 3, 2, 5, 4]
+{'abc': 123, 'def': 456}
+9.869587728099999</code></pre>
+</div>
+</div>
+<p>Bazı nesneler <em>pickle</em> ile kaydedilemezler; ağ bağlantıları, veri tabanı bağlantıları, açık dosya nesneleri gibi.</p>
+<p>Dikkat: <em>pickle</em> işlemleri herhangi bir emniyet tedbiri içermez. Pickle dosyasının içindeki nesne <code>load()</code> ile doğrudan doğruya çalıştırılır. Bu nesnenin içinde kötü amaçlı bir kod parçası varsa sisteminize zarar gelebilir. Bu yüzden bilmediğiniz bir yerden gelen pickle dosyalarını açmayın.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

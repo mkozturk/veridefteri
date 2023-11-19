@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Birol Yüceoğlu">
+<meta name="dcterms.date" content="2018-03-30">
+
+<title>Veri Defteri - pandas’a Giriş - Veri Çerçeveleri</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">pandas’a Giriş - Veri Çerçeveleri</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">pandas</div>
+    <div class="quarto-category">veri önişleme</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Birol Yüceoğlu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 30, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><code>Pandas</code> ile ilgili bu yazımızda veri çerçevesi (<code>DataFrame</code>) isimli veri yapısını ele alacağız. Önceki yazımızda etiketli verilerden oluşan <a href="http://www.veridefteri.com/2018/03/01/pandasa-giris-seriler/">serileri</a> görmüştük. Seriler tek boyutlu bir veri yapısıyken, veri çerçevelerini her sütunu bir seriden oluşan iki boyutlu bir matris olarak düşünebiliriz. Serilerde bahsettiğimiz birçok yöntemi veri çerçevelerinde de kullanmak mümkün. Ayrıca SQL tablolarında kullanılan tablo birleştirme (<code>JOIN</code>) gibi işlemleri de <code>Pandas</code> ile yapmak mümkün.</p>
+<section id="veri-çerçeveleri" class="level1">
+<h1>Veri Çerçeveleri</h1>
+<p>Veri çerçevelerini birden fazla serinin bir araya gelmiş hali olarak düşünebiliriz. Veri çerçeveleri de seriler gibi etiketli bir veri yapısıdır, ancak serilerden farkı iki boyutlu olmasıdır. Serilerdeki gibi etiket değerlerine indeks (<code>index</code>) denir. Veri çerçeveleri <code>index</code> alanının yanında <code>columns</code> alanını da içeriyor. <code>columns</code> sütunların isimlerini içeren bir sıralı nesne.</p>
+<p>Veri çerçevesi oluşturmak için serileri kullanmak mümkün. <a href="http://www.imf.org/external/pubs/ft/weo/2017/02/weodata/download.aspx">Linkten</a> erişebileceğiniz IMF’nin gayrisafi yurt içi hasıla verisi ile ilk denemeyi yapabiliriz. 2016 ve 2017 yılları için serileri anlattığımız yazıdaki veri kümelerini oluşturalım.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pandas paketini yükleyelim</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># GSYİH değeri en yüksek olan 10 ülkenin değerlerini kullanacağız.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>gdp_data_2017 <span class="op">=</span> [<span class="fl">19362.13</span>, <span class="fl">11937.56</span>, <span class="fl">4884.49</span>, <span class="fl">3651.87</span>, <span class="fl">2574.81</span>, <span class="fl">2565.05</span>, <span class="fl">2439.01</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                 <span class="fl">2080.92</span>, <span class="fl">1921.14</span>, <span class="fl">1640.39</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># İndeks değerlerini içeren listeyi oluşturalım.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>gdp_index_2017 <span class="op">=</span> [<span class="st">'ABD'</span>, <span class="st">'Çin'</span>, <span class="st">'Japonya'</span>, <span class="st">'Almanya'</span>, <span class="st">'Fransa'</span>, </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>                  <span class="st">'Birleşik Krallık'</span>, <span class="st">'Hindistan'</span>, <span class="st">'Brezilya'</span>, <span class="st">'İtalya'</span>, <span class="st">'Kanada'</span>]</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Seriyi oluşturalım. İndeks değerini vermediğimizde, Pandas 0'dan başlayarak veriyi indeksler.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>gdp_2017 <span class="op">=</span> pd.Series(gdp_data_2017, index <span class="op">=</span> gdp_index_2017, name <span class="op">=</span> <span class="st">'GDP_2017'</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Aynı işlemi 2016 yılı için yapalım.</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'ABD'</span>:<span class="fl">18624.45</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="st">'Çin'</span>:<span class="fl">11232.11</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="st">'Japonya'</span>:<span class="fl">4936.54</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="st">'Almanya'</span>:<span class="fl">3479.23</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="st">'Fransa'</span>:<span class="fl">2466.47</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="st">'Birleşik Krallık'</span>:<span class="fl">2629.19</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="st">'Hindistan'</span>:<span class="fl">2263.79</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="st">'Brezilya'</span>:<span class="fl">1798.62</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="st">'İtalya'</span>:<span class="fl">1850.74</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="st">'Kanada'</span>:<span class="fl">1529.76</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="st">'Kore'</span>:<span class="fl">1411.04</span>}</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>gdp_2016 <span class="op">=</span> pd.Series(d, name <span class="op">=</span> <span class="st">'GDP_2016'</span>)</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gdp_2016)</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(gdp_2017)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ABD                 18624.45
+Almanya              3479.23
+Birleşik Krallık     2629.19
+Brezilya             1798.62
+Fransa               2466.47
+Hindistan            2263.79
+Japonya              4936.54
+Kanada               1529.76
+Kore                 1411.04
+Çin                 11232.11
+İtalya               1850.74
+Name: GDP_2016, dtype: float64
+ABD                 19362.13
+Çin                 11937.56
+Japonya              4884.49
+Almanya              3651.87
+Fransa               2574.81
+Birleşik Krallık     2565.05
+Hindistan            2439.01
+Brezilya             2080.92
+İtalya               1921.14
+Kanada               1640.39
+Name: GDP_2017, dtype: float64</code></pre>
+</div>
+</div>
+<p>Oluşturduğumuz serileri birleştirmek için iki yol kullanacağız. Bunlardan biri <code>pandas</code> altındaki <code>concat</code> fonksiyonu, diğeri ise serilerden oluşan bir sözlük tanımlamak olacak.</p>
+<p><code>concat</code> fonksiyonunu kullanırken sütunların isimlerini ayrıca belirtmemize gerek yok. Bunun yerine serilerin <code>name</code> alanı sütun isimleri olarak atanıyor. Bir seride olup diğerinde olmayan değerler (Kore gibi) <code>NaN</code> değeriyle gösterilir.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([gdp_2017, gdp_2016], axis <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  GDP_2017  GDP_2016
+ABD               19362.13  18624.45
+Almanya            3651.87   3479.23
+Birleşik Krallık   2565.05   2629.19
+Brezilya           2080.92   1798.62
+Fransa             2574.81   2466.47
+Hindistan          2439.01   2263.79
+Japonya            4884.49   4936.54
+Kanada             1640.39   1529.76
+Kore                   NaN   1411.04
+Çin               11937.56  11232.11
+İtalya             1921.14   1850.74</code></pre>
+</div>
+</div>
+<p>Veri çerçevesindeki değerlerin serilerdeki yerinden bağımsız olarak indeks alanına göre eşleştirildiğini görüyoruz. Ondalık işaretini virgüle çevirmek için aşağıdaki yerel ayarları kullanabiliriz. Aşağıdaki kutucukta yerel ayarları değiştiriyoruz ve ondalıklı sayıları formatlıyoruz. Son satırdaki <code>grouping = False</code> binlik işaretini kullanmayacağımızı belirtiyor. Yerel ayarların formatlama ile kullanılması konusunda Kaan’ın <a href="http://www.veridefteri.com/2018/01/26/python-programlamaya-giris-sirali-nesnelerle-islemler/">sıralı nesneler</a> ve <a href="http://www.veridefteri.com/2018/02/23/python-programlamaya-giris-16-dize-bicimlendirme/">dizeler</a> için yazdığı yazıları incelemenizi tavsiye ederim.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> locale</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>loc <span class="op">=</span> locale.getlocale()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Yerel ayarları Türkiye standartlarına çeviriyoruz.</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>locale.setlocale(locale.LC_ALL, <span class="st">"Turkish_Turkey.1254"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Küsuratlı sayıları virgülden sonra iki basamak içerecek şekilde formatlıyoruz.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Binlik işaretini kullanmayacağız.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>pd.set_option(<span class="st">'display.float_format'</span>, <span class="kw">lambda</span> x: locale.<span class="bu">format</span>(<span class="st">'</span><span class="sc">%.2f</span><span class="st">'</span>, x, grouping <span class="op">=</span> <span class="va">False</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aşağıdaki örnekte, veri çerçevesini serilerden oluşan bir sözlük yardımıyla oluşturuyoruz. Sözlüğün anahtarı sütunun ismine atanır.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'2017'</span> : gdp_2017,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>     <span class="st">'2016'</span> : gdp_2016}</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(d)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     2016     2017
+ABD              18624,45 19362,13
+Almanya           3479,23  3651,87
+Birleşik Krallık  2629,19  2565,05
+Brezilya          1798,62  2080,92
+Fransa            2466,47  2574,81
+Hindistan         2263,79  2439,01
+Japonya           4936,54  4884,49
+Kanada            1529,76  1640,39
+Kore              1411,04      nan
+Çin              11232,11 11937,56
+İtalya            1850,74  1921,14</code></pre>
+</div>
+</div>
+<p>Ondalık işaretinin değiştiğini görebilirsiniz.</p>
+<p>Sözlük listeleri de veri çerçevesi oluşturmak için kullanılabilir. Aşağıdaki örnekteki listedeki her bir sözlük bir ülkenin GSYİH değerine denk geliyor. Hangi ülkeler olduğunu ise veri çerçevesini oluştururken söylüyoruz. Belirtmediğimiz değerler de <code>NaN</code> değerini alıyor.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [{<span class="st">'GDP_2016'</span>:<span class="fl">3651.87</span>, <span class="st">'GDP_2017'</span>: <span class="fl">3479.23</span>}, {<span class="st">'GDP_2016'</span> : <span class="fl">2466.47</span>}]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data, index <span class="op">=</span> [<span class="st">'Almanya'</span>, <span class="st">'Fransa'</span>])</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         GDP_2016  GDP_2017
+Almanya   3651,87   3479,23
+Fransa    2466,47       nan</code></pre>
+</div>
+</div>
+<p>Veri çerçevelerinin matrisler gibi iki boyutlu bir veri yapısı olduğundan bahsetmiştik. Matrisler de veri çerçeveleri oluşturmak için kullanılabilir.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2x2'lik rassal sayılardan oluşan bir matris oluşturalım.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> np.random.rand(<span class="dv">2</span>,<span class="dv">2</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Index ve columns değerlerini veri çerçevesini oluştururken tanımlayabiliriz.</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data, index <span class="op">=</span> [<span class="st">'1. satır'</span>, <span class="st">'2. satır'</span>], columns<span class="op">=</span>[<span class="st">'1. sütun'</span>, <span class="st">'2. sütun'</span>])</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          1. sütun  2. sütun
+1. satır      0,45      0,42
+2. satır      1,00      0,96</code></pre>
+</div>
+</div>
+<p>Uygulamalarınızda kullanacağınız boyuttaki verileri bahsettiğimiz yöntemlerle veri çerçevesine atamanın zorluğunu farketmişsinizdir. Neyse ki <code>pandas</code> çeşitli formatlardaki dosyaları okumanızı sağlayacak fonksiyonlar içeriyor.</p>
+</section>
+<section id="dosya-okuma" class="level1">
+<h1>Dosya okuma</h1>
+<p><code>pandas</code> paketi csv, Excel, JSON formatlarındaki dosyaların yanında Stata, SAS programlarıyla oluşturulmuş dosyaları da okuyarak içeriğini bir veri çerçevesine atamanızı sağlayan fonksiyonlar içeriyor. Benim sıklıkla kullandığım <code>read_clipboard</code> fonksiyonu ise kopyaladığınız bir veriyi (örneğin bir Excel tablosunu) veri çerçevesine dönüştürüyor.</p>
+<p><code>read_csv</code> fonksiyonunda sıklıkla kullanabileceğiniz parametreleri aşağıda bulabilirsiniz:</p>
+<ul>
+<li><code>sep</code>: kolonları ayıran karakter ya da kurallı ifade (varsayılan değer <code>','</code>),</li>
+<li><code>header</code>: sütun isimlerini içeren satırın numarası (varsayılan değer 0, eğer böyle bir satır yoksa <code>None</code>),</li>
+<li><code>index_col</code>: indeks değerlerini içeren sütunun numarası,</li>
+<li><code>names</code>: sütun isimlerini içeren sıralı nesne.</li>
+</ul>
+<p><code>read_excel</code> fonksiyonunda ek olarak birden fazla sayfa içeren dokümanlarda hangi sayfaları okutacağınızı belirten <code>sheet_name</code> argümanını da kullanabilirsiniz. <code>sheet_name</code> değeri sayfanın adı, indeksi (ya da bunların bir listesi) olabilir. Ayrıca <code>None</code> değerini kullanmanız halinde bütün sayfaları okutabilirsiniz. Örnek olarak <a href="http://archive.ics.uci.edu/ml/datasets/online+retail">linkten</a> indirebileceğiniz bir çevrimiçi alışveriş veri kümesini kullandım.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dosya tek bir sayfa içerdiği için sheet_name'e ihtiyaç duymadık.</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Benim bilgisayarımda Excel dosyası ile Jupyter Notebook dosyası </span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># aynı klasörde olduğundan adres belirtmedim.</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_excel(<span class="st">'Online Retail.xlsx'</span>, decimal <span class="op">=</span> <span class="st">','</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  InvoiceNo StockCode                          Description  Quantity  \
+0    536365    85123A   WHITE HANGING HEART T-LIGHT HOLDER         6   
+1    536365     71053                  WHITE METAL LANTERN         6   
+2    536365    84406B       CREAM CUPID HEARTS COAT HANGER         8   
+3    536365    84029G  KNITTED UNION FLAG HOT WATER BOTTLE         6   
+4    536365    84029E       RED WOOLLY HOTTIE WHITE HEART.         6   
+
+          InvoiceDate  UnitPrice  CustomerID         Country  
+0 2010-12-01 08:26:00       2,55    17850,00  United Kingdom  
+1 2010-12-01 08:26:00       3,39    17850,00  United Kingdom  
+2 2010-12-01 08:26:00       2,75    17850,00  United Kingdom  
+3 2010-12-01 08:26:00       3,39    17850,00  United Kingdom  
+4 2010-12-01 08:26:00       3,39    17850,00  United Kingdom  </code></pre>
+</div>
+</div>
+<p>Kolonların isimlerini değiştirelim.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [<span class="st">'FaturaNo'</span>, <span class="st">'UrunNo'</span>, <span class="st">'Tanim'</span>, <span class="st">'Adet'</span>, <span class="st">'FaturaTarihi'</span>, <span class="st">'BirimFiyat'</span>, <span class="st">'MusteriNo'</span>, <span class="st">'Ulke'</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  FaturaNo  UrunNo                                Tanim  Adet  \
+0   536365  85123A   WHITE HANGING HEART T-LIGHT HOLDER     6   
+1   536365   71053                  WHITE METAL LANTERN     6   
+2   536365  84406B       CREAM CUPID HEARTS COAT HANGER     8   
+3   536365  84029G  KNITTED UNION FLAG HOT WATER BOTTLE     6   
+4   536365  84029E       RED WOOLLY HOTTIE WHITE HEART.     6   
+
+         FaturaTarihi  BirimFiyat  MusteriNo            Ulke  
+0 2010-12-01 08:26:00        2,55   17850,00  United Kingdom  
+1 2010-12-01 08:26:00        3,39   17850,00  United Kingdom  
+2 2010-12-01 08:26:00        2,75   17850,00  United Kingdom  
+3 2010-12-01 08:26:00        3,39   17850,00  United Kingdom  
+4 2010-12-01 08:26:00        3,39   17850,00  United Kingdom  </code></pre>
+</div>
+</div>
+</section>
+<section id="temel-metotlar-ve-erişim" class="level1">
+<h1>Temel Metotlar ve Erişim</h1>
+<p>Veri çerçevelerinde, serilerde gördüğümüz <code>dim</code>, <code>shape</code>, <code>size</code> alanlarını ve erişim için kullandığımız <code>loc</code> ve <code>iloc</code> fonksiyonları kullanabiliriz. Serilerden farklı olarak veri çerçeveleri iki boyutlu, <code>size</code> alanı da bu nedenle sütun ve satır sayısının çarpımına eşit.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Boyut: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.ndim))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Şekil: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.shape))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Uzunluk: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.size))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Sütunlar: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.columns))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Boyut: 2
+Şekil: (541909, 8)
+Uzunluk: 4335272
+Sütunlar: Index(['FaturaNo', 'UrunNo', 'Tanim', 'Adet', 'FaturaTarihi', 'BirimFiyat',
+       'MusteriNo', 'Ulke'],
+      dtype='object')</code></pre>
+</div>
+</div>
+<p>Erişim için de yine serilerde gördüğümüz <code>iloc</code> ve <code>loc</code> metotlarını kullanabiliriz. Aynı zamanda Kaan’ın <a href="http://www.veridefteri.com/2018/01/26/python-programlamaya-giris-sirali-nesnelerle-islemler/">Sıralı Nesneler İşlemler</a> yazısında bahsettiği dilimleme yöntemlerini kullanabiliriz.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Veri çerçevesinin 0,0 indeksindeki değer: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.iloc[<span class="dv">0</span>,<span class="dv">0</span>]))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Veri çerçevesinin ilk satırındaki değerler:</span><span class="ch">\n</span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.iloc[<span class="dv">0</span>,:]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Veri çerçevesinin 0,0 indeksindeki değer: 536365
+Veri çerçevesinin ilk satırındaki değerler:
+FaturaNo                                    536365
+UrunNo                                      85123A
+Tanim           WHITE HANGING HEART T-LIGHT HOLDER
+Adet                                             6
+FaturaTarihi                   2010-12-01 08:26:00
+BirimFiyat                                    2,55
+MusteriNo                                 17850,00
+Ulke                                United Kingdom
+Name: 0, dtype: object</code></pre>
+</div>
+</div>
+<p>Verideki eksik değerler özel ilgi göstermemizi gerektirecek durumlara işaret edebilir. Şimdi sütunlardaki eksik değerlerin sayısına bakalım. <code>isnull</code> veri çerçevesinin boyutunda 0 ve 1 (<code>True</code>/<code>False</code>) değerlerinden oluşan bir veri çerçevesi döndürüyor. Bu veri çerçevesi <code>NaN</code> olan hücreler için <code>True</code>, diğer hücreler için <code>False</code> değerine sahip. Sütunlar üzerinden toplarsak eksik değer içeren hücre sayısını bulabiliriz.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eksik hücre sayısı'</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eksik hücre sayısı
+FaturaNo             0
+UrunNo               0
+Tanim             1454
+Adet                 0
+FaturaTarihi         0
+BirimFiyat           0
+MusteriNo       135080
+Ulke                 0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Müşteri numarası olmayan 135080 satır var. Bu satırları veri setinden çıkaralım.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[<span class="op">~</span>df[<span class="st">'MusteriNo'</span>].isnull()]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Şekil: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df.shape))</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eksik hücre sayısı'</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Şekil: (406829, 8)
+Eksik hücre sayısı
+FaturaNo        0
+UrunNo          0
+Tanim           0
+Adet            0
+FaturaTarihi    0
+BirimFiyat      0
+MusteriNo       0
+Ulke            0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Alternatif olarak eksik değerleri istediğiniz başka bir değerle değiştirmeniz de mümkün. Bu amaçla <code>fillna</code> fonksiyonunu kullanabilirsiniz. Örnek olarak eksik değerleri 0 değeriyle doldurmak için <code>df.fillna(0, inplace = True)</code> yazmanız yeterli. Buradaki <code>inplace</code> argümanı değişikliğin veri çerçevesi üzerinde yapılmasını sağlar. Bunu kullanmak istemezseniz bir atama yapmanız gerekecek (<code>df = df.fillna(0)</code>). İki seçeneği de kullanmamanız haline orijinal veri çerçevesi değişmeyecektir.</p>
+<p>Müşteri numaraları tamsayı olması gerekirken ondalıklı olarak okunduğu için tamsayıya çevirelim.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Aşağıdaki satırda sütunlara ulaşmanın iki farklı yolunu görüyoruz. </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri_çerçevesi['sütun_adı'] ve Veri_çerçevesi.Sütun_adı</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'MusteriNo'</span>] <span class="op">=</span> df.MusteriNo.astype(<span class="st">'int'</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  FaturaNo  UrunNo                                Tanim  Adet  \
+0   536365  85123A   WHITE HANGING HEART T-LIGHT HOLDER     6   
+1   536365   71053                  WHITE METAL LANTERN     6   
+2   536365  84406B       CREAM CUPID HEARTS COAT HANGER     8   
+3   536365  84029G  KNITTED UNION FLAG HOT WATER BOTTLE     6   
+4   536365  84029E       RED WOOLLY HOTTIE WHITE HEART.     6   
+
+         FaturaTarihi  BirimFiyat  MusteriNo            Ulke  
+0 2010-12-01 08:26:00        2,55      17850  United Kingdom  
+1 2010-12-01 08:26:00        3,39      17850  United Kingdom  
+2 2010-12-01 08:26:00        2,75      17850  United Kingdom  
+3 2010-12-01 08:26:00        3,39      17850  United Kingdom  
+4 2010-12-01 08:26:00        3,39      17850  United Kingdom  </code></pre>
+</div>
+</div>
+</section>
+<section id="veri-işleme" class="level1">
+<h1>Veri İşleme</h1>
+<p>Veri çerçevesinde ürünler için birim fiyat ve satın alınan adet değerleri var. Müşterilerin o ürün için toplam harcamasını içeren bir sütun ekleyelim. Yeni sütunun adı <code>Miktar</code> olsun.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Miktar'</span>] <span class="op">=</span> df[<span class="st">'BirimFiyat'</span>] <span class="op">*</span> df[<span class="st">'Adet'</span>]</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  FaturaNo  UrunNo                                Tanim  Adet  \
+0   536365  85123A   WHITE HANGING HEART T-LIGHT HOLDER     6   
+1   536365   71053                  WHITE METAL LANTERN     6   
+2   536365  84406B       CREAM CUPID HEARTS COAT HANGER     8   
+3   536365  84029G  KNITTED UNION FLAG HOT WATER BOTTLE     6   
+4   536365  84029E       RED WOOLLY HOTTIE WHITE HEART.     6   
+
+         FaturaTarihi  BirimFiyat  MusteriNo            Ulke  Miktar  
+0 2010-12-01 08:26:00        2,55      17850  United Kingdom   15,30  
+1 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34  
+2 2010-12-01 08:26:00        2,75      17850  United Kingdom   22,00  
+3 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34  
+4 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34  </code></pre>
+</div>
+</div>
+<p><code>FaturaNo</code> ve o faturaya ait toplam miktarı içeren yeni bir veri çerçevesi oluşturalım. <code>groupby</code> fonksiyonuyla her alışverişin toplam miktarını bulabiliriz. <code>Groupby</code> fonksiyonunun kullanımını Veri Defteri’nin <a href="http://www.veridefteri.com/2017/10/30/groupby/">ilk yazılarından birinde</a> anlatmıştık.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df_fis <span class="op">=</span> df.groupby([<span class="st">'FaturaNo'</span>]).agg({<span class="st">'Miktar'</span> : <span class="st">'sum'</span>}).reset_index()</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>df_fis.columns <span class="op">=</span> [<span class="st">'FaturaNo'</span>, <span class="st">'ToplamMiktar'</span>]</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_fis.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  FaturaNo  ToplamMiktar
+0   536365        139,12
+1   536366         22,20
+2   536367        278,73
+3   536368         70,05
+4   536369         17,85</code></pre>
+</div>
+</div>
+<p>İlk veri çerçevesine <code>ToplamMiktar</code> sütununu eklemek için <code>pandas</code> paketinin sunduğu birleştirme işlemlerinden yararlanabiliriz. Bu amaçla <code>merge</code> fonksiyonunu kullanacağız.</p>
+<p><code>merge</code> işlemi için iki veri çerçevesinin hangi sütunlarının nasıl birleştirileceğini belirtmek gerekiyor. <code>merge</code> fonksiyonu SQL tablolarında kullanılan birleştirme (<code>JOIN</code>) işlemlerini destekliyor. İki veri çerçevesini birleştirmek için <code>FaturaNo</code> anahtarını kullanalım (<code>on = 'FaturaNo'</code>). Farklı isimlere sahip sütunlar üzerinden birleştirme yapmak için <code>right_on = ...</code> ve <code>left_on = ...</code> şeklinde veri çerçevelerindeki sütun isimlerini fonksiyona ekleyebilirsiniz.</p>
+<p><code>how</code> argümanı için kullanabileceğiniz değerler:</p>
+<ul>
+<li>“<code>inner</code>”: Sadece iki tabloda da bulunan anahtar değerlerini birleştirir. Bir tabloda olmayan değerler silinir.</li>
+<li>“<code>right</code>”: İlk tabloda bulunan değerler korunur ve ikinci tabloda eşleşen değerler tabloya eklenir. İkinci tabloda bulunmayan değerler <code>NaN</code> ile belirtilir.</li>
+<li>“<code>left</code>”: İkinci tabloda bulunan değerler korunur ve ilk tabloda eşleşen değerler tabloya eklenir. İlk tabloda bulunmayan değerler <code>NaN</code> ile belirtilir.</li>
+<li>“<code>outer</code>”: İki tablodan en az birinde bulunan değerler korunur. Bir tabloda olmayan eksik değerler <code>NaN</code> ile belirtilir.</li>
+</ul>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>df_yeni <span class="op">=</span> pd.merge(df,df_fis, how<span class="op">=</span> <span class="st">'inner'</span>, on <span class="op">=</span> <span class="st">'FaturaNo'</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_yeni.head())</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Şekil: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df_yeni.shape))</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_yeni[df_yeni[<span class="st">'FaturaNo'</span>] <span class="op">==</span> <span class="dv">536365</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  FaturaNo  UrunNo                                Tanim  Adet  \
+0   536365  85123A   WHITE HANGING HEART T-LIGHT HOLDER     6   
+1   536365   71053                  WHITE METAL LANTERN     6   
+2   536365  84406B       CREAM CUPID HEARTS COAT HANGER     8   
+3   536365  84029G  KNITTED UNION FLAG HOT WATER BOTTLE     6   
+4   536365  84029E       RED WOOLLY HOTTIE WHITE HEART.     6   
+
+         FaturaTarihi  BirimFiyat  MusteriNo            Ulke  Miktar  \
+0 2010-12-01 08:26:00        2,55      17850  United Kingdom   15,30   
+1 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34   
+2 2010-12-01 08:26:00        2,75      17850  United Kingdom   22,00   
+3 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34   
+4 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34   
+
+   ToplamMiktar  
+0        139,12  
+1        139,12  
+2        139,12  
+3        139,12  
+4        139,12  
+Şekil: (406829, 10)
+  FaturaNo  UrunNo                                Tanim  Adet  \
+0   536365  85123A   WHITE HANGING HEART T-LIGHT HOLDER     6   
+1   536365   71053                  WHITE METAL LANTERN     6   
+2   536365  84406B       CREAM CUPID HEARTS COAT HANGER     8   
+3   536365  84029G  KNITTED UNION FLAG HOT WATER BOTTLE     6   
+4   536365  84029E       RED WOOLLY HOTTIE WHITE HEART.     6   
+5   536365   22752         SET 7 BABUSHKA NESTING BOXES     2   
+6   536365   21730    GLASS STAR FROSTED T-LIGHT HOLDER     6   
+
+         FaturaTarihi  BirimFiyat  MusteriNo            Ulke  Miktar  \
+0 2010-12-01 08:26:00        2,55      17850  United Kingdom   15,30   
+1 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34   
+2 2010-12-01 08:26:00        2,75      17850  United Kingdom   22,00   
+3 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34   
+4 2010-12-01 08:26:00        3,39      17850  United Kingdom   20,34   
+5 2010-12-01 08:26:00        7,65      17850  United Kingdom   15,30   
+6 2010-12-01 08:26:00        4,25      17850  United Kingdom   25,50   
+
+   ToplamMiktar  
+0        139,12  
+1        139,12  
+2        139,12  
+3        139,12  
+4        139,12  
+5        139,12  
+6        139,12  </code></pre>
+</div>
+</div>
+<p>Tekrar eden verileri tekilleştirmek için <code>drop_duplicates</code> fonksiyonunu kullanabiliriz. Aşağıda müşteri numaralarını tekilleştirerek kaç müşteri olduğunu buluyoruz. Ben sütunları kopyalamayı tercih ettim. Bunu yapmamanız durumunda Python referans modelinden kaynaklı bir uyarı mesajı alacaksınız. Bu konu hakkında Kaan’ın <a href="http://www.veridefteri.com/2018/03/19/python-programlamaya-giris-18-python-referans-modeli-sig-ve-derin-kopyalama/">yazısını</a> okumanızı tavsiye ederim.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sadece ürün bilgilerini içeren sütunları alıyoruz.</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Burada copy işlemini kullanmazsak bir uyarı mesajı alıyoruz.</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>df_musteri <span class="op">=</span> df[[<span class="st">'MusteriNo'</span>]].copy()</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>df_musteri.drop_duplicates(inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_musteri.head())</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Şekil: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df_musteri.shape))</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Müşteri sayısı: </span><span class="sc">{}</span><span class="st">'</span>.<span class="bu">format</span>(df_musteri.shape[<span class="dv">0</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    MusteriNo
+0       17850
+9       13047
+26      12583
+46      13748
+65      15100
+Şekil: (4372, 1)
+Müşteri sayısı: 4372</code></pre>
+</div>
+</div>
+<p>Veri çerçeveleri <code>scikit-learn</code>, <code>statsmodel</code> gibi bir çok paket tarafından destekleniyor. <code>Tensorflow</code> ve <code>lightgbm</code> gibi popüler paketlerle de veri çerçevelerini kullanabilirsiniz. Yapay öğrenmede sıklıkla kullanılan bu paketlerden <a href="http://www.veridefteri.com/2017/11/23/scikit-learn-ile-veri-analitigine-giris/">scikit-learn</a> paketiyle ilgili bir giriş yazısı yazmıştık. İleride, diğer paketlerle ilgili yazılar yazmayı planlıyoruz.</p>
+<p>Bu yazının Jupyter Notebook dosyasına <a href="https://github.com/sibirbil/VeriDefteri">Github</a> dizinimizden ulaşabilirsiniz.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

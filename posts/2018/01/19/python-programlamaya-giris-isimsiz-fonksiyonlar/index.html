@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-01-19">
+
+<title>Veri Defteri - Python Programlamaya Giriş 11 - İsimsiz Fonksiyonlar</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 11 - İsimsiz Fonksiyonlar</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 19, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Python Programlamaya Giriş yazı dizimizde <a href="http://www.veridefteri.com/2018/01/06/python-programlamaya-giris-fonksiyonlar/">Python fonksiyonlarının nasıl tanımlandığını</a>, parametre eşleştirmenin ve varsayılan parametrelerin <a href="http://www.veridefteri.com/2018/01/10/python-programlamaya-giris-fonksiyon-parametreleri/">nasıl işlediğini gördük</a>, çeşitli örnekler ve alıştırmalar işledik. Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<p>Fonksiyonların her zaman <code>def</code> komutuyla tanımlanması gerekmez. Başka bir yol, <code>lambda</code> komutunu kullanarak isimsiz (“anonymous” - belli bir isme bağlı olmayan) fonksiyonlar yaratmaktır. İsimsiz fonksiyonlar, <code>def</code> komutuyla üretilen fonksiyonlara göre daha kısıtlıdırlar. Buna karşılık, bir fonksiyon nesnesi gereken yerlerde bazı kolaylıklar sağlarlar.</p>
+<p>Fonksiyonların <code>lambda</code> komutuyla üretilmesine basit bir örnek olarak, aşağıdaki ifadeyi ele alalım. Burada, aldığı parametrenin karesini döndüren bir fonksiyon yaratıyoruz ve buna <code>f</code> ismini atıyoruz.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x: x<span class="op">*</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bundan sonra <code>f</code> alıştığımız şekilde bir fonksiyon olarak kullanılabilir.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>f(<span class="fl">1.2</span>), f(<span class="dv">4</span>), f(f(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>(1.44, 16, 256)</code></pre>
+</div>
+</div>
+<p>Nitekim aynı <code>f</code> fonksiyonunu <code>def</code> ile de tanımlayabilirdik.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x): <span class="cf">return</span> x<span class="op">*</span>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>f(<span class="fl">1.2</span>), f(<span class="dv">4</span>), f(f(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>(1.44, 16, 256)</code></pre>
+</div>
+</div>
+<p>Python dinamik bir dildir. Bunun anlamı, verdiğimiz komutların anında işlenmesi, ve gerekli nesnelerin bellekte o anda yaratılıyor olmasıdır. Python’daki her şey gibi fonksiyonlar da (yazılım geliştirmedeki anlamıyla) birer nesnedir. Yukarıdaki <code>lambda x: x*x</code> ifadesi bellekte bir <em>fonksiyon nesnesi</em> yaratır, ve bu nesne ile <code>f</code> ismi birbirine bağlanır. Öz olarak bunun <code>s = "merhaba"</code> komutundan farkı yok; burada da önce bellekte <code>"merhaba"</code> değerini tutan bir dize nesnesi yaratılır, sonra bu nesne <code>s</code> ismi ile eşleştirilir.</p>
+<p>Elbette <code>lambda</code> ile yaratılan fonksiyon nesnesi tek başına da kullanılabilir.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">lambda</span> x: x<span class="op">*</span>x)(<span class="fl">1.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>1.44</code></pre>
+</div>
+</div>
+<p>Ama böyle bir kullanımda fonksiyon her seferinde baştan oluşturulacağından programın verimi azalır.</p>
+<p>İsimsiz fonksiyonlar, <code>def</code> ile tanımladığımız genel amaçlı fonksiyonlardan daha kısıtlıdırlar. Genel amaçlı fonksiyonlarda Python’da tanımlı olan her türlü işlemi kullanabiliriz. İsimsiz fonksiyonlarda ise komut (“statement”) bulunamaz, yani mesela atama yapamayız veya <code>if-else</code>, <code>while</code>, <code>for</code> yapılarını kullanamayız. Sadece bir ifade (“expression”, geriye bir değer veren bir işlem) bulunabilir.</p>
+<p>O zaman isimsiz fonksiyonların faydası ne? Bunlar, özellikle <strong>fonksiyon alan fonksiyonlara verilen parametreler</strong> olarak kullanışlıdırlar.</p>
+<p>İlk okuyuşta çok egzotik bir kullanım gibi görünebilir ama değil. İsimsiz fonksiyonların kullanılabildiği yerlere birkaç örnek verelim.</p>
+<p><strong>Örnek: Seriler</strong></p>
+<p><a href="http://www.veridefteri.com/2018/01/06/python-programlamaya-giris-fonksiyonlar/">Önceki bir bölümde</a> fonksiyon alan bir fonksiyon tanımlamıştık. Özel olarak, <span class="math inline">\(f\)</span> reel sayı alıp reel sayı veren herhangi bir fonksiyon olmak üzere, <span class="math inline">\(f(a) + f(a+1) + f(a+2) +\cdots + f(b)\)</span> toplamını hesaplayan bir fonksiyon yazdık. Bu fonksiyon sadece başlangıç ve bitiş değerleri olan <code>a</code> ve <code>b</code>’yi değil, aynı zamanda <code>f</code> fonksiyonunu da parametre olarak alıyor. Böylece herhangi bir fonksiyon için bu toplamı hesaplayabiliyoruz.</p>
+<p>Bu toplamı veren fonksiyonu şöyle tanımlayabiliriz:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> seritoplam(f, a, b):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    toplam <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> a</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> x<span class="op">&lt;=</span>b:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        toplam <span class="op">+=</span> f(x)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        x <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> toplam</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tanımladığımız <code>seritoplam</code> fonksiyonu, matematiksel terimle bir “fonksiyonel”dir, yani fonksiyon alıp sayı veren bir fonksiyon. Bunu kullanarak, <span class="math inline">\(\sum_{x=a}^b 2^{-x}\)</span> değerini hesaplayalım. Bu toplam için <code>f</code> parametresi olarak <span class="math inline">\(2^{-x}\)</span> olarak tanımlanmış bir fonksiyon verilmeli.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> g(x): <span class="cf">return</span> <span class="fl">2.0</span><span class="op">**</span>(<span class="op">-</span>x)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>seritoplam(g, <span class="dv">0</span>, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>1.9990234375</code></pre>
+</div>
+</div>
+<p>Aynısını bir isimsiz fonksiyonla şöyle yapabiliriz:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>seritoplam( <span class="kw">lambda</span> x: <span class="fl">2.0</span><span class="op">**</span>(<span class="op">-</span>x), <span class="dv">0</span>, <span class="dv">10</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>1.9990234375</code></pre>
+</div>
+</div>
+<p>Burada <code>lambda</code> ifadesini doğrudan doğruya <code>seritoplam</code>’a bir parametre olarak verdiğimize dikkat edin. Bunu doğrudan <code>def</code> ile yapamayız, yani</p>
+<pre><code>seritoplam( def f(x): 2.0**(-x), 0, 10 )</code></pre>
+<p>yazmak hatalıdır, çünkü <code>def</code> yapısı bir fonksiyon nesnesi döndürmez. Buna karşılık <code>lambda</code> bir ifadedir (“expression”); konduğu yerde bir fonksiyon nesnesi yaratır.</p>
+<p><code>seritoplam</code> fonksiyonunu birçok farklı fonksiyon parametresi vererek denemek istiyor olabilirsiniz. Mesela $ 1+ 1/2 + 1/3 + + 1/10$ toplamını bulalım:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>seritoplam( <span class="kw">lambda</span> x: <span class="dv">1</span><span class="op">/</span>x, <span class="dv">1</span>, <span class="dv">10</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>2.9289682539682538</code></pre>
+</div>
+</div>
+<p>Elbette deneyeceğiniz her türlü fonksiyonu <code>def</code> ile tanımlayarak da aynı sonuca ulaşabilirsiniz. Ama <code>lambda</code> kullanmak burada daha fazla kolaylık sağlıyor.</p>
+<p><strong>Örnek: Sıralama</strong></p>
+<p>Listelere kısaca değinmiştik. Bir listenin elemanlarını sıralamak için <code>sorted</code> fonksiyonu kullanılabilir. Söz gelişi:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> [ <span class="fl">6.1</span>, <span class="fl">2.3</span>, <span class="op">-</span><span class="fl">5.6</span>, <span class="fl">8.5</span>, <span class="fl">4.0</span>, <span class="op">-</span><span class="fl">1.2</span>, <span class="op">-</span><span class="fl">3.4</span>, <span class="fl">7.8</span>]</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>[-5.6, -3.4, -1.2, 2.3, 4.0, 6.1, 7.8, 8.5]</code></pre>
+</div>
+</div>
+<p>Bazen alışılageldik sırayla değil de, başka bir düzene göre sıralamak isteyebilirsiniz. <code>sorted</code> fonksiyonunun <code>key</code> parametresine bir fonksiyon verirseniz, bu fonksiyon bütün elemanlara tek tek uygulanır ve sıralama bu sonuçlara göre yapılır. Söz gelişi, yukarıdaki listeyi sayıların <em>mutlak değerlerine</em> göre sıralamak için <code>key</code> parametresine <code>abs</code> fonksiyonunu verebilirsiniz.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(L, key<span class="op">=</span><span class="bu">abs</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>[-1.2, 2.3, -3.4, 4.0, -5.6, 6.1, 7.8, 8.5]</code></pre>
+</div>
+</div>
+<p>Gördüğünüz gibi burada da fonksiyon alan bir fonksiyonumuz var. Aynı sıralamayı bir isimsiz fonksiyonla şöyle elde ederdik.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(L, key<span class="op">=</span><span class="kw">lambda</span> x: x <span class="cf">if</span> x<span class="op">&gt;</span><span class="dv">0</span> <span class="cf">else</span> <span class="op">-</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>[-1.2, 2.3, -3.4, 4.0, -5.6, 6.1, 7.8, 8.5]</code></pre>
+</div>
+</div>
+<p>Üçlü if-else yapısını <a href="http://www.veridefteri.com/2017/12/16/python-programlamaya-giris-secim-yapma-mantik-islemleri-karsilastirmalar/">başka bir bölümde</a> daha ayrıntılı işlemiştik.</p>
+<p>Başka bir örnek olarak, listelerden oluşan bir listeyi sıralamayı ele alalım. <code>key</code> parametresini kullanmadan <code>sorted</code> ilk elemana göre sıralama yapar.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> [ [<span class="dv">1</span>, <span class="st">"merhaba"</span>], [<span class="dv">6</span>, <span class="st">"hello"</span>], [<span class="op">-</span><span class="dv">2</span>, <span class="st">"guten tag"</span>] ]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(L)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>[[-2, 'guten tag'], [1, 'merhaba'], [6, 'hello']]</code></pre>
+</div>
+</div>
+<p>Eğer ikinci elemana göre sıralama yapmak istiyorsak, <code>key</code> parametresine listenin ikinci elemanını (1 indeksli) veren bir fonksiyon koyarız.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sorted</span>(L, key <span class="op">=</span> <span class="kw">lambda</span> i: i[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>[[-2, 'guten tag'], [6, 'hello'], [1, 'merhaba']]</code></pre>
+</div>
+</div>
+<p><strong>Örnek: Sayısal integral hesaplama</strong></p>
+<p>Bir <em>belirli integral</em> <span class="math inline">\(\int_a^b f(x)\mathrm{d}x\)</span> matematiksel olarak bir “fonksiyonel”dir: Bir fonksiyon alır ve bir sayı verir. Bir fonksiyonun integralini alırken de isimsiz fonksiyonlar kullanabiliriz.</p>
+<p>Bir belirli integrali sayısal olarak hesaplamanın pek çok yöntemi vardır. Bunlara şimdilik hiç girmeden, SciPy paketi içindeki integral alma modülünü kullanalım ve <span class="math inline">\(\int_{-2}^4 6x^3 - 4x^2\, \mathrm{d}x\)</span> integralini hesaplayalım.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.integrate</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>scipy.integrate.quad(<span class="kw">lambda</span> x: <span class="dv">6</span><span class="op">*</span>x<span class="op">**</span><span class="dv">3</span> <span class="op">-</span> <span class="dv">4</span><span class="op">*</span>x<span class="op">**</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">2</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>(264.00000000000006, 3.703317987014864e-12)</code></pre>
+</div>
+</div>
+<p>İlk sayı belirli integralin değeri, ikinci sayı ise tahmini hata miktarıdır.</p>
+<hr>
+<p>Örnekler çoğaltılabilir: Bir fonksiyonun optimal noktalarını bulan bir fonksiyon, türev alan bir fonksiyon, veya bir fonksiyonun grafiğini çizen bir fonksiyon, isimsiz fonksiyonlar alarak daha kolay şekilde işlenebilirler. Ayrıca grafik arayüz oluştururken de isimsiz fonksiyonlar kolaylık sağlar.</p>
+<p>İsimsiz fonksiyonların iyi ve kötü taraflarını şöyle özetleyebiliriz:</p>
+<ul>
+<li><code>lambda</code> bir fonksiyon nesnesi döndürür, <code>def</code> ise bir komuttur, bir değer döndürmez. Bu yüzden <code>lambda</code> ile tanımlanan isimsiz fonksiyonları başka ifadelerin içine, söz gelişi atamalara veya fonksiyon parametrelerine yerleştirebiliriz.</li>
+<li>İsimsiz fonksiyonlarla karmaşık işlemler yapılamaz. Kısa, bir seferlik kullan-at fonksiyonlar tanımlamak için daha uygundurlar.</li>
+<li>İsimsiz fonksiyonlarla kodunuz daha okunaklı olabilir. Sıralama vb. işlemlerde <code>def</code> ile farklı fonksiyonlar tanımlamak isim alanının bir sürü tek kullanımlık fonksiyon ismiyle dolmasına sebep olur. Dahası, kaynak kodunuz uzunsa, fonksiyonun tanımlandığı yer ile kullanıldığı yer arasında kalan mesafe yüzünden, kodda ne yapıldığını anlamak için yukarı aşağı kaydırmak gerekebilir. Bu tür küçük işlerde <code>lambda</code> ifadeleri kullanmak, fonksiyonun yapısını açıkça gösterdiği için kodun anlaşılırlığını artırır.</li>
+</ul>
+<p>İsimsiz fonksiyonlarda parametre kullanımı kuralları isimli fonksiyonlardakilerle aynıdır. Örneğin birden fazla parametre alabilirler.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: x<span class="op">+</span>y</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>f(<span class="dv">4</span>,<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>9</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>f(<span class="st">"hello"</span>,<span class="st">"world"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>'helloworld'</code></pre>
+</div>
+</div>
+<p>Parametre paketleme / parametre çözme kuralları isimsiz fonksiyonlarda da aynen geçerlidir.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> <span class="kw">lambda</span> <span class="op">*</span>p : <span class="bu">sum</span>(p)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>g(<span class="fl">0.25</span>, <span class="dv">2</span>, <span class="dv">13</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>15.25</code></pre>
+</div>
+</div>
+<p>Parametrelere varsayılan değerler atanabilir.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> <span class="kw">lambda</span> x, n<span class="op">=</span><span class="dv">2</span>: x<span class="op">**</span>n  <span class="co"># üst alma. Varsayılan kuvvet 2.</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(h(<span class="dv">3</span>)) <span class="co"># 3**2</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(h(<span class="dv">3</span>,<span class="dv">5</span>)) <span class="co"># 3**5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>9
+243</code></pre>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

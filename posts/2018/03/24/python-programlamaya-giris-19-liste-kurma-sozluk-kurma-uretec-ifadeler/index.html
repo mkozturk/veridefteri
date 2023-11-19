@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-03-24">
+
+<title>Veri Defteri - Python Programlamaya Giriş 19 - Liste kurma, sözlük kurma, üreteç ifadeler</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 19 - Liste kurma, sözlük kurma, üreteç ifadeler</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 24, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Python’da yeni bir liste oluşturmak için, boş bir listeden başlayabiliriz ve bir döngü içinde <code>append()</code> metoduyla büyütebiliriz. Bu yazıda bu işlemi daha hızlı verimli olarak yapmamızı sağlayan özel <em>liste kurma</em> yazımını göreceğiz. Liste kurma, genel olarak bir <em>üreteç ifadesi</em> örneğidir. Liste kurma gibi sözlük ve kümeleri de hızlıca kurmak için benzer bir yazım kullanırız.</p>
+<p>Python Programlamaya Giriş yazı dizimizin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<section id="basit-liste-kurma" class="level2">
+<h2 class="anchored" data-anchor-id="basit-liste-kurma">Basit liste kurma</h2>
+<p>Basit bir örnekle başlayalım: Bir sayı listesi alalım, ve liste elemanlarının karelerinden oluşan yeni bir liste oluşturalım.</p>
+<p>Şimdiye kadar gördüğümüz yöntemlerle bu işi yapmak için önce boş bir liste yaratırız, sonra bir <code>for</code> döngüsü içinde sayıları tek tek alırız, karelerini teker teker boş listeye ekleriz.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sayılar <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>]</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>kareler <span class="op">=</span> []</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> sayılar:</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    kareler.append(x<span class="op">*</span>x)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>kareler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>[1, 4, 9, 16, 25]</code></pre>
+</div>
+</div>
+<p>Aynı işi daha kısa yoldan ve daha hızlı yapmak için Python’da <em>liste kurma</em> (list comprehensions) denen bir yapı vardır.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>kareler <span class="op">=</span> [x<span class="op">*</span>x <span class="cf">for</span> x <span class="kw">in</span> sayılar]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>kareler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>[1, 4, 9, 16, 25]</code></pre>
+</div>
+</div>
+<p>En basit halinde, liste kurma yapısının genel hali şöyledir:</p>
+<pre><code>[ &lt;ifade&gt; for &lt;değişken&gt; in &lt;sıralı nesne&gt; ]</code></pre>
+<p>Bu yapıda, <code>&lt;sıralı nesne&gt;</code>’deki değerler tek tek <code>&lt;değişken&gt;</code>’e atanır, ve <code>&lt;ifade&gt;</code>’nin değeri hesaplanarak listeye eklenir.</p>
+<p>Yukarıdaki liste kurma ifadesi aşağıdaki kod parçasına denktir:</p>
+<pre><code>L = []
+for &lt;değişken&gt; in &lt;sıralı nesne&gt;:
+    L.append(&lt;ifade&gt;)</code></pre>
+<p>Birkaç örnek vererek açıklayalım. İkinin ilk on kuvvetinin listesi:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">2</span><span class="op">**</span>i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">11</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>[2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]</code></pre>
+</div>
+</div>
+<p>Bir dizedeki karakterleri tek tek almak:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>[c<span class="op">+</span><span class="st">"*"</span> <span class="cf">for</span> c <span class="kw">in</span> <span class="st">"merhaba"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>['m*', 'e*', 'r*', 'h*', 'a*', 'b*', 'a*']</code></pre>
+</div>
+</div>
+<p>Çokuzlardaki elemanların toplamlarının listesi:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>[ x[<span class="dv">0</span>] <span class="op">+</span> x[<span class="dv">1</span>] <span class="cf">for</span> x <span class="kw">in</span> [(<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>), (<span class="dv">4</span>,<span class="dv">2</span>), (<span class="dv">3</span>,<span class="dv">7</span>)] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>[3, 1, 6, 10]</code></pre>
+</div>
+</div>
+<p>Yukarıdaki örnek, <em>çokuz ataması</em> özelliği sayesinde şöyle de yazılabilir:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>[ x<span class="op">+</span>y <span class="cf">for</span> x,y <span class="kw">in</span> [(<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>), (<span class="dv">4</span>,<span class="dv">2</span>), (<span class="dv">3</span>,<span class="dv">7</span>)] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>[3, 1, 6, 10]</code></pre>
+</div>
+</div>
+<p>Aradaki fark şöyle: Birinci durumda <code>x</code> değişkenine sırayla çokuzlar atanıyor, sonra indeksleme ile tek tek elemanlarını alıyoruz. İkinci durumda ise çokuzun birinci ve ikinci elemanı sırasıyla <code>x</code> ve <code>y</code> değişkenlerine atanıyor.</p>
+<p>İfade olarak bir fonksiyon da kullanılabilir.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> kare(x): <span class="cf">return</span> x<span class="op">*</span>x</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>[kare(x) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">11</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> topla(a,b): <span class="cf">return</span> a<span class="op">+</span>b</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>[topla(x,y) <span class="cf">for</span> x,y <span class="kw">in</span> [(<span class="dv">1</span>,<span class="dv">2</span>), (<span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>), (<span class="dv">4</span>,<span class="dv">2</span>), (<span class="dv">3</span>,<span class="dv">7</span>)] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>[3, 1, 6, 10]</code></pre>
+</div>
+</div>
+<p>Liste kurma ifadelerinin döngülerden bir farkı da, döngü değişkeninin kalıcı olmamasıdır.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>[i<span class="op">*</span>i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'i' is not defined</code></pre>
+</div>
+</div>
+<p>Oysa bir döngü kullandığımızda iç değişkenler döngüden sonra da erişilebilir olurlar.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> []</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    L.append(i<span class="op">*</span>i)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>i</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>9</code></pre>
+</div>
+</div>
+</section>
+<section id="hız-farkı" class="level2">
+<h2 class="anchored" data-anchor-id="hız-farkı">Hız farkı</h2>
+<p>Liste kurma ile, bir döngü içinde bir listeye <code>append()</code> ile eleman ekleme aynı işi yapıyorsa, neden liste kurmayı kullanalım? Birincisi, daha sade bir yapı olduğu için. Daha da önemlisi, liste kurma işlemi daha hızlı çalışır.</p>
+<p>Hız farkının iki sebebi vardır: Birincisi Python gibi yorumlanan dillerde döngülerin nispeten yavaş çalışmasıdır (C gibi derlenen dillere göre). Bir liste kurma ifadesi yine de örtük bir döngü içeriyor elbette, ama bu döngü alt seviyededir ve Python yorumlayıcısı tarafından yüksek hızda işletilir. İkinci sebep ise her iterasyonda listenin <code>append()</code> metodunun çağırılması gereğidir - fonksiyon çağrıları uzun zaman alan işlemlerdir ve programı yavaşlatırlar.</p>
+<p>Bunu daha somut olarak görmek için 1 ile 1000 arasındaki sayıların karelerini alan bir liste kurma ve bir döngü oluşturalım ve iki yaklaşım arasındaki zaman farkına bakalım.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>[x<span class="op">*</span>x <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>79.8 µs ± 9.52 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> []</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1000</span>):</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    L.append(x<span class="op">*</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>150 µs ± 13.2 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)</code></pre>
+</div>
+</div>
+<p>Şartlı liste kurma</p>
+<hr>
+<p>Liste kurma işleminde her elemanı eklemek zorunda değiliz; bir şartı sağlayanları da eklememiz mümkün. Sözgelişi, bir sayı listesi içinde, sadece beşten büyük olanların karesini barındıran bir liste oluşturalım.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>[x<span class="op">*</span>x <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">11</span>] <span class="cf">if</span> x<span class="op">&gt;</span><span class="dv">5</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>[49, 81, 121]</code></pre>
+</div>
+</div>
+<p>Bu ifade, aşağıdaki döngüye denktir:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> []</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">11</span>]:</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> x<span class="op">&gt;</span><span class="dv">5</span>:</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>        L.append(x<span class="op">*</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Çeşitli karşılaştırma işlemleri ve mantıksal işlemler de birleştirilebilir. Örnek olarak, 1900 ile 2100 arasındaki artık yılların listesini oluşturalım. Bilindiği gibi bir yıl 4’e bölünebiliyorsa artık yıldır; 100’e bölünen ama 400’e bölünemeyen yıllar hariç. Yani 1600 ve 2000 yılları artık yıl iken, 1700, 1800, 1900, 2100 yılları artık değildir.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>[ y <span class="cf">for</span> y <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1900</span>, <span class="dv">2101</span>) <span class="cf">if</span> (y<span class="op">%</span><span class="dv">4</span> <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> y<span class="op">%</span><span class="dv">100</span> <span class="op">!=</span> <span class="dv">0</span>) <span class="kw">or</span> y<span class="op">%</span><span class="dv">400</span> <span class="op">==</span> <span class="dv">0</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>[1904,
+ 1908,
+ 1912,
+ 1916,
+ 1920,
+ 1924,
+ 1928,
+ 1932,
+ 1936,
+ 1940,
+ 1944,
+ 1948,
+ 1952,
+ 1956,
+ 1960,
+ 1964,
+ 1968,
+ 1972,
+ 1976,
+ 1980,
+ 1984,
+ 1988,
+ 1992,
+ 1996,
+ 2000,
+ 2004,
+ 2008,
+ 2012,
+ 2016,
+ 2020,
+ 2024,
+ 2028,
+ 2032,
+ 2036,
+ 2040,
+ 2044,
+ 2048,
+ 2052,
+ 2056,
+ 2060,
+ 2064,
+ 2068,
+ 2072,
+ 2076,
+ 2080,
+ 2084,
+ 2088,
+ 2092,
+ 2096]</code></pre>
+</div>
+</div>
+<p>Şartlı liste kurmanın genel ifadesi şöyledir:</p>
+<pre><code>[&lt;ifade&gt; for &lt;değişken&gt; in &lt;sıralı nesne&gt; if &lt;şart&gt;]</code></pre>
+<p>Bu yapıda, sadece şartın doğru olduğu değişken değerleri için listeye eleman eklenir. Şart yanlışsa eklenmez. Eğer şart yanlış olduğunda da listeye belli değerler eklenmesini istiyorsak, daha önce gördüğümüz <em>üçlü if-else</em> ifadesini kullanabiliriz.</p>
+<p>Söz gelişi, girdi listesindeki sayı beşten büyükse o sayının karesini, değilse sıfırı barındıran bir liste kuralım.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>[x<span class="op">*</span>x <span class="cf">if</span> x<span class="op">&gt;</span><span class="dv">5</span> <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>,<span class="dv">7</span>,<span class="dv">9</span>,<span class="dv">11</span>] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>[0, 0, 0, 49, 81, 121]</code></pre>
+</div>
+</div>
+<p>Buradaki <code>if-else</code> komutunun asıl ifadeye ait olduğuna dikkat edin; liste kurma şartı olarak kullanılmamıştır.</p>
+</section>
+<section id="iç-içe-döngülerle-liste-kurma" class="level2">
+<h2 class="anchored" data-anchor-id="iç-içe-döngülerle-liste-kurma">İç içe döngülerle liste kurma</h2>
+<p>Diyelim iki ayrı listeden elemanları birleştirerek mümkün bütün çiftleri kurmak istiyoruz, (a,1), (a,2),.., (b,1), (b,2),… gibi. Bunun için birinci listedeki her bir eleman için ikinci listedeki elemanlar üzerinde döngü kurmamız gerek. Yani döngü içinde döngü kurmalıyız. Bunu alışıldık yöntemle şöyle yapabiliriz:</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>liste <span class="op">=</span> []</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> c <span class="kw">in</span> <span class="st">"abcd"</span>:</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> b <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>]:</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>        liste.append((c,b))</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>liste</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>[('a', 1),
+ ('a', 2),
+ ('a', 3),
+ ('b', 1),
+ ('b', 2),
+ ('b', 3),
+ ('c', 1),
+ ('c', 2),
+ ('c', 3),
+ ('d', 1),
+ ('d', 2),
+ ('d', 3)]</code></pre>
+</div>
+</div>
+<p>Aynı işi liste kurma işlemiyle yapmak da mümkündür:</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>[(c,b) <span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="cf">for</span> c <span class="kw">in</span> <span class="st">"abcd"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>[('a', 1),
+ ('b', 1),
+ ('c', 1),
+ ('d', 1),
+ ('a', 2),
+ ('b', 2),
+ ('c', 2),
+ ('d', 2),
+ ('a', 3),
+ ('b', 3),
+ ('c', 3),
+ ('d', 3)]</code></pre>
+</div>
+</div>
+<p>Başka bir örnek olarak, iki ayrı listeden alınan sayılar ve onların toplamlarından oluşan çokuzlarla bir liste kurabiliriz.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>[(a,b,a<span class="op">+</span>b) <span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="cf">for</span> a <span class="kw">in</span> (<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>[(4, 1, 5),
+ (5, 1, 6),
+ (6, 1, 7),
+ (4, 2, 6),
+ (5, 2, 7),
+ (6, 2, 8),
+ (4, 3, 7),
+ (5, 3, 8),
+ (6, 3, 9)]</code></pre>
+</div>
+</div>
+<p>Kullanabileceğimiz iç içe döngülerin sınırı yok, istediğimiz kadar derine inebiliriz.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>[(a,b,c,a<span class="op">+</span>b<span class="op">+</span>c) <span class="cf">for</span> c <span class="kw">in</span> (<span class="dv">1</span>,<span class="dv">2</span>) <span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">3</span>,<span class="dv">4</span>) <span class="cf">for</span> a <span class="kw">in</span> (<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>[(5, 3, 1, 9),
+ (6, 3, 1, 10),
+ (7, 3, 1, 11),
+ (5, 4, 1, 10),
+ (6, 4, 1, 11),
+ (7, 4, 1, 12),
+ (5, 3, 2, 10),
+ (6, 3, 2, 11),
+ (7, 3, 2, 12),
+ (5, 4, 2, 11),
+ (6, 4, 2, 12),
+ (7, 4, 2, 13)]</code></pre>
+</div>
+</div>
+<p>Her <code>for</code> ile beraber bir şart ekleyebiliriz.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>[(a,b,a<span class="op">+</span>b) <span class="cf">for</span> a <span class="kw">in</span> (<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="cf">if</span> a<span class="op">&gt;</span><span class="dv">2</span> <span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>[(3, 5, 8), (3, 6, 9), (3, 7, 10), (4, 5, 9), (4, 6, 10), (4, 7, 11)]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>[(a,b,a<span class="op">+</span>b) <span class="cf">for</span> a <span class="kw">in</span> (<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>) <span class="cf">if</span> a<span class="op">&gt;</span><span class="dv">2</span> <span class="cf">for</span> b <span class="kw">in</span> (<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>) <span class="cf">if</span> b<span class="op">&lt;</span><span class="dv">7</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>[(3, 5, 8), (3, 6, 9), (4, 5, 9), (4, 6, 10)]</code></pre>
+</div>
+</div>
+<p>Şartlarımız değişkenlerin hepsini birleştiren bir ifade halinde de olabilir. Örnek olarak, <code>a+b+c==10</code> şartını sağlayan bütün üçlüleri bulalım. Tekrarlardan kaçınmak için <code>b&gt;=a</code> ve <code>c&gt;=b</code> şartlarını da koyalım.</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>[ (a,b,c) <span class="cf">for</span> a <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">10</span>) <span class="cf">for</span> b <span class="kw">in</span> <span class="bu">range</span>(a, <span class="dv">10</span>) <span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(b,<span class="dv">10</span>) <span class="cf">if</span> a<span class="op">+</span>b<span class="op">+</span>c<span class="op">==</span><span class="dv">10</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>[(1, 1, 8),
+ (1, 2, 7),
+ (1, 3, 6),
+ (1, 4, 5),
+ (2, 2, 6),
+ (2, 3, 5),
+ (2, 4, 4),
+ (3, 3, 4)]</code></pre>
+</div>
+</div>
+<p>Liste kurma ifadesinde solda kalan değişken sağ tarafta tanınır, ama tersi doğru değildir. Aşağıdaki kod yanlış olur:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>[ (a,b,c) <span class="cf">for</span> b <span class="kw">in</span> <span class="bu">range</span>(a,<span class="dv">10</span>) <span class="cf">for</span> a <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">10</span>) <span class="cf">for</span> c <span class="kw">in</span> <span class="bu">range</span>(b,<span class="dv">10</span>) <span class="cf">if</span> a<span class="op">+</span>b<span class="op">+</span>c<span class="op">==</span><span class="dv">10</span> ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>NameError: name 'a' is not defined</code></pre>
+</div>
+</div>
+<p>Liste kurmanın yorumlanması sol taraftan başladığı için, yukarıdaki örnekte <code>a</code> henüz tanımlanmamış oluyor ve yorumlayıcı hata mesajı veriyor. Bu davranışı anlamak için yukarıda bir önceki örneği döngülerle yazalım:</p>
+<pre><code>L = []
+for a in range(1,10):
+    for b in range(a,10):
+        for c in range(b,10):
+            if (a+b+c==10):
+                L.append((a,b,c))
+          </code></pre>
+<p>Buradan da görülebileceği gibi, <code>for b in range(a,10):</code> satırı önce gelirse, <code>a</code>’nın değeri tanımsız oluyor.</p>
+</section>
+<section id="genel-liste-kurma-ifadesi-ve-dengi-olan-döngüler" class="level2">
+<h2 class="anchored" data-anchor-id="genel-liste-kurma-ifadesi-ve-dengi-olan-döngüler">Genel liste kurma ifadesi ve dengi olan döngüler</h2>
+<p>Liste kurma ifadesinin en genel hali şöyle yazılabilir:</p>
+<pre><code>[ &lt;ifade&gt; for &lt;değişken_1&gt; in &lt;sıralı_1&gt; if &lt;şart_1&gt;
+for &lt;değişken_2&gt; in &lt;sıralı_2&gt; if &lt;şart_2&gt;
+...
+for &lt;değişken_N&gt; in &lt;sıralı_N&gt; if &lt;şart_N&gt; ]</code></pre>
+<p>Burada <code>if</code> kısımları mecburi değil. Bu yapı ilk bakışta yadırgatıcı geliyorsa, aynısının döngü karşılığını göz önünde tutmak faydalı olabilir.</p>
+<pre><code>liste = []
+for &lt;değişken_1&gt; in &lt;sıralı_1&gt;:
+    if &lt;şart_1&gt;:
+        for &lt;değişken_2&gt; in &lt;sıralı_2&gt;:
+            if &lt;şart_2&gt;:
+            ....
+                      for &lt;değişken_N&gt; in &lt;sıralı_N&gt;:
+                          if &lt;şart_N&gt;:
+                              liste.append(&lt;ifade&gt;)</code></pre>
+</section>
+<section id="iç-içe-listeler-ve-matrisler-kurma" class="level2">
+<h2 class="anchored" data-anchor-id="iç-içe-listeler-ve-matrisler-kurma">İç içe listeler ve matrisler kurma</h2>
+<p>Bir önceki bölümde gördüğümüz iç içe <code>for</code> döngülerinin tek seviyeli bir liste kurduğuna dikkat edin. Listeye yeni eleman eklemek ancak en içteki döngüde gerçekleşiyor. Eğer bir <em>listeler listesi</em> oluşturmak istiyorsak başka bir yaklaşım kullanacağız, yani bir liste kurma işlemini başka birinin içine yerleştireceğiz.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>[ [a<span class="op">+</span>b <span class="cf">for</span> a <span class="kw">in</span> <span class="st">"abc"</span>] <span class="cf">for</span> b <span class="kw">in</span> <span class="st">"xyz"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>[['ax', 'bx', 'cx'], ['ay', 'by', 'cy'], ['az', 'bz', 'cz']]</code></pre>
+</div>
+</div>
+<p>Bir matris bir listeler listesi olarak yazılabilir. Listenin her elemanı (satır) bir listedir. Sözgelişi, <span class="math inline">\(\left[\begin{array}{ccc}1&amp;2&amp;3\\ 4&amp;5&amp;6\\7&amp;8&amp;9\end{array}\right]\)</span> matrisini bu şekilde temsil etmek için aşağıdaki yapıyı kullanabiliriz.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>[ [<span class="dv">3</span><span class="op">*</span>sütun <span class="op">+</span> satır <span class="cf">for</span> satır <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>] ] <span class="cf">for</span> sütun <span class="kw">in</span> [<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>] ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>[[1, 2, 3], [4, 5, 6], [7, 8, 9]]</code></pre>
+</div>
+</div>
+<p>Daha karmaşık bir örnek olarak, <em>Kronecker delta</em> <span class="math inline">\(\delta_{i,j}\)</span> matrisi, yani diyagonal elemanları 1, diğer elemanları 0 olan matris bir üçlü if-else ifadesiyle yazılabilir:</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>[ [ <span class="dv">1</span> <span class="cf">if</span> satır<span class="op">==</span>sütun <span class="cf">else</span> <span class="dv">0</span> <span class="cf">for</span> sütun <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>)] <span class="cf">for</span> satır <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<pre><code>[[1, 0, 0, 0, 0],
+ [0, 1, 0, 0, 0],
+ [0, 0, 1, 0, 0],
+ [0, 0, 0, 1, 0],
+ [0, 0, 0, 0, 1]]</code></pre>
+</div>
+</div>
+<p>Üreteç ifadeler</p>
+<hr>
+<p>Yukarıda gördüğümüz liste kurma yapısı, aslında daha genel ve daha verimli olan <em>üreteç ifadeleri</em> nin (generator expressions) özel bir durumudur. İlk örneğimizi, bir üreteç olarak şöyle yazabiliriz:</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>(x<span class="op">*</span>x <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>&lt;generator object &lt;genexpr&gt; at 0x7f26157b7a98&gt;</code></pre>
+</div>
+</div>
+<p>Somut bir listeye çevirmek için bu üreteç ifadesini çıplak halde (çevresinde parantezler olmadan) bir <code>list()</code> fonksiyonuna verebiliriz. Bu, liste kurma ifadesiyle birebir aynı sonucu verir.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(x<span class="op">*</span>x <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>[1, 4, 9, 16, 25]</code></pre>
+</div>
+</div>
+<p>Üreteçler, sıralı nesneler gibi iterasyonlarda kullanılabilirler. Önemli bir farkları vardır: Bütün elemanları bir seferde yaratılıp bellekte saklanmaz. Bunun yerine, her eleman sırası geldikçe üretilir. Üreteç en son kaldığı yeri aklında tutar.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>g <span class="op">=</span> (x<span class="op">*</span>x <span class="cf">for</span> x <span class="kw">in</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>])</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="bu">next</span>(g), <span class="bu">next</span>(g), <span class="bu">next</span>(g)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>(1, 4, 9)</code></pre>
+</div>
+</div>
+<p>Üreteci bir döngüde kullanabiliriz:</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> g:</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>16
+25</code></pre>
+</div>
+</div>
+<p>Üreteç ifadelerinin listelere göre avantajı daha az yer kaplamalarıdır. Bir listede bütün elemanlar baştan sonra üretilip bellekte saklanırken, bir üreteçte her eleman sadece ihtiyaç duyulduğu anda (söz gelişi, döngüde sırası geldiği zaman) dinamik olarak üretilirler. Özellikle çok elemanlı dizilerde bu önemli miktarda bellek tasarrufu sağlayabilir.</p>
+<p>Üreteç ifadeleri, dizili nesne alan fonksiyonlara parametre olarak verilebilir:</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="bu">sum</span>(<span class="dv">1</span><span class="op">/</span>(x<span class="op">*</span>x) <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">1001</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>1.6439345666815615</code></pre>
+</div>
+</div>
+<p>Bir de kendi tanımladığımız fonksiyonla kullanalım.</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> çarpım(L):</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Liste elemanlarının çarpımını döndürür."""</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    p <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x <span class="kw">in</span> L:</span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>        p <span class="op">*=</span> x</span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> p</span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>çarpım(x<span class="op">+</span><span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>,<span class="dv">6</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+<pre><code>2520</code></pre>
+</div>
+</div>
+</section>
+<section id="çokuz-ve-küme-kurma" class="level2">
+<h2 class="anchored" data-anchor-id="çokuz-ve-küme-kurma">Çokuz ve küme kurma</h2>
+<p>Liste yerine küme kurmak için köşeli parantez <code>[]</code> yerine küme parantezi <code>{}</code> kullanmak yeterlidir. Aynı kurallar geçerlidir.</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>{i <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>) <span class="cf">if</span> i<span class="op">%</span><span class="dv">3</span> <span class="op">&gt;</span> <span class="dv">0</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>{1, 2, 4, 5, 7, 8}</code></pre>
+</div>
+</div>
+<p>Ancak, yuvarlak parantez <code>()</code> üreteç kurma için kullanıldığından, çokuz üretmek için üreteci <code>tuple()</code> fonksiyonuna vermek gerekir.</p>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="bu">tuple</span>( (i,i<span class="op">**</span><span class="dv">2</span>, i<span class="op">**</span><span class="dv">3</span>) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>((0, 0, 0),
+ (1, 1, 1),
+ (2, 4, 8),
+ (3, 9, 27),
+ (4, 16, 64),
+ (5, 25, 125),
+ (6, 36, 216),
+ (7, 49, 343),
+ (8, 64, 512),
+ (9, 81, 729))</code></pre>
+</div>
+</div>
+</section>
+<section id="sözlük-kurma" class="level2">
+<h2 class="anchored" data-anchor-id="sözlük-kurma">Sözlük kurma</h2>
+<p>Liste kurma yapısını sözlük kurmaya adapte etmek mümkündür. Sözlük kurma yapısında, ikililerden oluan bir sıralı nesne üzerinden iterasyon yapılır. İkililerin birinci elemanı sözlüğe anahtar, ikinci elemanı ise o anahtara ait değer olarak atanır.</p>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>{k:v <span class="cf">for</span> k,v <span class="kw">in</span> ((<span class="st">"a"</span>,<span class="dv">1</span>),(<span class="st">"b"</span>,<span class="dv">2</span>),(<span class="st">"c"</span>,<span class="dv">6</span>))}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>{'a': 1, 'b': 2, 'c': 6}</code></pre>
+</div>
+</div>
+<p>Anahtarlar ve değerler ayrı nesnelerde sıralanmışlarsa, bunlar <code>zip()</code> fonksiyonuyla istenen biçime sokulabilir.</p>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>anahtarlar <span class="op">=</span> (<span class="st">"a"</span>,<span class="st">"b"</span>,<span class="st">"c"</span>)</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a>değerler <span class="op">=</span> (<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>)</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a>{k:v <span class="cf">for</span> k,v <span class="kw">in</span> <span class="bu">zip</span>(anahtarlar,değerler)}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<pre><code>{'a': 1, 'b': 2, 'c': 3}</code></pre>
+</div>
+</div>
+<p>Bir sözlüğün <code>items()</code> metodu anahtar-değer ikililerinden oluşan bir dizi verir. Bu dizi üzerinden iterasyon yaparsak, mevcut bir sözlükteki verilerle yeni bir sözlük oluşturabiliriz.</p>
+<p>Söz gelişi, <code>d</code> sözlüğündeki değerlerin karesini barındıran yeni bir sözlük oluşturalım:</p>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'a'</span>: <span class="dv">1</span>, <span class="st">'b'</span>: <span class="dv">2</span>, <span class="st">'c'</span>: <span class="dv">3</span>}</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>{k<span class="op">*</span><span class="dv">2</span>:v<span class="op">*</span>v <span class="cf">for</span> k,v <span class="kw">in</span> d.items()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>{'aa': 1, 'bb': 4, 'cc': 9}</code></pre>
+</div>
+</div>
+<p>Bu yöntemle bir sözlüğün anahtar ve değerlerini ters çevirmek çok kolaydır:</p>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>{v:k <span class="cf">for</span> k,v <span class="kw">in</span> d.items()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+<pre><code>{1: 'a', 2: 'b', 3: 'c'}</code></pre>
+</div>
+</div>
+<p>Bu son örnekte, iki ayrı anahtarda aynı değer varsa, sonra gelenin öncekini sileceğine dikkat edin.</p>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> {<span class="st">'a'</span>: <span class="dv">1</span>, <span class="st">'b'</span>: <span class="dv">2</span>, <span class="st">'c'</span>: <span class="dv">3</span>, <span class="st">'d'</span>:<span class="dv">2</span>}</span>
+<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>{v:k <span class="cf">for</span> k,v <span class="kw">in</span> d.items()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+<pre><code>{1: 'a', 2: 'd', 3: 'c'}</code></pre>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

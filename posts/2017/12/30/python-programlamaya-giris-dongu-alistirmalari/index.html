@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2017-12-30">
+
+<title>Veri Defteri - Python Programlamaya Giriş 6 - Döngü Alıştırmaları</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 6 - Döngü Alıştırmaları</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 30, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Python Programlamaya Giriş yazı dizimizin <a href="http://www.veridefteri.com/2017/12/20/python-programlamaya-giris-donguler/">bir önceki bölümünde</a> döngü yapılarını kullanarak bazı hesaplama problemlerini nasıl çözeceğimizi görmüştük. Bu bölümde ise döngüleri kullanarak yazacağınız bazı alıştırma problemleri veriyoruz. Çözümlerini bulmak size ait.</p>
+<p>Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<ol>
+<li>
+En uzun Collatz zinciri
+</li>
+<li>
+Üstel fonksiyon Taylor serisi
+</li>
+<li>
+Karekök bulma
+</li>
+<li>
+Machin formülüyle pi’yi bulma
+</li>
+<li>
+Lojistik fonksiyon ve kaos
+</li>
+<li>
+SIR salgın modeli
+</li>
+</ol>
+<section id="en-uzun-collatz-zinciri" class="level1">
+<h1>En uzun Collatz zinciri</h1>
+<p>Collatz dizisinden daha önceki bölümde bahsetmiştik. Diziyi <span class="math inline">\(n\)</span> sayısıyla başlatırsak, sonraki sayıyı şu bulma kuralla buluruz:</p>
+<ul>
+<li><span class="math inline">\(n_i\)</span> çift sayıysa: <span class="math inline">\(n_{i+1} = n_i/2\)</span></li>
+<li><span class="math inline">\(n_i\)</span> tek sayıysa: <span class="math inline">\(n_{i+1} = 3n_i+1\)</span></li>
+<li><span class="math inline">\(n_i=1\)</span> ise dizi sonlanır.</li>
+</ul>
+<p>Meselâ 13 ile başlarsak, on eleman uzunlukta olan 13, 40, 20, 10, 5, 16, 8, 4, 2, 1 dizisini elde ederiz. Bu dizinin uzunluğu 10’dur.</p>
+<p>Sorumuz şu: Bir milyonun altındaki bütün başlangıç değerleri içinde hangisi <strong>en uzun</strong> Collatz dizisini verir? (Başlangıçtan sonraki değerler bir milyonun üzerine çıkabilir.)</p>
+<p>(Kaynak: Euler Project, <a href="http://projecteuler.net/problem=14">14. problem</a>)</p>
+</section>
+<section id="üstel-fonksiyon-için-taylor-serisi" class="level1">
+<h1>Üstel fonksiyon için Taylor serisi</h1>
+<p>Üstel fonksiyonun <span class="math inline">\(x=0\)</span> çevresinde bir sonsuz seri ile gösterilebileceğini temel analiz derslerinden biliyoruz.</p>
+<p><span class="math display">\[e^x = \sum_{n=0}^{\infty} \frac {x^n}{n!} = 1 + x + \frac{1}{2}x^2 + \frac{1}{6}x^3 + \cdots\]</span></p>
+<p>Bu seri bütün <span class="math inline">\(x\)</span> değerleri için yakınsar, yani her <span class="math inline">\(x\)</span> değeri için yeterince terim ekleyerek <span class="math inline">\(e^x\)</span> değerini istediğimiz hassasiyette hesaplayabiliriz.</p>
+<p><span class="math inline">\(x\)</span> değerini kullanıcıdan sorarak, yukarıdaki seriyle <span class="math inline">\(e^x\)</span> değerini veren bir program yazın. Programın içinde <code>tol</code> isimli bir tolerans değişkeni tanımlayın ve <span class="math inline">\(10^{-10}\)</span> değeri verin. Bir döngü içinde, son terimin mutlak değeri <code>tol</code>’den küçük olana kadar seriye yeni terimler ekleyin.</p>
+<p>Her terimi sıfırdan hesaplamak gereksiz yük bindirecektir. Eklenecek yeni terimi hesaplarken, bir önceki terimi <span class="math inline">\(x\)</span> ile çarpıp, iterasyon değişkeni olan <span class="math inline">\(n\)</span>’ye bölmek daha verimli olur.</p>
+<p>Çeşitli <span class="math inline">\(x\)</span> ve <code>tol</code> değerleri kullanarak <span class="math inline">\(e^x\)</span> değerlerini, kaç terim gerektiğini, ve son terimi ekrana bastırın.</p>
+<p>Örnek çıktı:</p>
+<pre><code>x değerini girin: 3.0
+e^x ~  20.0855369232
+22 terim kullanıldı
+Son terim = 2.79190741015e-11</code></pre>
+<p>Matematik kütüphanesindeki fonksiyonla karşılaştırmak isterseniz <code>math.exp()</code> fonksiyonunu kullanabilirsiniz.</p>
+</section>
+<section id="babil-yöntemiyle-karekök-bulma" class="level1">
+<h1>Babil yöntemiyle karekök bulma</h1>
+<p>Verilen bir <span class="math inline">\(N\)</span> sayısının karekökünü bulmak için Babil döneminden beri kullanılan tekrarlamalı (iteratif) bir yöntem vardır: Önce, karekök için bir tahminde bulunun ve buna <span class="math inline">\(x_0\)</span> deyin. Bir sonraki tahminimiz <span class="math display">\[x_1 = \frac{1}{2}\left(x_0 + N/x_0\right)\]</span> olacak. Genel olarak, <span class="math display">\[x_{n+1} = \frac{1}{2}\left(x_n + N/x_n\right)\]</span> kuralıyla ardışık iterasyonlar yaparsak, <span class="math inline">\(x_n\)</span> değerleri hızlıca <span class="math inline">\(N\)</span>’nin kareköküne yakınsayacaktır.</p>
+<p>Bu yöntem, fonksiyon köklerini bulmak için kullanılan en iyi algoritmalardan biri olan Newton yönteminin özel bir durumudur.</p>
+<p>Bu yöntemi kullanarak karekök değerini hesaplayan bir program yazın. Program kullanıcıya karekökü alınacak sayıyı ve ilk tahmini sorsun. Bir döngü içinde, hata değeri <span class="math inline">\(|x_n^2 - N|\)</span> programda belirlenen bir toleranstan (sözgelişi <span class="math inline">\(10^{-10}\)</span>) küçük olana kadar iterasyonlar tekrarlansın. Program karekökün tahmini değerini ve sonuca ulaşmak için kaç iterasyon gerektiğini ekrana bassın.</p>
+<p>Örnek çıktı:</p>
+<pre><code>Karekökü alınacak sayı: 135.646
+İlk tahmin: 10
+Karekök ~  11.6467162754
+4 iterasyon</code></pre>
+</section>
+<section id="pi-sayısı-ve-machin-formülü" class="level1">
+<h1>Pi sayısı ve Machin formülü</h1>
+<p>Pi’yi hesaplamak için <a href="http://www.acikbilim.com/2013/03/dosyalar/pi-gunu-kutlu-olsun.html">tarih boyunca çeşitli yöntemler geliştirildi</a>. Önceki bir örnekte kullandığımız Leibniz formülü <span class="math inline">\(\arctan\)</span> fonksiyonunun Taylor açılımına dayanır:</p>
+<p><span class="math display">\[\arctan x = x - \frac{1}{3}x^3 + \frac{1}{5}x^5 - \frac{1}{7} x^7 + \cdots\]</span></p>
+<p>Bu formülde <span class="math inline">\(x=1\)</span> koyarak Leibniz formülünü elde ederiz:</p>
+<p><span class="math display">\[\frac{\pi}{4} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \ldots\]</span></p>
+<p>Bu formül, onu ilk defa 14. yüzyılın sonunda keşfeden dâhi Hintli matematikçi Madhava’nın, ve astronom James Gregory’nin de adı eklenerek, Madhava-Gregory-Leibniz serisi olarak da anılır.</p>
+<p>Daha önce gördüğümüz gibi, <span class="math inline">\(x=1\)</span> için bu seri çok yavaş yakınsar. Ancak, <span class="math inline">\(x\)</span>’in birden küçük olduğu değerlerde yakınsama hızlı olur. 1706’da John Machin <span class="math inline">\(\pi\)</span> için hızlı yakınsayan, böylelikle az sayıda terimle yüksek doğruluk sağlayan bir formül yayınladı.</p>
+<p><span class="math display">\[\pi = 16 \arctan \frac{1}{5} - 4 \arctan \frac{1}{239}\]</span></p>
+<p>Buradaki her bir terim, <span class="math inline">\(\arctan\)</span> fonksiyonunun yukarıda verilen açılımıyla hesaplanabilir.</p>
+<p>Bu formülle Machin, <span class="math inline">\(\pi\)</span>’yi o dönem için bir rekor olan 100 basamağa kadar hesaplayabilmişti. <span class="math inline">\(\pi\)</span>’nin birkaç <span class="math inline">\(\arctan\)</span> teriminin toplamı olarak ifade edildiği formüllere <a href="http://en.wikipedia.org/wiki/Machin-like_formula"><em>Machin benzeri</em></a> adı verilir. Bu algoritmalar, <span class="math inline">\(\pi\)</span>’yi trilyon basamağa kadar hesaplarken bile kullanılabilecek kadar verimlidirler.</p>
+<p>Machin formülüyle <span class="math inline">\(\pi\)</span>’yi hesaplayacak bir program yazın. Programda <span class="math inline">\(\arctan\)</span> fonksiyonlarının değerlerini yine bir döngü içinde, serinin son terimi belli bir hata payı değerinin altında olacak şekilde hesaplatın.</p>
+</section>
+<section id="lojistik-fonksiyon-ve-kaos" class="level1">
+<h1>Lojistik fonksiyon ve kaos</h1>
+<p>Matematiksel kaosun gözlendiği en basit sistemlerden biri, <a href="https://www.wikizero.com/en/Logistic_map"><em>lojistik fonksiyon</em></a> denen fonksiyonun iterasyonlarında bulunur. Lojistik dizinin her yeni terimi <span class="math inline">\(x_{t+1}\)</span>, bir önceki terim <span class="math inline">\(x_t\)</span>’den şu formülle elde edilir.:</p>
+<p><span class="math display">\[x_{t+1} = r x_t (1-x_t)\]</span></p>
+<p>Burada <span class="math inline">\(x_t\)</span> 0 ile 1 arasında kalan dinamik değişken, <span class="math inline">\(r\)</span> ise 0 ile 4 arasında bir parametredir. Parametre bir kere belirlendikten sonra dizi içinde değişmez.</p>
+<ol>
+<li>
+<span class="math inline">\(x_0 = 0.1\)</span> değerinden başlayarak, kullanıcıdan alınan bir <span class="math inline">\(r\)</span> değerini kullanarak ardışık <span class="math inline">\(x_0\ldots x_{100}\)</span> değerlerini ekrana yazan bir program yazın. Programı r parametresine sırayla 2.1, 3.1, 3.4, 3.5 değerleri vererek çalıştırın. Elde edilen <span class="math inline">\(x_t\)</span> değerlerinin uzun vadeli davranışını inceleyin (sabit bir noktaya mı yakınsıyor, periyodik bir döngüye mi oturuyor?) Örnek çıktı:
+<pre>r parametresi (0-4): 2.1
+0.1
+0.189
+0.3218859
+0.4583782715
+0.521362026605
+0.524041694021
+...
+0.52380952381
+0.52380952381
+0.5238095238
+</pre>
+</li><li>
+<span class="math inline">\(r\)</span> = 3.5 için dizi, periyotu dört olan bir salınıma oturur. Deneme yanılma ile, dört periyotlu salınım veren en düşük ve en yüksek <span class="math inline">\(r\)</span> değerlerini belirleyin.
+</li>
+<li>
+<p><i>Kaos</i>’un alametifarikası, birbirine çok yakın yerden başlayan iki yörüngenin hızla (üstel olarak) birbirinden uzaklaşmasıdır. Bunu görmek için programı biraz değiştirelim: Programı iki ayrı değerle başlayan dizileri, iki ayrı sütunda basacak şekilde değiştirin. Başlangıç değerleri 0.1 ve 0.10001 olsun. Bu programı <span class="math inline">\(r=\)</span> 3.1, 3.5, 3.57, 3.7 ve 4.0 için çalıştırın.</p>
+<ul>
+<li>
+Hangi <span class="math inline">\(r\)</span> değerleri için uzun vadede iki sütundaki sayılar eşitleniyor? (Kaos olmayan durum)
+</li><li>
+Hangi değerlerde sütunlardaki sayılar birbirine yakın başlamasına rağmen sonunda çok farklı hale geliyorlar?
+</li><li>
+Sütunlardaki sayıların arasındaki farkın belli bir miktar açılması için gereken zaman <span class="math inline">\(r\)</span> ile nasıl değişiyor?
+</li>
+
+</ul></li></ol>
+</section>
+<section id="salgın-hastalıklar---sir-modeli" class="level1">
+<h1>Salgın hastalıklar - SIR modeli</h1>
+<p><a href="https://www.wikizero.com/en/Compartmental_models_in_epidemiology">SIR (susceptible-infected-recovered) modeli</a>, salgın hastalıkların yayılmasını incelemekte kullanılan modellerin en sadelerindendir. Modelde bir topluluk üç kategoriye ayrılır: Şimdilik sağlıklı olan ama hastalığa yakalanması mümkün olanlar (S), hastalığa yakalanmış ve S’lere bulaştırabilecek olanlar (I), ve hastalanıp iyileşmiş, tekrar hastalanmayacak ve hastalığı başkasına bulaştıramayacak olanlar (R). Belli bir <span class="math inline">\(t\)</span> anında bu üç kategoride bulunanların nüfustaki oranlarını sırayla <span class="math inline">\(S_t, I_t, R_t\)</span> olarak gösterelim. O zaman, ayrık zaman adımlarında modelin denklemleri şöyle yazılabilir:</p>
+<p><span class="math display">\[\begin{array}{rcl}S_{t+1} &amp;=&amp; S_t - a I_t S_t \\ I_{t+1} &amp;=&amp; I_t + a I_t S_t - b I_t \\ R_{t+1} &amp;=&amp; R_t + bI_t \end{array}\]</span></p>
+<p>Burada <span class="math inline">\(a\)</span> parametresi, kullanılan zaman birimi içinde (gün, hafta, ay) hastalıkla temas sıklığı veya bulaşma olasılığı, <span class="math inline">\(b\)</span> parametresi ise ortalama iyileşme oranıdır. Buna göre 1/<span class="math inline">\(b\)</span> değeri hastalığın iyileşmesi için bir zaman ölçeği sağlar, bu bilgiyle de <span class="math inline">\(b\)</span> için bir tahmin yapılabilir.</p>
+<p>SIR modelini kullanarak her zaman adımında S, I, ve R kategorisindekilerin oranını listeleyen bir program yazın. Veriler hasta olanların oranı %0.1’in üzerinde olduğu sürece, ama en fazla 100 zaman adımı gösterecek şekilde listelensin. Başlangıçta sağlıklı olanların oranı %99, hastaların oranı %1, iyileşmiş olanlar ise %0 olsun. Parametreler için <span class="math inline">\(a = 0.6\)</span> ve <span class="math inline">\(b = 0.2\)</span> kullanın (epeyce bulaşıcı, ama tipik iyileşme süresinin 5 zaman adımı olduğu bir hastalık).</p>
+<p>SIR modelinde salgının kısa sürdüğü ve salgın süresince toplam nüfusun sabit kaldığı varsayılır. Yukarıdaki denklemlerin sağ taraflarını topladığınızda bazı terimlerin birbirini götürdüğünü ve <span class="math inline">\(S_{t+1} + I_{t+1} + R_{t+1} = S_t + I_t + R_t = 1\)</span> olacağını görebilirsiniz. Her zaman adımında <span class="math inline">\(S_t + I_t + R_t\)</span> toplamını da ekrana bastırın. Bu toplamın sabit kalmaması programınızda bir hata olduğunu göstergesidir.</p>
+<p>Örnek çıktı:</p>
+<pre><code>t     s     i     r   toplam
+-- ----- ----- ----- --------
+ 0 0.990 0.010 0.000 1.000000
+ 1 0.984 0.014 0.002 1.000000
+ 2 0.976 0.019 0.005 1.000000
+ 3 0.964 0.027 0.009 1.000000
+ 4 0.949 0.037 0.014 1.000000
+ 5 0.928 0.051 0.021 1.000000
+...
+47 0.046 0.002 0.952 1.000000
+48 0.046 0.001 0.952 1.000000
+49 0.046 0.001 0.953 1.000000</code></pre>
+<p>Çeşitli başlangıç şartları, ve parametreler için çeşitli değerler deneyerek sistemin davranışına bakın. Hasta olanların oranı kaçıncı zaman adımında azami sayıya ulaşıyor? Salgın dindiğinde hiç hasta olmayanların oranı ne kadar? Bu sayılar parametrelerle nasıl değişiyor?</p>
+<p><strong>Not.</strong> Dinamik değişkenlerin güncellenmesi sırasında sağ tarafta hep eski (bir önceki zamandaki) değerlerin kullanılmasına dikkat etmek gerekiyor. Sözgelişi,</p>
+<pre><code>s = s - a*i*s
+i = i + a*i*s - b*i    # hata
+r = r + b*i            # hata
+...</code></pre>
+<p>yazmak, ilk bakışta gözden kaçabilecek ciddi bir hataya yol açar. İkinci atamadaki <code>s</code> değişkeni aslında <span class="math inline">\(S_{t}\)</span> değerini değil, yenilenen <span class="math inline">\(S_{t+1}\)</span> değerini taşımaktadır. Aynı sorun üçüncü atamadaki <code>i</code> değişkeni için de geçerli. Bunu engellemenin iki yolu var. Birincisi, eski değerleri ayrı adlar altında saklamak ve döngünün sonunda güncelleme yapmak:</p>
+<pre><code>s = s_eski - a * i_eski * s_eski
+i = i_eski + a* i_eski * s_eski - b * i_eski
+r = r_eski + b * i_eski
+...
+s_eski = s
+i_eski = i
+r_eski = r
+...</code></pre>
+<p>İkinci yol ise, Python’un çoklu atama özelliğini kullanarak, geçici değişken kullanmadan bütün değişkenleri tek bir atamada güncellemek:</p>
+<pre><code>s, i, r = s - a*i*s, i + a*i*s - b*i, r + b*i</code></pre>
+<p>Bu atamada önce eşit işaretinin sağ tarafının değeri (bir üçüz) bulunur. Sağ tarafta eski değerler kullanılır. Sonra bu üçüzün elemanları <code>s</code>, <code>i</code>, ve <code>r</code>’ye sırayla atanır.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

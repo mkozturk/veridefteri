@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Egemen İmre">
+<meta name="dcterms.date" content="2019-03-04">
+
+<title>Veri Defteri - Bilimsel Programlamaya Kolay Başlangıç - 4</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bilimsel Programlamaya Kolay Başlangıç - 4</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Bilimsel Programlama</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Egemen İmre </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 4, 2019</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a href="http://www.veridefteri.com/2019/03/01/bilimsel-programlamaya-kolay-baslangic-iii/">Yazı dizimizin bir önceki bölümünde</a> <code>numpy</code> kullanımına basit bir giriş yapmıştık, şimdi ise daha ileri matematiksel yöntemleri içeren <code>scipy</code>’a bir göz atalım. Yapmaya çalıştığımız “ivmenin nümerik integrasyonu” işi, aslında bir “ikinci derece diferansiyel denklem çözümü” ile eşdeğer. Konumun zamana göre ikinci türevi olan ivme diferansiyel denklemini analitik olarak çözebilseydik, konum ve hız vektörlerinin geçmiş ve gelecekteki tüm değerlerini bulabilirdik. Lakin bunu analitik olarak çözmeye hiç niyetimiz yok - işi bilgisayar yapabilecekken biz niye uğraşalım ki?</p>
+<p><code>scipy</code> bu tür diferansiyel denklemleri çözmek için bize <code>integrate</code> paketi altında <code>solve_ivp</code> adlı kütüphaneyi sunuyor. Bu kütüphane altındaki metodlarla diferansiyel denklemleri sayısal metodlarla kolayca çözebiliriz. Ancak öncelikle denklemleri bu yöntemlerin anlayacağı halde yazmamız gerekiyor, diğer bir deyişle ikinci derece diferansiyel denklemi iki tane birinci derece diferansiyel denklem haline getirmemiz gerekiyor. Öncelikle kullanacağımız ara değişkenleri belirleyelim:</p>
+<p><span class="math display">\[\vec{y_1} = \frac{d\vec{r}}{dt} = \dot{\vec{r}}\]</span> <span class="math display">\[\vec{y_2} = \vec{r}\]</span></p>
+<p>Şimdi de ikinci derece diferansiyel denklemimizi bu yeni değişkenler cinsinden yazalım:<br>
+<span class="math display">\[\dot{\vec{y_2}} = \frac{d\vec{y_2}}{dt} = \vec{y_1}\]</span><br>
+<span class="math display">\[\dot{\vec{y_1}} = \frac{d\vec{y_1}}{dt} = - \frac{\mu}{(y_2)^3} \vec{y_2}\]</span></p>
+<p>Böylece ikinci derece diferansiyel denklemimiz iki tane birinci derece diferansiyel denkleme indirgendi ve <code>scipy</code>’ın çözebileceği hale geldi.</p>
+<p>Yukarıda olan biteni kod halinde yazmak zor değil:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> solve_ivp</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Kütleçekimi Sabiti [m^3/s^2]</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>muDünya <span class="op">=</span> <span class="fl">398600.5</span><span class="op">*</span><span class="fl">1E9</span>  </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> odeDiffDenklem(t, y, mu<span class="op">=</span>muDünya):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">    İki cisim problemi için diferansiyel denklem setini tanımlar.</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Arguments:</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">        t {float} -- başlangıç zamanı (s)</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">        y {ndarray} -- konum (m) ve hızı (m/s) içeren 1B, 4 elemanlı vektör [r_x r_y v_x v_y]</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">        {ndarray} -- konum ve hız diferansiyel denklemlerini (hız (m/s) ve ivmeyi(m/s^2)) içeren </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">        1B, 4 elemanlı vektör [v_x v_y a_x a_y]</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> np.sqrt(y[<span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y[<span class="dv">1</span>]<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    dy0 <span class="op">=</span> y[<span class="dv">2</span>]</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    dy1 <span class="op">=</span> y[<span class="dv">3</span>]</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    dy2 <span class="op">=</span> <span class="op">-</span>(mu <span class="op">/</span> (r<span class="op">**</span><span class="dv">3</span>)) <span class="op">*</span> y[<span class="dv">0</span>]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    dy3 <span class="op">=</span> <span class="op">-</span>(mu <span class="op">/</span> (r<span class="op">**</span><span class="dv">3</span>)) <span class="op">*</span> y[<span class="dv">1</span>]</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [dy0, dy1, dy2, dy3]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>odeDiffDenklem</code> zaman ile konum-hız vektörünü alıyor (aslında yerçekimi ivmesini de alıyor ama maalesef henüz yeni çıkmış olan <code>solve_ivp</code> paketi bu değerin dışarıdan atanmasını kabul etmiyor).</p>
+<p>Yukarıdaki metodla tanımlanan diferansiyel denklem setini çözen kod da zor görünüyor, ama aslında değil:</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> odeÇözümü(pvt0, tAdım, tSon, çözücüTipi <span class="op">=</span> <span class="st">'RK45'</span>):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Scipy ODE sayısal integrasyon metodlarıyla konum ve hız değerleri listesini hesaplar.</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Arguments:</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">        tAdım {float} -- adım büyüklüğü (s)</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">        pvt0 {ZamanKonumHız} -- başlangıç zamanında zaman konum hız</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">        tSon {float} -- bitiş zamanı (s)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">        çözücüTipi {string} -- ODE çözücüsünün tipi ('RK45', 'RK23', 'Radau', 'BDF', 'LSODA')</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">        list {ZamanKonumHız} --  her bir zaman adımı için zaman konum hız değerlerini içeren liste</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># adımSayısı ve zaman listesini oluştur</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    adımSayısı <span class="op">=</span> (tSon<span class="op">-</span>pvt0.t)<span class="op">/</span>tAdım <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    zamanListesi <span class="op">=</span> np.asarray(np.linspace(pvt0.t, tSon, num <span class="op">=</span> adımSayısı, endpoint<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># diff denklem başlangıç değerlerini oluştur</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    diffIlkDeğer <span class="op">=</span> np.asarray(np.concatenate([pvt0.r, pvt0.v]))</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># diff denklemi başlangıç zamanından son zamana dek çöz</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    diffDenkÇözüm <span class="op">=</span> solve_ivp(odeDiffDenklem, [pvt0.t, tSon], diffIlkDeğer, method<span class="op">=</span>çözücüTipi, dense_output<span class="op">=</span><span class="va">True</span>) </span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># zaman listesine karşılık gelen değerleri oluştur</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    cozumListesi <span class="op">=</span> diffDenkÇözüm.sol.<span class="fu">__call__</span>(zamanListesi)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sonuç listesini başlat</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>    numPvtList <span class="op">=</span> []</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Listeyi objelere dönştür</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(zamanListesi)):</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>        pvArray <span class="op">=</span> cozumListesi[:, i]</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        numPvtList.append( ZamanKonumHız(zamanListesi[i], pvArray[<span class="dv">0</span>], pvArray[<span class="dv">1</span>], pvArray[<span class="dv">2</span>], pvArray[<span class="dv">3</span>]) )</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (numPvtList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>odeÇözümü</code>, başlangıç ZamanKonumHız nesnesini, adım büyüklüğünü ve son zaman adımını alıyor. Buraya kadarki kısmı Euler ile benzer. Ancak buna ek olarak kullanılacak diferansiyel denklem çözüm yöntemini de alıyor. Varsayılan değer olan <code>RK45</code>, 4. derece bir çözücü kullanarak adım büyüklüğünü belirleyen ama asıl çözüm için 5. derece kullanan bir <em>Adaptif Runge-Kutta</em> yöntemi. Çok profesyonel olmasa da birçok öğrencinin projelerinde iş görecek bir diferansiyel denklem çözücüsü. Bu yöntem, hatayı belli bir seviyenin altında tutacak şekilde kendi adım büyüklüğünü belirleyecek kadar da akıllı. Ancak biz her <code>tAdım</code> değerinde bir çıktı almak istiyoruz. Bu nedenle, her <code>tAdım</code> aralıkla çıktı alınacak zamanların bir listesini oluşturuyoruz.</p>
+<p><code>solve_ivp</code> satırı aslında denklem setinin çözüldüğü satır - bir döngü bile yok, her şey sessiz sedasız içeride hallediliyor. Bu çözücüye diferansiyel denklem setini içeren metodu, başlangıç ve bitiş zamanlarını, ilk konum ve hızı ve çözücü tipini yolluyoruz. Bir sonraki adımda ise zaman listesine karşılık gelen ara çözümleri oluşturuyoruz. Biz <code>diffDenkÇözüm.sol.__call__(zamanListesi)</code> komutunu yazdığımızda arka tarafta interpolasyon algoritmaları bizim istediğimiz zamanlara karşılık gelen noktaları oluşturuyor. Son kısımda ise elde ettiğimiz bu çözüm setini <code>ZamanKonumHız</code> nesnelerine dolduruyoruz.</p>
+<p>Sadece bu iki satır ile, oturup yazmaya üşeneceğimiz (ben benzerlerini yazdım, oradan biliyorum), yüzlerce satırlık koda karşılık gelen işlevselliği kolaylıkla elde edebiliyoruz. <code>scipy</code> sayesinde elbette!</p>
+<p>O halde bunları çağırarak problemi çözen koda bakalım:</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç zamanı</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># bitiş zamanı (sn)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>tSon <span class="op">=</span> <span class="dv">6000</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># adım büyüklüğü (sn)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>tAdımEuler_1  <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>tAdımEuler_2  <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>tAdımODE <span class="op">=</span> <span class="dv">60</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>çözücüTipi <span class="op">=</span> <span class="st">'RK23'</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç konum ve hız</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pvt0 <span class="op">=</span> ZamanKonumHız(t0, <span class="dv">0</span>, <span class="dv">7000</span><span class="op">*</span><span class="fl">1E3</span>, <span class="fl">7.5</span><span class="op">*</span><span class="fl">1E3</span>, <span class="dv">0</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Euler sayısal integrasyon verisini hesaplayan döngüyü çalıştır</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>eulPvtList5  <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdımEuler_1, tSon)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>eulPvtList1  <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdımEuler_2, tSon)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>çözücüPvtList <span class="op">=</span> odeÇözümü(pvt0, tAdımODE, tSon, çözücüTipi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/egemen/anaconda3/lib/python3.6/site-packages/ipykernel_launcher.py:18: DeprecationWarning: object of type &lt;class 'float'&gt; cannot be safely interpreted as an integer.</code></pre>
+</div>
+</div>
+<p>Diferansiyel denklem çözücüsü için 60 saniyelik bir çıktı adım büyüklüğü kullandık, ama bu seferlik kullanacağımız 3. derece Runge-Kutta (<code>RK23</code>) yönteminde de adım büyüklüğü otomatik olarak, integrasyon algoritması tarafından belirleniyor. Bakalım <code>RK23</code> kullanarak bulduğumuz sonuçlar küçük adımlara sahip Euler yöntemlerinden daha mı iyi çıkacak?</p>
+<p>Bu sorunun yanıtı için grafikleri oluşturmamız gerek:</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># konum grafiği</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.r[<span class="dv">0</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList], [pvt.r[<span class="dv">1</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList], label<span class="op">=</span>çözücüTipi <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Konum"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x konum (m)"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y konum (m)'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.grid(b<span class="op">=</span><span class="va">True</span>, which<span class="op">=</span><span class="st">'major'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># hız grafiği</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.v[<span class="dv">0</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList], [pvt.v[<span class="dv">1</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList], label<span class="op">=</span>çözücüTipi <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hız"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x hız (m/s)"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y hız (m/s)"</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>plt.grid(b<span class="op">=</span><span class="va">True</span>, which<span class="op">=</span><span class="st">'major'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co"># enerji grafikleri</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#referans değer - tüm farklar bu değere göre hesaplanacak</span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>spEnerjiRef <span class="op">=</span> pvt0.spesifikEnerji()</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Spesifik Enerji Değişimi"</span>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"zaman (s)"</span>)</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"spesifik enerji ($m^2/s^2$)"</span>)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList1], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList1], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımEuler_2) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList5], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList5], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımEuler_1) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList], label<span class="op">=</span>çözücüTipi <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-5-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-5-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-5-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Öncelikle konum ve hız grafiklerini göstermek için kullandığımız RK23’ün hiç fena performans göstermediği anlaşılıyor - başladığımız yere iyi kötü dönmeyi başarmışız.</p>
+<p>Yöntemler arasındaki uçurum nedeniyle enerji değişim grafiğini log ölçeğinde çizdirdik, aslında tüm yöntemler için artış lineer. Log kısmını kapatıp bunu siz de görebilirsiniz. Enerji grafiklerine bakınca, <code>RK23</code>’ün, 1 saniye adım büyüklüğüne sahip Euler’in sadece onda biri kadar enerji hatası yaptığı görülüyor. Yani <code>scipy</code>’ın yöntemleri bizim uzun uzadıya yazdığımız kodlardan çok daha iyi sonuç veriyor. Çıkarılacak sonuç çok açık, tekerleği yeniden keşfetmenin gereği yok - tabii <code>scipy</code>’ın sunduklarından daha iyi algoritmalar kullanmak durumundaysanız iş başka.</p>
+<p>Yazdığımız <code>odeÇözümü</code> metodunda pek hoş olmayan bir kısım var: metoda çözücü adını <code>string</code> olarak yolluyoruz. Ancak kafamıza göre bir string değeri yollamamız mümkün değil, zira <code>solve_ivp</code> tarafından kabul edilen sadece birkaç çözücü var. Bu yöntem bizi hataya fazlasıyla açık hale getiriyor. Bunu çözmenin pratik bir yolu <code>enumerator</code> adı verilen mini mini veri depoları. Öncelikle enum içinde olası tüm değerleri (yani integrasyon algoritması tiplerini) belirliyoruz. Örneğin <em>adı</em>, yani <code>çözücüTipi.name</code> değeri RADAU olan bir parametremiz var. Bunun <code>çözücüTipi.value</code> ile sorgulanan <em>değeri</em> ‘Radau’ ile ifade edilen string. Böylece parametre adları ve buna karşılık gelen değerlerden mini bir tablo oluşturmuş oluyoruz.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> enum <span class="im">import</span> Enum</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ODEÇözücüTipi(Enum):</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    solve_ivp integrasyon tipleri</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    RK45 <span class="op">=</span> <span class="st">'RK45'</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    RK23 <span class="op">=</span> <span class="st">'RK23'</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    RADAU <span class="op">=</span> <span class="st">'Radau'</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    BDF <span class="op">=</span> <span class="st">'BDF'</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    LSODA <span class="op">=</span> <span class="st">'LSODA'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bir sonraki adımda da <code>odeÇözümü</code> metodunda buna uygun küçük bir değişiklik yapıyoruz - metodumuzun kullanıcısını yukarıda belirlediğimiz tablodaki parametreler arasında bir tercih yapmaya zorluyoruz.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> odeÇözümü(pvt0, tAdım, tSon, çözücüTipi <span class="op">=</span> ODEÇözücüTipi.RK45):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Scipy ODE sayısal integrasyon metodlarıyla konum ve hız değerleri listesini hesaplar.</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Arguments:</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">        tAdım {float} -- adım büyüklüğü (s)</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">        pvt0 {ZamanKonumHız} -- başlangıç zamanında zaman konum hız</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">        tSon {float} -- bitiş zamanı (s)</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">        çözücüTipi {ODEÇözücüTipi} -- ODE Çözücü Tipi</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">        list {ZamanKonumHız} --  her bir zaman adımı için zaman konum hız değerlerini içeren liste</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># adımSayısı ve zaman listesini oluştur</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    adımSayısı <span class="op">=</span> (tSon<span class="op">-</span>pvt0.t)<span class="op">/</span>tAdım <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    zamanListesi <span class="op">=</span> np.asarray(np.linspace(pvt0.t, tSon, num <span class="op">=</span> adımSayısı, endpoint<span class="op">=</span><span class="va">True</span>))</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># diff denklem başlangıç değerlerini oluştur</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    diffIlkDeğer <span class="op">=</span> np.asarray(np.concatenate([pvt0.r, pvt0.v]))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># diff denklemi başlangıç zamanından son zamana dek çöz</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    diffDenkÇözüm <span class="op">=</span> solve_ivp(odeDiffDenklem, [pvt0.t, tSon], diffIlkDeğer, method<span class="op">=</span>çözücüTipi.value, </span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                                                                  dense_output<span class="op">=</span><span class="va">True</span>, rtol <span class="op">=</span> <span class="fl">1e-12</span>, atol <span class="op">=</span> <span class="fl">1e-15</span>) </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># zaman listesine karşılık gelen değerleri oluştur</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    cozumListesi <span class="op">=</span> diffDenkÇözüm.sol.<span class="fu">__call__</span>(zamanListesi)</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># sonuç listesini başlat</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    numPvtList <span class="op">=</span> []</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Listeyi objelere dönştür</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(zamanListesi)):</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        pvArray <span class="op">=</span> cozumListesi[:, i]</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        numPvtList.append( ZamanKonumHız(zamanListesi[i], pvArray[<span class="dv">0</span>], pvArray[<span class="dv">1</span>], pvArray[<span class="dv">2</span>], pvArray[<span class="dv">3</span>]) )</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (numPvtList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Burada bir değişiklik daha yaptık ve <code>solve_ivp</code>’yi çağırırken <code>method=çözücüTipi.value, dense_output=True, rtol = 1e-12, atol = 1e-15</code> parametre setini de ekledik. Bu üçlünün detaylarına girmeyeceğim, ama sadece hata kontrolünün burada yapıldığını söylemekle yetineyim. Yani buradaki <code>rtol</code> ve <code>atol</code> ile verilen bağıl ve mutlak tolerans değerlerini ne kadar küçük seçerseniz diferansiyel denklem çözücüsünü de o kadar hatasız ve elbette küçük adımlarla ve yavaş çalışmaya zorlarsınız. Farklı tolerans değerlerini deneyip hatanın nasıl değiştiğini kendiniz de görebilirsiniz.</p>
+<p>Kalan kısımlarda önemli bir değişiklik yapmayacağız, sadece bu kez de RK45 adlı çözücüyü deneyip RK23 ile karşılaştıracağız. Kalan tüm değerler ve Euler ilerleticiler öncekilerle aynı olduğu için buraya eklemedim.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># *********** ana kod yapısı ***********</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç zamanı</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># bitiş zamanı (sn)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>tSon <span class="op">=</span> <span class="dv">6000</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># adım büyüklüğü (sn)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>tAdımEuler_1  <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>tAdımEuler_2  <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>tAdımODE <span class="op">=</span> <span class="dv">60</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>çözücüTipi1 <span class="op">=</span> ODEÇözücüTipi.RK23</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>çözücüTipi2 <span class="op">=</span> ODEÇözücüTipi.RK45</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç konum ve hız</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>pvt0 <span class="op">=</span> ZamanKonumHız(t0, <span class="dv">0</span>, <span class="dv">7000</span><span class="op">*</span><span class="fl">1E3</span>, <span class="fl">7.5</span><span class="op">*</span><span class="fl">1E3</span>, <span class="dv">0</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Euler sayısal integrasyon verisini hesaplayan döngüyü çalıştır</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>eulPvtList5  <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdımEuler_1, tSon)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>eulPvtList1  <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdımEuler_2, tSon)</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>çözücüPvtList1 <span class="op">=</span> odeÇözümü(pvt0, tAdımODE, tSon, çözücüTipi1)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>çözücüPvtList2 <span class="op">=</span> odeÇözümü(pvt0, tAdımODE, tSon, çözücüTipi2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/egemen/anaconda3/lib/python3.6/site-packages/ipykernel_launcher.py:17: DeprecationWarning: object of type &lt;class 'float'&gt; cannot be safely interpreted as an integer.</code></pre>
+</div>
+</div>
+<p>Son olarak, yeni diferansiyel çözücümüz RK45’in sonuçlarını görmek için grafiklere tekrar bakalım:</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># *********** grafikler ***********</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># konum grafiği</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.r[<span class="dv">0</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList2], [pvt.r[<span class="dv">1</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList2], label<span class="op">=</span>çözücüTipi2.value <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Konum"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x konum (m)"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y konum (m)'</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>plt.grid(b<span class="op">=</span><span class="va">True</span>, which<span class="op">=</span><span class="st">'major'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co"># hız grafiği</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.v[<span class="dv">0</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList2], [pvt.v[<span class="dv">1</span>] <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList2], label<span class="op">=</span>çözücüTipi2.value <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hız"</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x hız (m/s)"</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y hız (m/s)"</span>)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>plt.grid(b<span class="op">=</span><span class="va">True</span>, which<span class="op">=</span><span class="st">'major'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.show() </span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a><span class="co"># enerji grafikleri</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="co">#referans değer - tüm farklar bu değere göre hesaplanacak</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>spEnerjiRef <span class="op">=</span> pvt0.spesifikEnerji()</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Spesifik Enerji Değişimi"</span>)</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"zaman (s)"</span>)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"spesifik enerji ($m^2/s^2$)"</span>)</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>plt.yscale(<span class="st">'log'</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList1], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList1], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımEuler_2) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList5], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList5], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımEuler_1) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList1], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList1], label<span class="op">=</span>çözücüTipi1.value <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList2], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> çözücüPvtList2], label<span class="op">=</span>çözücüTipi2.value <span class="op">+</span> <span class="st">" ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdımODE) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Standart bir RK23 ile geçen sefer enerjiyi 1 saniye adım büyüklüğüne sahip Euler’den 10 kat daha iyi koruduğumuzu söylemiştik. Bu kez sıkı bir adım kontrolü kullanan bir RK45 ile, Euler’e oranla enerjiyi 10,000,000,000 (10 milyar) kez daha iyi koruduk! Bu kadar iyi bir sonucu elde etmek için daha fazla kod yazmamız da gerekmedi zira <code>scipy</code> bize tüm bu imkanları hazır olarak sunuyor. RK23 de RK45’e yakın bir performans gösterdi, çünkü sıkı adım kontrolünü ona da uyguladık. Ancak muhtemelen otomatik seçilen adım büyüklükleri RK45’ten daha küçük kaldı; diğer bir deyişle, kullandığımız metod olan RK23, RK45’ten daha kötü olduğu için aynı performansı gösterebilmek için daha çok çalıştı. Gerçek problemlerde, kullanacağımız sayısal integrasyon metodunun seçimi kritik önem teşkil eder. Diferansiyel denklemin bir adımını çözmek için gereken hesaplama kapasitesi, problemin non-lineerliği ve ne kadar ani değişiklikler gösterdiği, problemi ne kadar uzun süre modelleyeceğimiz ile elbette doğruya ne kadar yakın sonuçlar istediğimize bağlı olarak seçeceğimiz matematiksel model değişiklik gösterir. Bu durumda, genellikle farklı modellerle uzun uzadıya performans testleri yaparak en uygun model seçilir.</p>
+<p>Özetle, bu örneğimizde sonunda <code>numpy</code> ve <code>scipy</code> kütüphanelerine bir başlangıç yaptık ve kod organizasyonu, işlevlerin ayrılması, kodun yeniden kullanımı gibi yazılımcılık zanaatının temel prensiplerinden bahsettik. Bu arada iki cisim gibi basit bir problemin çözümünde bile, fizik kanunları ve matematiksel modeller arasındaki ilişkinin ne kadar çetrefilli olabileceğine kısaca değindik. Son olarak ikinci derece bir diferansiyel denklemin nasıl çözülebileceğine dair de küçük bir örnek yaptık.</p>
+<p>Bu yazıyı da, her zamanki gibi, çalıştırılabilir bir Jupyter defteri halinde, yazıdaki iki örneğin kodlarıyla birlikte GitHub sayfamızda bulabilirsiniz.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

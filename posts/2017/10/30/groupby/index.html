@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Birol Yüceoğlu">
+<meta name="dcterms.date" content="2017-10-30">
+
+<title>Veri Defteri - Groupby</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Groupby</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">pandas</div>
+    <div class="quarto-category">veri önişleme</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Birol Yüceoğlu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 30, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Pandas paketi veri analizi ve işlemesi için hazırlanmış bir Python paketidir. Bu paket çeşitli formatlardaki dosyaları (Excel, Csv, Txt gibi) okumayı, bu formatlarda dosyalar oluşturmayı kolaylaştırır. Aynı zamanda pandas paketi ile oluşturulan veri çerçeveleri (dataframe) sayesinde farklı formatlardaki (sayı, metin, tarih) veriyi birlikte tutmak, bu verileri işlemek ve basit analizler yapmak mümkündür.</p>
+<p>Pandas paketinin altındaki bir yöntem olan <code>groupby()</code> ham haldeki veriden (örnek olarak alışveriş verisi) çeşitli istatistikler çıkarmak için oldukça yararlı bir araç. Bu Veri Defteri’nde UCI Machine Learning Repository’de bulunan online satış verisini kullanacağız. Veriye <a href="http://archive.ics.uci.edu/ml/datasets/online+retail">linke</a> tıklayarak erişebilirsiniz. İlk olarak veriyi okutarak ve boyutlarına bakarak başlayalım.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># İlk adımda pandas ve numpy paketlerini yüklüyoruz</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Input dosyasının olduğu klasörün yolu</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>IDIR <span class="op">=</span> <span class="st">'D:/Data/Blog/Data/'</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Pandas'ın altındaki read_excel fonksiyonuyla Excel dosyasını okutabiliriz.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Pandas aynı zamanda csv, table, sql ve kopyaladığınız tablo halindeki verileri de okuyabilir (clipboard).</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># read_csv, read_table, read_json, read_sql, read_clipboard fonksiyonlarını inceleyebilirsiniz.</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Şimdi veriyi okutarak verinin boyutlarını inceleyelim.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_excel(IDIR <span class="op">+</span> <span class="st">'Online Retail.xlsx'</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Veri çerçevesinin boyutu: "</span> <span class="op">+</span> <span class="bu">str</span>(np.shape(df)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Veride 8 kolon var. Kolonlar hakkındaki ilk bilgiyi <code>head()</code> fonksiyonuyla görebiliriz.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>HTML(df.head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Verideki kolonların ne anlama geldiğine bakalım.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Kolon</th>
+<th style="text-align: left;">Anlam</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">InvoiceNo</td>
+<td style="text-align: left;">Fatura numarası, her alışverişin bir numarası var</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">StockCode</td>
+<td style="text-align: left;">Ürünün numarası</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Description</td>
+<td style="text-align: left;">Ürünün açıklaması</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Quantity</td>
+<td style="text-align: left;">Üründen kaç adet alındığı</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">InvoiceDate</td>
+<td style="text-align: left;">Alışverişin tarihi ve saati</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">UnitPrice</td>
+<td style="text-align: left;">Ürünün birim fiyatı</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CustomerID</td>
+<td style="text-align: left;">Müşteri numarası</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Country</td>
+<td style="text-align: left;">Ülke</td>
+</tr>
+</tbody>
+</table>
+<p>Öncelikle ülke bazında alışveriş istatistikleri çıkaralım. Bu amaçla ilk yapacağımız şey veri setini ülke bazında gruplamak.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Veriyi ülke (Country) bazında grupluyoruz</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df_country <span class="op">=</span> df.groupby(<span class="st">'Country'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Veride hangi ülkeler olduğunu görmek için <code>group.keys()</code>, kaç ülke olduğunu görmek içinse <code>ngroups</code> metotlarını kullanabiliriz.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ülkeler"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_country.groups.keys())</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Ülke sayısı: "</span> <span class="op">+</span> <span class="bu">str</span>(df_country.ngroups))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Veri setinde 38 ülkeden yapılan alışverişler var. Her bir gruba (ülkede yapılan alışverişlere) erişmek için aşağıdaki gibi bir loop kullanabiliriz. <code>df_country</code> bir <em>GroupBy</em> objesi ve veriyi ülke ve satış verisini içeren bir dictionarye benzer bir şekilde tutuyor.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> country, sales <span class="kw">in</span> df_country:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> country <span class="op">==</span> <span class="st">'Belgium'</span>:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        HTML(sales.head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>İstediğimiz gruba ulaşmanın bir diğer yolu da <code>get_group()</code> fonksiyonu. ‘Austria’ için olan satış verilerine ulaşmayı deneyelim.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>HTML(df_country.get_group(<span class="st">'Austria'</span>).head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Şimdi her ülke için en çok satılan ürünü bulalım. Bunun için yapmamız gerekenler ülke (Country) ve ürün (StockCode) bazında satış miktarlarını (Quantity) toplamak olacak. Ondan sonra da her ülke için en çok satılan ürünü bulacağız. <code>groupby</code> fonksiyonuna vereceğimiz <code>by</code> argümanı hangi kolonlara göre (Country, StockCode) gruplayacağımız bilgisini veriyor. Daha sonra işlem yapacağımız kolonu (Quantity) ve yapacağımız işlemi (<code>sum()</code>) belirtiyoruz.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_country_product <span class="op">=</span> df.groupby(by <span class="op">=</span> [<span class="st">'Country'</span>, <span class="st">'StockCode'</span>])[<span class="st">'Quantity'</span>].<span class="bu">sum</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_country_product.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dataframe yapısını korumak için reset_index() fonksiyonunu kullanabiliriz.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_country_product <span class="op">=</span> df_country_product.reset_index()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>HTML(df_country_product.head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ülke bazında en yüksek miktara sahip ürünleri bulmak için <code>groupby</code>ı maksimum değeri bulacak şekilde kullanabiliriz. Ancak bu ürün bilgisini vermeyeceği için <code>transform</code> yöntemini kullanıyoruz. Bu sayede her ülke için maksimum satış değerine sahip ürünün satış adedine erişiyoruz. Aşağıdaki satırda değeri maksimum satışa sahip ürünlere sahip indexleri belirliyoruz. Bu, aynı satış miktarına sahip birden fazla ürün varsa onları da bulmamızı sağlar.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>idx <span class="op">=</span> df_country_product.groupby([<span class="st">'Country'</span>])[<span class="st">'Quantity'</span>].transform(<span class="bu">max</span>) <span class="op">==</span> df_country_product[<span class="st">'Quantity'</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>HTML(df_country_product[idx].head(<span class="dv">10</span>).to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Şimdi de müşteriler için çeşitli istatistikler çıkaralım. Müşterilerle ilgili pazarlama, segmentasyon, müşteri terki tahmini gib çalışmalarda sıklıkla kullanılan <strong>RFM</strong> (Recency, frequency, monetary / yakınlık, sıklık, mali) değişkenlerini <code>groupby</code> fonksiyonunu kullanarak oluşturacağız. Bu tip istatistikler aynı zamanda gerçekleştireceğiniz çalışmalarda öznitelik türetmek için de kullanılabilir.</p>
+<p>Her müşteri için aşağıdaki değişkenlerin değerlerini elde etmek istiyoruz: * Alışveriş sayısı * Toplam ve ortalama alışveriş miktarı * Satın alınan toplam ve ortalama (farklı) ürün sayısı * En son alışveriş tarihi</p>
+<p>Bunun için öncelike toplam alışveriş miktarını ‘Amount’ kolonuna yazdıracağız. Yapmamız gereken miktar (Quantity) ile birim fiyat (UnitPrice) kolonlarını çarpmak.</p>
+<p>Bunları yapmadan önce müşteri (CustomerID) kolonunda boş değerler olduğu için öncelikle bu alışverişleri veri setinden çıkaralım.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CustomerID değeri olmayan müşterileri veri setinden çıkaralım.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Temizlik öncesi alışveriş sayısı: "</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">len</span>(df)))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df[df[<span class="st">'CustomerID'</span>] <span class="op">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Temizlik sonrası alışveriş sayısı: "</span> <span class="op">+</span> <span class="bu">str</span>(<span class="bu">len</span>(df)))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Birim fiyat ve miktar değerlerini çarparak toplam tutarı bulalım.</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Amount'</span>] <span class="op">=</span> df[<span class="st">'Quantity'</span>] <span class="op">*</span> df[<span class="st">'UnitPrice'</span>]</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>HTML(df.head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Alışverişleri önce müşteri (CustomerID) ve alışveriş (InvoiceNo) değerleri için gruplayalım. Bu sayede her alışveriş için sepetteki ürün sayısı ve sepetteki ürünleri toplam tutarını öğrenebiliriz. Her alışveriş için yapacağımız işlemler aşağıdakilerdir: * Farklı ürün sayısını bulmak (StockCode): Kullanacağımız yöntem <code>nunique</code> kaç tane tekil (unique) değer olduğuna bakar. * Sepetteki ürünlerin değerini toplamak (Amount): Kullanacağımız yöntem <code>sum</code> verilen kolonun değerlerini toplar. * Alışveriş tarihini belirlemek (InvoiceDate): Kullanacağımız değer <code>max</code> maksimum değeri verir. Burada max değerini kullanmamız şart değil. Sadece bu değeri bir sonraki tabloya da aktarmak istiyoruz.</p>
+<p><code>agg</code> fonksiyonu dictionary yapısıyla bu farklı işlemleri tek satırda yapmamıza imkan tanıyor.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>df_customer <span class="op">=</span> df.groupby([<span class="st">'CustomerID'</span>, <span class="st">'InvoiceNo'</span>]).agg({<span class="st">'StockCode'</span>:<span class="st">'nunique'</span>, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                                           <span class="st">'Amount'</span>:<span class="st">'sum'</span>, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>                                                           <span class="st">'InvoiceDate'</span>: <span class="st">'max'</span>}).reset_index()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>HTML(df_customer.head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Artık istediğimiz değerleri hesaplayabiliriz. Her müşteri ve alışveriş için oluşturduğumuz tabloyu müşteri bazında tekrar gruplayacağız. Yapmak istediğimiz işlemler aşağıdakilerdir: * İşlem sayısını bulmak: ‘InvoiceNo’ kolonundaki değerleri sayacağız. Değerler tekil olduğu için <code>count</code> fonksiyonunu kullanabiliriz. * Toplam ve ortalam işlem miktarını bulmak: ‘Amount’ kolonu için toplam ve ortalama (<code>mean</code>) değerleri bulacağız. * En son alışveriş tarihini bulmak: Her müşteri için ‘InvoiceDate’ kolonundaki maksimum değeri bulacağız.</p>
+<p>Miktar kolonunda yapacağımız iki işlem (toplam ve ortalama) için de dictionary yapısını ya da bir liste kullanabiliriz.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_customer <span class="op">=</span> df_customer.groupby(<span class="st">'CustomerID'</span>).agg({<span class="st">'InvoiceNo'</span>:<span class="st">'count'</span>, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                                     <span class="st">'Amount'</span>: [<span class="st">'sum'</span>,<span class="st">'mean'</span>],</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                                                    <span class="st">'InvoiceDate'</span>: <span class="st">'max'</span>}).reset_index()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>df_customer.columns <span class="op">=</span> [<span class="st">'CustomerID'</span>, <span class="st">'Number_of_Transactions'</span>, <span class="st">'Total_Amount'</span>, <span class="st">'Average_Amount'</span>, <span class="st">'Last_Transaction_Date'</span>]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>HTML(df_customer.head().to_html())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>groupby()</code>fonksiyonunu kullanarak veriyi özetledik. Bu noktadan sonra uygulamanıza göre veriden özetlediğiniz bilgileri kullanabilirsiniz.</p>
+<p>Jupyter Notebook dosyalarına ulaşmak için Github <a href="https://github.com/sibirbil/VeriDefteri">dizinine</a> bakabilirsiniz.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-06-08">
+
+<title>Veri Defteri - Python Programlamaya Giriş 21 - Dinamik kod üretme</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 21 - Dinamik kod üretme</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">June 8, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Python <em>dinamik</em> tabir edilen dillerden biridir. Programda kullandığıız değişkenlerin tiplerini baştan bildirmeniz gerekmez. Program çalıştıkça işlenen komutlar, yeni nesneleri anında üretir. Bu dinamiklik sayesinde, dize olarak verilmiş Python komutlarını da işleyebilir, hatta program yazan programlar yazabiliriz.</p>
+<p>Bu işlemi yapmak için iki Python fonksiyonu vardır: <code>eval()</code> ve <code>exec()</code></p>
+<p>Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<section id="eval" class="level2">
+<h2 class="anchored" data-anchor-id="eval">eval</h2>
+<p>Bu fonksiyon, Python komutları içeren bir dizeyi yorumlayıcıya gönderir ve sonucu geri verir.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span>(<span class="st">"2**3 + 4*5"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>28</code></pre>
+</div>
+</div>
+<p>Çalıştırma anında isim alanında bulunan değişkenler de kod dizesi içinde kullanılabilir.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span>(<span class="st">"2*x+4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>14</code></pre>
+</div>
+</div>
+<p>Komut dizesi içindeki değişkeni başka bir değerle kullanmak isterseniz, değişkenleri bir sözlük ile verebilirsiniz.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span>(<span class="st">"2*x+4"</span>,{<span class="st">"x"</span>:<span class="dv">10</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>24</code></pre>
+</div>
+</div>
+<section id="örnek-basit-hesap-makinesi." class="level3">
+<h3 class="anchored" data-anchor-id="örnek-basit-hesap-makinesi.">Örnek: Basit hesap makinesi.</h3>
+<p>Kullanıcıdan tek tek matematiksel ifadeler alıp sonucu yazan bir programcık yazalım. Kullanıcı “dur” yazdığında program sona ersin.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>işlemler <span class="op">=</span> <span class="st">"""1 + 2 + 3 + 4 + 5</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">2**2 + 3 * 5</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">1/10 + 1/5</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> işlem <span class="kw">in</span> işlemler.splitlines():</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(işlem, <span class="st">" = "</span>, <span class="bu">eval</span>(işlem))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1 + 2 + 3 + 4 + 5  =  15
+2**2 + 3 * 5  =  19
+1/10 + 1/5  =  0.30000000000000004</code></pre>
+</div>
+</div>
+</section>
+<section id="örnek-yardım-belgeleri-özetleri" class="level3">
+<h3 class="anchored" data-anchor-id="örnek-yardım-belgeleri-özetleri">Örnek: Yardım belgeleri özetleri</h3>
+<p>Nesnelerin yardım belgelerini daha önce kullanmıştık. Bir metodla ilgili bilgi almak için <code>help()</code> komutunu kullandığımızda o metodun (bir fonksiyon nesnesidir) <code>__doc__</code> isimli özelliği ekrana basılır. Buna doğrudan da erişebiliriz.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>.append.__doc__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>'L.append(object) -&gt; None -- append object to end'</code></pre>
+</div>
+</div>
+<p>Diyelim bir nesne sınıfı altında tanımlanmış bütün metodların kısa tarifini (belge dizesini) ekrana dökmek istiyoruz. Ama bir sınıf altında, daha özel amaçlı, doğrudan kullanılmayan metodlar da bulunur. Bunların başlarında ve sonlarında bir çift altçizgi (“dunder”) bulunur.</p>
+<p>Çift altçizgili metodları hariç tutarak, metodların kısa açıklamalarını listelemek için <code>eval</code>’i bir döngü içinde kullanabiliriz.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> metod <span class="kw">in</span> <span class="bu">dir</span>(<span class="bu">list</span>):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">"__"</span> <span class="kw">not</span> <span class="kw">in</span> metod:</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="bu">eval</span>(<span class="st">"list."</span><span class="op">+</span>metod<span class="op">+</span><span class="st">".__doc__"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>L.append(object) -&gt; None -- append object to end
+L.clear() -&gt; None -- remove all items from L
+L.copy() -&gt; list -- a shallow copy of L
+L.count(value) -&gt; integer -- return number of occurrences of value
+L.extend(iterable) -&gt; None -- extend list by appending elements from the iterable
+L.index(value, [start, [stop]]) -&gt; integer -- return first index of value.
+Raises ValueError if the value is not present.
+L.insert(index, object) -- insert object before index
+L.pop([index]) -&gt; item -- remove and return item at index (default last).
+Raises IndexError if list is empty or index is out of range.
+L.remove(value) -&gt; None -- remove first occurrence of value.
+Raises ValueError if the value is not present.
+L.reverse() -- reverse *IN PLACE*
+L.sort(key=None, reverse=False) -&gt; None -- stable sort *IN PLACE*</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="exec" class="level2">
+<h2 class="anchored" data-anchor-id="exec">exec</h2>
+<p>Değer döndüren ifadeleri <code>eval()</code> ile işletebiliriz, ama bir ifade (expression) olmayan, yani değer döndürmeyen komutları (söz gelişi, modül yükleme, fonksiyon tanımları, döngüler, atamalar vb.) çalıştırmak için <code>exec()</code> fonksiyonuna ihtiyacımız var.</p>
+<p>Örnek olarak, bir değişken ataması yapalım:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(<span class="st">"""</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st">import math</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">x=math.pi"""</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>3.141592653589793</code></pre>
+</div>
+</div>
+<p>Bir formülde değişkene 0-9 arası değerler vererek bir tablo oluşturan bir kod yazalım.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>değişken <span class="op">=</span> <span class="st">"x"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>formül <span class="op">=</span> <span class="st">"1/(1+x) + x"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>kod <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="st">for </span><span class="sc">{0}</span><span class="st"> in range(10):</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="st">    print(</span><span class="sc">{0}</span><span class="st">, </span><span class="sc">{1}</span><span class="st">)"""</span>.<span class="bu">format</span>(değişken, formül)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+for x in range(10):
+    print(x, 1/(1+x) + x)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(kod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0 1.0
+1 1.5
+2 2.3333333333333335
+3 3.25
+4 4.2
+5 5.166666666666667
+6 6.142857142857143
+7 7.125
+8 8.11111111111111
+9 9.1</code></pre>
+</div>
+</div>
+<p>Farkedeceğiniz gibi, <code>değişken</code>’in değeri <code>"x"</code> olduğu için formülde de <code>x</code> karakterini kullanmamız gerekiyor.</p>
+</section>
+<section id="global-ve-yerel-değişkenler" class="level2">
+<h2 class="anchored" data-anchor-id="global-ve-yerel-değişkenler">Global ve yerel değişkenler</h2>
+<p><code>eval</code>/<code>exec</code> fonksiyonları, işletilecek kodu barındıran dizenin yanı sıra iki parametre daha alırlar: <em>globals</em> ve <em>locals</em>. Bu parametreler özellikle belirtilmezse, <code>eval</code>/<code>exec</code> kodunda yorumlayıcının o andaki durumunda tanımlanmış olan bütün isimler kullanılabilir.</p>
+<p><em>Yerel</em> değişkenler bir fonksiyon içinden tanımlı olan, o fonksiyonun dışında tanınmayan isimlerdir. <em>Global</em> değişkenler ise bütün fonksiyonların erişebileceği değişkenlerdir. Yerel isimlere <code>locals()</code>, global isimlere ise <code>globals()</code> komutlarıyla ulaşılabilir. Bu komutlar değişken isimleriyle değerlerini eşleştiren birer sözlük döndürür.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(x):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="bu">locals</span>())</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>f(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'a': 10, 'x': 3}</code></pre>
+</div>
+</div>
+<p><code>eval</code>/<code>exec</code> ile bir kod parçası çalıştırırken bu global ve yerel değişkenleri sınırlandırabiliriz. Bu fonksiyonların genel kullanımı şöyledir:</p>
+<pre><code>eval(source, globals=None, locals=None)
+exec(source, globals=None, locals=None)</code></pre>
+<p>Burada <code>globals</code> ve <code>locals</code> parametreleri için global ve yerel değişkenleri tutan birer sözlük koyabiliriz.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(<span class="st">"print(locals())"</span>, <span class="va">None</span>, {<span class="st">"abc"</span>: <span class="dv">17</span>, <span class="st">"xyz"</span>: <span class="st">"Mehmet"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'abc': 17, 'xyz': 'Mehmet'}</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(<span class="st">"print(globals())"</span>, <span class="va">None</span>, {<span class="st">"abc"</span>: <span class="dv">17</span>, <span class="st">"xyz"</span>: <span class="st">"Mehmet"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'__name__': '__main__', '__doc__': 'Automatically created module for IPython interactive environment', '__package__': None, '__loader__': None, '__spec__': None, '__builtin__': &lt;module 'builtins' (built-in)&gt;, '__builtins__': &lt;module 'builtins' (built-in)&gt;, '_ih': ['', 'eval("2**3 + 4*5")', 'x = 5\neval("2*x+4")', 'eval("2*x+4",{"x":10})', 'while(True):\n    işlem = input("Bir işlem yazın: ")\n    if işlem.strip().lower()=="dur": break\n    print(eval(işlem))', 'list.append.__doc__', 'dir(list)', 'for metod in dir(list):\n    if "__" not in metod:\n        print(eval("list."+metod+".__doc__"))', 'exec("x=3.1415")\nx', 'değişken = "x" # Formülde kullanılacak değişken.\nformül = input("Bir matematiksel formül yazın: ")\nkod = """\nfor {0} in range(10):\n    print({0}, {1})""".format(değişken, formül)\nprint(kod)', 'exec(kod)', 'globals()', 'def f(x):\n    a = 10\n    print(locals())\n\nf(3)', 'exec("print(locals())", None, {"abc": 17, "xyz": "Mehmet"})', 'exec("print(globals())", None, {"abc": 17, "xyz": "Mehmet"})'], '_oh': {1: 28, 2: 14, 3: 24, 5: 'L.append(object) -&gt; None -- append object to end', 6: ['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort'], 8: 3.1415, 11: {...}}, '_dh': ['/home/kaan/git/VeriDefteri/Python_Programlama'], 'In': ['', 'eval("2**3 + 4*5")', 'x = 5\neval("2*x+4")', 'eval("2*x+4",{"x":10})', 'while(True):\n    işlem = input("Bir işlem yazın: ")\n    if işlem.strip().lower()=="dur": break\n    print(eval(işlem))', 'list.append.__doc__', 'dir(list)', 'for metod in dir(list):\n    if "__" not in metod:\n        print(eval("list."+metod+".__doc__"))', 'exec("x=3.1415")\nx', 'değişken = "x" # Formülde kullanılacak değişken.\nformül = input("Bir matematiksel formül yazın: ")\nkod = """\nfor {0} in range(10):\n    print({0}, {1})""".format(değişken, formül)\nprint(kod)', 'exec(kod)', 'globals()', 'def f(x):\n    a = 10\n    print(locals())\n\nf(3)', 'exec("print(locals())", None, {"abc": 17, "xyz": "Mehmet"})', 'exec("print(globals())", None, {"abc": 17, "xyz": "Mehmet"})'], 'Out': {1: 28, 2: 14, 3: 24, 5: 'L.append(object) -&gt; None -- append object to end', 6: ['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort'], 8: 3.1415, 11: {...}}, 'get_ipython': &lt;bound method InteractiveShell.get_ipython of &lt;ipykernel.zmqshell.ZMQInteractiveShell object at 0x7f9d822f7b70&gt;&gt;, 'exit': &lt;IPython.core.autocall.ZMQExitAutocall object at 0x7f9d80260630&gt;, 'quit': &lt;IPython.core.autocall.ZMQExitAutocall object at 0x7f9d80260630&gt;, '_': {...}, '__': 3.1415, '___': ['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort'], '_i': 'exec("print(locals())", None, {"abc": 17, "xyz": "Mehmet"})', '_ii': 'def f(x):\n    a = 10\n    print(locals())\n\nf(3)', '_iii': 'globals()', '_i1': 'eval("2**3 + 4*5")', '_1': 28, '_i2': 'x = 5\neval("2*x+4")', 'x': 9, '_2': 14, '_i3': 'eval("2*x+4",{"x":10})', '_3': 24, '_i4': 'while(True):\n    işlem = input("Bir işlem yazın: ")\n    if işlem.strip().lower()=="dur": break\n    print(eval(işlem))', 'işlem': 'dur', '_i5': 'list.append.__doc__', '_5': 'L.append(object) -&gt; None -- append object to end', '_i6': 'dir(list)', '_6': ['__add__', '__class__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort'], '_i7': 'for metod in dir(list):\n    if "__" not in metod:\n        print(eval("list."+metod+".__doc__"))', 'metod': 'sort', '_i8': 'exec("x=3.1415")\nx', '_8': 3.1415, '_i9': 'değişken = "x" # Formülde kullanılacak değişken.\nformül = input("Bir matematiksel formül yazın: ")\nkod = """\nfor {0} in range(10):\n    print({0}, {1})""".format(değişken, formül)\nprint(kod)', 'değişken': 'x', 'formül': '2*x**3-10', 'kod': '\nfor x in range(10):\n    print(x, 2*x**3-10)', '_i10': 'exec(kod)', '_i11': 'globals()', '_11': {...}, '_i12': 'def f(x):\n    a = 10\n    print(locals())\n\nf(3)', 'f': &lt;function f at 0x7f9d80165d08&gt;, '_i13': 'exec("print(locals())", None, {"abc": 17, "xyz": "Mehmet"})', '_i14': 'exec("print(globals())", None, {"abc": 17, "xyz": "Mehmet"})'}</code></pre>
+</div>
+</div>
+<p><em>globals</em> yerine boş bir sözlük koyarsak, sadece Python’da tanımlanmış (built-in) isimlere erişilebilir sadece</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(<span class="st">"print(globals())"</span>, {}, {<span class="st">"abc"</span>: <span class="dv">17</span>, <span class="st">"xyz"</span>: <span class="st">"Mehmet"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'__builtins__': {'__name__': 'builtins', '__doc__': "Built-in functions, exceptions, and other objects.\n\nNoteworthy: None is the `nil' object; Ellipsis represents `...' in slices.", '__package__': '', '__loader__': &lt;class '_frozen_importlib.BuiltinImporter'&gt;, '__spec__': ModuleSpec(name='builtins', loader=&lt;class '_frozen_importlib.BuiltinImporter'&gt;), '__build_class__': &lt;built-in function __build_class__&gt;, '__import__': &lt;built-in function __import__&gt;, 'abs': &lt;built-in function abs&gt;, 'all': &lt;built-in function all&gt;, 'any': &lt;built-in function any&gt;, 'ascii': &lt;built-in function ascii&gt;, 'bin': &lt;built-in function bin&gt;, 'callable': &lt;built-in function callable&gt;, 'chr': &lt;built-in function chr&gt;, 'compile': &lt;built-in function compile&gt;, 'delattr': &lt;built-in function delattr&gt;, 'dir': &lt;built-in function dir&gt;, 'divmod': &lt;built-in function divmod&gt;, 'eval': &lt;built-in function eval&gt;, 'exec': &lt;built-in function exec&gt;, 'format': &lt;built-in function format&gt;, 'getattr': &lt;built-in function getattr&gt;, 'globals': &lt;built-in function globals&gt;, 'hasattr': &lt;built-in function hasattr&gt;, 'hash': &lt;built-in function hash&gt;, 'hex': &lt;built-in function hex&gt;, 'id': &lt;built-in function id&gt;, 'input': &lt;bound method Kernel.raw_input of &lt;ipykernel.ipkernel.IPythonKernel object at 0x7f9d822f7f28&gt;&gt;, 'isinstance': &lt;built-in function isinstance&gt;, 'issubclass': &lt;built-in function issubclass&gt;, 'iter': &lt;built-in function iter&gt;, 'len': &lt;built-in function len&gt;, 'locals': &lt;built-in function locals&gt;, 'max': &lt;built-in function max&gt;, 'min': &lt;built-in function min&gt;, 'next': &lt;built-in function next&gt;, 'oct': &lt;built-in function oct&gt;, 'ord': &lt;built-in function ord&gt;, 'pow': &lt;built-in function pow&gt;, 'print': &lt;built-in function print&gt;, 'repr': &lt;built-in function repr&gt;, 'round': &lt;built-in function round&gt;, 'setattr': &lt;built-in function setattr&gt;, 'sorted': &lt;built-in function sorted&gt;, 'sum': &lt;built-in function sum&gt;, 'vars': &lt;built-in function vars&gt;, 'None': None, 'Ellipsis': Ellipsis, 'NotImplemented': NotImplemented, 'False': False, 'True': True, 'bool': &lt;class 'bool'&gt;, 'memoryview': &lt;class 'memoryview'&gt;, 'bytearray': &lt;class 'bytearray'&gt;, 'bytes': &lt;class 'bytes'&gt;, 'classmethod': &lt;class 'classmethod'&gt;, 'complex': &lt;class 'complex'&gt;, 'dict': &lt;class 'dict'&gt;, 'enumerate': &lt;class 'enumerate'&gt;, 'filter': &lt;class 'filter'&gt;, 'float': &lt;class 'float'&gt;, 'frozenset': &lt;class 'frozenset'&gt;, 'property': &lt;class 'property'&gt;, 'int': &lt;class 'int'&gt;, 'list': &lt;class 'list'&gt;, 'map': &lt;class 'map'&gt;, 'object': &lt;class 'object'&gt;, 'range': &lt;class 'range'&gt;, 'reversed': &lt;class 'reversed'&gt;, 'set': &lt;class 'set'&gt;, 'slice': &lt;class 'slice'&gt;, 'staticmethod': &lt;class 'staticmethod'&gt;, 'str': &lt;class 'str'&gt;, 'super': &lt;class 'super'&gt;, 'tuple': &lt;class 'tuple'&gt;, 'type': &lt;class 'type'&gt;, 'zip': &lt;class 'zip'&gt;, '__debug__': True, 'BaseException': &lt;class 'BaseException'&gt;, 'Exception': &lt;class 'Exception'&gt;, 'TypeError': &lt;class 'TypeError'&gt;, 'StopAsyncIteration': &lt;class 'StopAsyncIteration'&gt;, 'StopIteration': &lt;class 'StopIteration'&gt;, 'GeneratorExit': &lt;class 'GeneratorExit'&gt;, 'SystemExit': &lt;class 'SystemExit'&gt;, 'KeyboardInterrupt': &lt;class 'KeyboardInterrupt'&gt;, 'ImportError': &lt;class 'ImportError'&gt;, 'ModuleNotFoundError': &lt;class 'ModuleNotFoundError'&gt;, 'OSError': &lt;class 'OSError'&gt;, 'EnvironmentError': &lt;class 'OSError'&gt;, 'IOError': &lt;class 'OSError'&gt;, 'EOFError': &lt;class 'EOFError'&gt;, 'RuntimeError': &lt;class 'RuntimeError'&gt;, 'RecursionError': &lt;class 'RecursionError'&gt;, 'NotImplementedError': &lt;class 'NotImplementedError'&gt;, 'NameError': &lt;class 'NameError'&gt;, 'UnboundLocalError': &lt;class 'UnboundLocalError'&gt;, 'AttributeError': &lt;class 'AttributeError'&gt;, 'SyntaxError': &lt;class 'SyntaxError'&gt;, 'IndentationError': &lt;class 'IndentationError'&gt;, 'TabError': &lt;class 'TabError'&gt;, 'LookupError': &lt;class 'LookupError'&gt;, 'IndexError': &lt;class 'IndexError'&gt;, 'KeyError': &lt;class 'KeyError'&gt;, 'ValueError': &lt;class 'ValueError'&gt;, 'UnicodeError': &lt;class 'UnicodeError'&gt;, 'UnicodeEncodeError': &lt;class 'UnicodeEncodeError'&gt;, 'UnicodeDecodeError': &lt;class 'UnicodeDecodeError'&gt;, 'UnicodeTranslateError': &lt;class 'UnicodeTranslateError'&gt;, 'AssertionError': &lt;class 'AssertionError'&gt;, 'ArithmeticError': &lt;class 'ArithmeticError'&gt;, 'FloatingPointError': &lt;class 'FloatingPointError'&gt;, 'OverflowError': &lt;class 'OverflowError'&gt;, 'ZeroDivisionError': &lt;class 'ZeroDivisionError'&gt;, 'SystemError': &lt;class 'SystemError'&gt;, 'ReferenceError': &lt;class 'ReferenceError'&gt;, 'BufferError': &lt;class 'BufferError'&gt;, 'MemoryError': &lt;class 'MemoryError'&gt;, 'Warning': &lt;class 'Warning'&gt;, 'UserWarning': &lt;class 'UserWarning'&gt;, 'DeprecationWarning': &lt;class 'DeprecationWarning'&gt;, 'PendingDeprecationWarning': &lt;class 'PendingDeprecationWarning'&gt;, 'SyntaxWarning': &lt;class 'SyntaxWarning'&gt;, 'RuntimeWarning': &lt;class 'RuntimeWarning'&gt;, 'FutureWarning': &lt;class 'FutureWarning'&gt;, 'ImportWarning': &lt;class 'ImportWarning'&gt;, 'UnicodeWarning': &lt;class 'UnicodeWarning'&gt;, 'BytesWarning': &lt;class 'BytesWarning'&gt;, 'ResourceWarning': &lt;class 'ResourceWarning'&gt;, 'ConnectionError': &lt;class 'ConnectionError'&gt;, 'BlockingIOError': &lt;class 'BlockingIOError'&gt;, 'BrokenPipeError': &lt;class 'BrokenPipeError'&gt;, 'ChildProcessError': &lt;class 'ChildProcessError'&gt;, 'ConnectionAbortedError': &lt;class 'ConnectionAbortedError'&gt;, 'ConnectionRefusedError': &lt;class 'ConnectionRefusedError'&gt;, 'ConnectionResetError': &lt;class 'ConnectionResetError'&gt;, 'FileExistsError': &lt;class 'FileExistsError'&gt;, 'FileNotFoundError': &lt;class 'FileNotFoundError'&gt;, 'IsADirectoryError': &lt;class 'IsADirectoryError'&gt;, 'NotADirectoryError': &lt;class 'NotADirectoryError'&gt;, 'InterruptedError': &lt;class 'InterruptedError'&gt;, 'PermissionError': &lt;class 'PermissionError'&gt;, 'ProcessLookupError': &lt;class 'ProcessLookupError'&gt;, 'TimeoutError': &lt;class 'TimeoutError'&gt;, 'open': &lt;built-in function open&gt;, 'copyright': Copyright (c) 2001-2017 Python Software Foundation.
+All Rights Reserved.
+
+Copyright (c) 2000 BeOpen.com.
+All Rights Reserved.
+
+Copyright (c) 1995-2001 Corporation for National Research Initiatives.
+All Rights Reserved.
+
+Copyright (c) 1991-1995 Stichting Mathematisch Centrum, Amsterdam.
+All Rights Reserved., 'credits':     Thanks to CWI, CNRI, BeOpen.com, Zope Corporation and a cast of thousands
+    for supporting Python development.  See www.python.org for more information., 'license': Type license() to see the full license text, 'help': Type help() for interactive help, or help(object) for help about object., '__IPYTHON__': True, 'display': &lt;function display at 0x7f9d893481e0&gt;, 'get_ipython': &lt;bound method InteractiveShell.get_ipython of &lt;ipykernel.zmqshell.ZMQInteractiveShell object at 0x7f9d822f7b70&gt;&gt;}}</code></pre>
+</div>
+</div>
+<p>Bunlara bile erişimi kapatmamız mümkündür, aşağıdaki bölümde göreceğimiz gibi.</p>
+</section>
+<section id="güvenlik" class="level2">
+<h2 class="anchored" data-anchor-id="güvenlik">Güvenlik</h2>
+<p>Dışarıdan alınan bir kodu çalıştırmak her zaman risklidir. <code>exec()</code> ve <code>eval()</code> fonksiyonlarının bilgisayarınıza bir kapı açtığını unutmayın.</p>
+<p>Tehlikeyi örneklemek için, yukarıdaki örneği tekrar ele alalım. Siz bir formül beklerken, kötü niyetli bir kullanıcı işletim sisteminizi yönetecek bir komutu bu formülle beraber verebilir. Meselâ, formül sorulduğunda</p>
+<pre><code>'x); import os; os.system("touch hello.world");(0,</code></pre>
+<p>dizesinin verildiğini varsayalım.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>değişken <span class="op">=</span> <span class="st">"x"</span> <span class="co"># Formülde kullanılacak değişken.</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>formül <span class="op">=</span> <span class="st">'x); import os; os.system("touch hello.world");(0,'</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>kod <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="st">for </span><span class="sc">{0}</span><span class="st"> in range(10):</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="st">    print(</span><span class="sc">{0}</span><span class="st">, </span><span class="sc">{1}</span><span class="st">)"""</span>.<span class="bu">format</span>(değişken, formül)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bu girdi sonucunda çalıştırılacak kod şöyle olur:</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kod)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+for x in range(10):
+    print(x, x); import os; os.system("touch hello.world");(0,)</code></pre>
+</div>
+</div>
+<p>Burada kötü niyetli kullanıcı beklenen formülü verdikten sonra parantezi kapatmış ve işletim sistemine yönelik komutlar eklemiş. (Sondaki <code>(0,</code> kısmı, kalıpta bulunan sağ parantezin sentaks hatası vermemesi için, onu etkisiz eleman haline dönüştürüyor.)</p>
+<p>Bu kodu <code>exec(kod)</code> ile çalıştırdığınızda ekrana sayılar tablosu çıkmasının yanı sıra, bu programı çalıştırdığınız dizinin altında <em>hello.world</em> isimli boş bir dosya yaratıldığını göreceksiniz (Linux kullanıyorsanız). Yani program işletim sisteminize erişebildi. Kötü niyetli bir saldırgan aynı yöntemle diskinizi silebilir, şifrelerinizi çalabilir, virüs yerleştirebilir.</p>
+<p>Bu risklere karşı alınabilecek kısmi tedbirler vardır. En yaygın olanı, <code>exec</code>’in çalıştığı sanal ortamdaki değişkenleri, <em>globals</em> ve <em>locals</em> parametreleri kullanarak düzenlemektir. Sözgelişi aşağıda, <em>globals</em> parametresi olarak <code>{"__builtins__":None}</code> vermekle Python’un öntanımlı fonksiyonlarını kapatırız. Böylelikle <code>import</code> ile bir modül yüklenmesini ve işletim sistemine ulaşılmasını engelleriz. Bu işlem <code>range</code> ve <code>print</code> fonksiyonlarını da kapatır, o yüzden <em>locals</em> parametresine bunların tanımlarını içeren bir sözlük veririz.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(kod, {<span class="st">"__builtins__"</span>:<span class="va">None</span>}, {<span class="st">"range"</span>:<span class="bu">range</span>, <span class="st">"print"</span>:<span class="bu">print</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0 0</code></pre>
+</div>
+<div class="cell-output cell-output-error">
+<pre><code>ImportError: __import__ not found</code></pre>
+</div>
+</div>
+<p>Bu yeni düzende <code>import</code> fonksiyonu tanınmadığı için <code>exec()</code> çağrısı bir hata verdi ve sızma engellendi. Aynı kodu beklenen şekilde bir girdiyle çalıştırdığınızda ise sorun yaşamazsınız.</p>
+<p>Matematik kütüphanesindeki fonksiyonları kullanan işlemler yapmak istiyorsanız, gereken fonksiyonlardan oluşan bir “beyaz liste” oluşturabilirsiniz.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>değişken <span class="op">=</span> <span class="st">"x"</span> <span class="co"># Formülde kullanılacak değişken.</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>formül <span class="op">=</span> <span class="st">"x * sqrt(x+1)/log(x+2)"</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>kod <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a><span class="st">for </span><span class="sc">{0}</span><span class="st"> in range(10):</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="st">    print(</span><span class="sc">{0}</span><span class="st">, </span><span class="sc">{1}</span><span class="st">)"""</span>.<span class="bu">format</span>(değişken, formül)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="bu">exec</span>(kod, {<span class="st">"__builtins__"</span>:<span class="va">None</span>}, {<span class="st">"range"</span>:<span class="bu">range</span>, <span class="st">"print"</span>:<span class="bu">print</span>, <span class="st">"sqrt"</span>:math.sqrt, <span class="st">"log"</span>:math.log})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0 0.0
+1 1.2872726592996706
+2 2.4988211106473432
+3 3.728009607357671
+4 4.991893199734352
+5 6.293943592339911
+6 7.6340245917967176
+7 9.010908615097694
+8 10.423067565678043
+9 11.868949934707404</code></pre>
+</div>
+</div>
+<p>Kendi kullanacağınız programlar veya bir masaüstü uygulaması için fazla endişe etmek gerekmeyebilir. Yanlış veya kötü niyetli bir kullanım sadece kullanıcıya zarar verecektir. Ama bir web uygulaması yazıyorsanız güvenliğe çok daha fazla dikkat etmelisiniz. Bu, daha derin bir uzmanlık gerektirir.</p>
+<hr>
+<p>Özetle, dinamik olarak üretilen bir kodu işletmek için <code>exec</code>/<code>eval</code> kullanabilirsiniz. Bunun yararlı olduğu çeşitli durumlar vardır. Söz gelişi, Python sentaksıyla yazılmış bir dizeyi doğrudan alıp işletmek gibi.</p>
+<p><code>exec</code>/<code>eval</code> ilk bakışta çok hoş görünseler de çok sık kullanılmamalıdırlar, bazı sakıncaları vardır.</p>
+<ul>
+<li>Kodu okumayı zorlaştırır. Programcı kaynak koduna ek olarak, çalıştırılmak üzere alınacak kodun ne olduğunu da bilmelidir.</li>
+<li>Kodu test etmeyi, hataları bulmayı zorlaştırır.</li>
+<li>Güvenlik açığı oluşturur.</li>
+</ul>
+<p><code>exec</code>/<code>eval</code> fonksiyonlarının işe yaradığı durumlar vardır, ama probleminizi önce başka yaklaşımlarla çözmeye çalışın.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Egemen İmre">
+<meta name="dcterms.date" content="2018-09-03">
+
+<title>Veri Defteri - Bilimsel Programlamaya Kolay Başlangıç - 2</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bilimsel Programlamaya Kolay Başlangıç - 2</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Bilimsel Programlama</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Egemen İmre </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 3, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Bilimsel Programlamaya Kolay Başlangıç serisinin ilk yazısında sadece grafikler için <code>matplotlib</code> kütüphanesini kullanarak serbest düşüş problemini modellemiş ve sonuçları grafiklerle görselleştirmiştik. Vesileyle, “fonksiyonları ne zaman nerede kullanmak gerekir” sorusuna da bir başlangıç yapmıştık.</p>
+<p>İlk yazıda Bilimsel Programlama 3 adımdan oluşur dedik, ama aslında birçok problemde dört adımdan bahsetmek mümkün:</p>
+<ol type="1">
+<li>Hazırlık (Sabitleri başlatma, gerekirse veri yapılarını oluşturma vb.)</li>
+<li>Hesaplama</li>
+<li>Veri Analizi (Hesaplama sonuçlarını gerçek veriler ya da başka bir modelle karşılaştırma, diğer bir deyişle Hata ya da Fark Analizi)</li>
+<li>Sonuçları Görselleştirme</li>
+</ol>
+<p>Bu yazıda öncelikle eğik atış problemini çözeceğiz ve sayısal yöntemlerin ne kadar başarılı olduğuna bakacağız. Elimiz değmişken sınıf (class) yapılarının nasıl kullanıldığına dair de basit bir örnek yapmış olacağız.</p>
+<p>Eğik atış problemi iki eksende çözülüyor, yatay eksen x ve düşey eksen y.</p>
+<p>İki eksendeki konum değişimi şu şekilde gösterilebilir:<br>
+<span class="math inline">\(t\)</span> anında yatay eksendeki konum: <span class="math inline">\(r_x(t) = r_x(0) + v_x(0) t\)</span><br>
+<span class="math inline">\(t\)</span> anında düşey eksendeki konum: <span class="math inline">\(r_y(t) = r_y(0) + v_y(0) t - \frac{1}{2} g t^2\)</span></p>
+<p>İki eksendeki hız değişimi ise şu şekilde gösterilebilir:<br>
+<span class="math inline">\(t\)</span> anında yatay eksendeki hız: <span class="math inline">\(v_x(t) = v_x(0)\)</span><br>
+<span class="math inline">\(t\)</span> anında düşey eksendeki hız: <span class="math inline">\(v_y(t) = v_y(0) - g t\)</span></p>
+<p>Parametreler ise şöyle:<br>
+<span class="math inline">\(r_x(t), r_y(t) =\)</span> x ve y ekseninde konum vektörü bileşenleri (<span class="math inline">\(m\)</span>)<br>
+<span class="math inline">\(v_x(t), v_x(t) =\)</span> x ve y ekseninde hız vektörü bileşenleri (<span class="math inline">\(m/s\)</span>)<br>
+<span class="math inline">\(g =\)</span> yerçekimi sabiti (9.81 <span class="math inline">\(m/s^2\)</span>)<br>
+<span class="math inline">\(t =\)</span> zaman (<span class="math inline">\(s\)</span>)</p>
+<p>Formüllerin bize anlatmak istediği şey şu:</p>
+<ol type="1">
+<li>Cisim yatay eksende başlanıç hızında gitmeye devam eder</li>
+<li>Cisim düşey eksende başlangıç hızında başlar, hızı yerçekimi ivmesiyle orantılı olarak düşey yönde değişir ve sonuçta düşmeye başlar.</li>
+</ol>
+<p>“Bu kadar matematik yeter” diyorsanız, kodlama işine başlayalım o zaman. Öncelikle basit bir vektör sınıfı oluşturalım. Bu sınıf zaman, yatay ve düşey konum ile yatay ve düşey hız bileşenlerinden oluşuyor.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> zamanKonumHız:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">'Zaman, 2D konum ve 2D hız değerlerini içeren vektör sınıfı'</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>   t <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   rx, ry <span class="op">=</span> <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   vx, vy <span class="op">=</span> <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, t0, rx0, ry0, vx0, vy0):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.t  <span class="op">=</span> t0</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.rx <span class="op">=</span> rx0</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.ry <span class="op">=</span> ry0</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.vx <span class="op">=</span> vx0</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.vy <span class="op">=</span> vy0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bundan sonra belirli bir zamana ait konum ve hız bilgilerimizi bir arada tutmak için bu yapıyı kullanacağız.</p>
+<p>Bu sınıfın sadece bir metodu var, o da <code>__init__()</code>. Adından da anlaşılacağı üzere bu sınıfın parametrelerini doldurmak için kullanılıyor. Herhangi bir parametre için varsayılan değer yok, çünkü konum ve hızı içeren bir vektörün başlangıç değerinin ne olduğunu tahmin etmemiz mümkün değil.</p>
+<p>Hazırlık kısmına devam edelim. Öncelikle kullanacağımız paketleri ekliyoruz ve yerçekimi sabitini dolduruyoruz. Başlangıç zamanı, bitiş zamanı ve adım büyüklüğünü de burada dolduruyoruz. Tüm bu parametreleri en başta tanımlıyourz ki, sonradan başka değerler kullanmak istersek hepsini derli toplu burada bulabilelim.</p>
+<p>Yaptığımız birkaç eğlenceli iş daha var; başlangıç hızının büyüklüğünü ve ilk atış açısını veriyoruz, sonra da <code>pvt0</code> başlangıç vektörünü bu değerlerle dolduruyoruz. Bu aşamada birimlere dikkat, Python <code>math.sin</code> ve <code>math.cos</code> fonksiyonları derece değil radyan cinsinden parametrelerle çalışıyor. Emin olun dalgınlıkla bunu gözden kaçırmak çok kolay.</p>
+<p>En son yaptığımız iş ise <code>zamanKonumHız</code> adlı, zaman, konum ve hız bilgisini paketleyen yapılardan oluşan boş bir liste oluşturmak. Her zaman adımında yaptığımız hesaplamalarla oluşturduğumuz bu veri paketlerini buraya istifleyeceğiz.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sonradan gerekecek kütüphanelerini çağır</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Kütleçekimi Sabiti [m/s^2]</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>gDünya <span class="op">=</span> <span class="fl">9.81</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç zamanı</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># bitiş zamanı (sn)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>tSon <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># adım büyüklüğü (sn)</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>tAdım <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç hızı (m/sn) ve atış açısı (derece)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>v0 <span class="op">=</span> <span class="dv">100</span> </span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>yükselmeAçısı <span class="op">=</span> <span class="dv">50</span> </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç konum ve hız</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>pvt0 <span class="op">=</span> zamanKonumHız(t0, <span class="dv">0</span>, <span class="dv">0</span>, v0<span class="op">*</span>math.cos(math.radians(yükselmeAçısı)), v0<span class="op">*</span>math.sin(math.radians(yükselmeAçısı)))</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Zaman, yükseklik ve hız bilgilerini içeren vektör listelerini oluştur</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>pvtList <span class="op">=</span> []</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Uzun hazırlık evreleri bilimsel programlamacılığın doğasında vardır. Varsayılan değerler, bilimsel sabitler, seçenekler, konfigürasyonlar gibi birçok parametre ve bilgi genellikle ilk adım olarak oluşturulur. Ayrıca gerekli bilgileri tutacak veri yapıları, sınıflar ve o sınıfların alt metodları ya da işlevleri de yine en başta oluşturulur. Bilimsel Programlama işlerinde pek de dile getirilmeyen bir sırrı artık biliyorsunuz: Zamanın önemli bir kısmı bu tür göze gözükmeyen ama mecburi işlerle geçer. Bununla birlikte, bu adımı ne kadar özenli yaparsanız Hesaplama ve sonrasındaki Veri Analizi aşamalarında başınız o kadar az ağrır.</p>
+<p>Sonunda Hesaplama adımına ulaşmayı başardık. Bu adım, verilen bir <span class="math inline">\(t\)</span> zamanı için, başlangıç değerlerinden(<code>pvt0</code>) nereye varılacağını hesaplayan bir fonksiyondan ibaret. Fonksiyonun içindeki matematiği yazının başında açıklamıştık zaten - zamana bağlı olarak yatayda ve düşeyde konum ve hız hesaplanıyor. Yeni konum, zaman ve hızdan oluşan bu veri paketi fonksiyon tarafından döndürülüyor, ancak başlangıç değerleri değiştirilmiyor.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tAnındaZamanKonumHız(t, pvt0, g<span class="op">=</span>gDünya):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Verilen bir t zamanı için yeni konum ve hızı döndürür"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    tYeni  <span class="op">=</span> pvt0.t <span class="op">+</span> t</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    rxYeni <span class="op">=</span> pvt0.rx <span class="op">+</span> pvt0.vx <span class="op">*</span> t</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    ryYeni <span class="op">=</span> pvt0.ry <span class="op">+</span> pvt0.vy <span class="op">*</span> t <span class="op">+</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span> <span class="op">*</span> g <span class="op">*</span> t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    vxYeni <span class="op">=</span> pvt0.vx </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    vyYeni <span class="op">=</span> pvt0.vy <span class="op">+</span> (<span class="op">-</span>g) <span class="op">*</span> t</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> zamanKonumHız(tYeni, rxYeni, ryYeni, vxYeni, vyYeni)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hesaplama adımında yapmamız gereken tek şey bu fonksiyonu her bir zaman adımı için tekrar tekrar çağırmak. Diğer bir deyişle döngü <span class="math inline">\(t \le t_{Son}\)</span> olana dek çalışıyor. Ancak ikinci bir kontrol daha var, cismimiz yerin altına düşmesin diye hesaplanan irtifa değeri sıfırın altına inerse de döngüden çıkılıyor.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> pvt0.t</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> pvt0.ry </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> t<span class="op">&lt;=</span>tSon <span class="kw">and</span> h<span class="op">&gt;=</span><span class="dv">0</span>:</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    pvtList.append( tAnındaZamanKonumHız(t, pvt0) )</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> pvtList[<span class="op">-</span><span class="dv">1</span>].ry</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    t <span class="op">+=</span> tAdım</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Şimdilik bir Veri Analizi adımımız yok, bir sonraki örnekte karşımıza çıkacak. Bu nedenle Görselleştirme adımına geçebiliriz. Bu kez zamana karşı değil yatay ve düşey eksenlerdeki konum ve hızı göstereceğiz.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># konum grafiği </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.rx <span class="cf">for</span> pvt <span class="kw">in</span> pvtList], [pvt.ry <span class="cf">for</span> pvt <span class="kw">in</span> pvtList])</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Konum"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x konum (m)"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y konum (m)'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># hız grafiği</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.vx <span class="cf">for</span> pvt <span class="kw">in</span> pvtList], [pvt.vy <span class="cf">for</span> pvt <span class="kw">in</span> pvtList])</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hız"</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x hız (m/sn)"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y hız (m/sn)'</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Konum grafiği beklediğimiz gibi çıktı, ama hız grafiği biraz tuhaf. Aslında hız grafiğinin bize anlatmaya çalıştığı, yatay hızın hiç değişmediği, düşey hızınsa yaklaşık 80 m/s’den başlayıp -80 m/s civarında sonlandığı.</p>
+<p>İlginç bir nokta daha var: son konum 0’ın altında çıktı. Bunun da sebebi şu; <code>while</code> döngüsü, irtifanın 0’ın altında olduğu bir değer hesaplanıp listeye eklendikten <em>sonra</em> irtifa kontrolünü yapıyor ve döngüden çıkıyor, haliyle 0’ın altında kalan son değer de grafiğe giriyor. İrtifanın tam olarak sıfıra denk geldiği yerde grafiği sonlandırmak isteseydik işler epey karışacaktı, zira bu sefer hangi zamanda irtifanın sıfıra eşit olduğunu bulmak için aradaki değeri tahmin etmemiz (İngilizcesiyle <em>interpolation</em>) ya da benzer başka bir yöntem kullanmamız gerekecekti. Şimdilik yazılımı karmaşıklaştıracak bu işlere girmiyoruz, zira bizi başka konular bekliyor.</p>
+<p>Yazının başında Veri Analizi adımından bahsetmiştim, artık buna dair bir örnek yapmanın da zamanı geldi. Sayısal integrasyon ya da sayısal diferansiyel çözümü metodları diye afili isimler verilen, ama aslında “ben tembel adamım, ben çalışacağıma bilgisayar çalışsın” diyenlerin şaşmaz tercihi olan metodların en basitiyle eğik atış problemini çözeceğiz. Sonra da bunu şimdiye dek hesapladığımız “gerçek” değerlerle karşılaştırarak yaptığımız hatayı ölçeceğiz.</p>
+<p>Öncelikle her zaman olduğu gibi işin Hazırlık adımına bakalım. Bu adımda yapılan işler artık tanıdık, ama ufak bir ek yaptık ve <code>konumBüyüklüğü()</code> ile <code>hızBüyüklüğü()</code> metodlarını ekledik. Sınıf yapılarının iki temel özelliği var: <em>bilgi depolamak</em> ve bu sınıfa ait bir <em>işlevi</em> yerine getirmek. Bizim vektör sınıfı da zaman, konum ve hız gibi bilgileri depoluyor ve artık konum ve hız vektörlerinin büyüklüğünü hesaplama işlevini yerine getiriyor. Bu işlevlere daha sonra ihtiyacımız olacak.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> zamanKonumHız:</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>   <span class="co">'Zaman, 2D konum ve 2D hız değerlerini içeren vektör sınıfı'</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>   t <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>   rx, ry <span class="op">=</span> <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>   vx, vy <span class="op">=</span> <span class="dv">0</span>, <span class="dv">0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, t0, rx0, ry0, vx0, vy0):</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.t  <span class="op">=</span> t0</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.rx <span class="op">=</span> rx0</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.ry <span class="op">=</span> ry0</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.vx <span class="op">=</span> vx0</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>      <span class="va">self</span>.vy <span class="op">=</span> vy0</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> konumBüyüklüğü(<span class="va">self</span>):</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""Konum vektörünün büyüklüğünü döndürür"""</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> math.sqrt(<span class="va">self</span>.rx<span class="op">*</span><span class="va">self</span>.rx<span class="op">+</span><span class="va">self</span>.ry<span class="op">*</span><span class="va">self</span>.ry)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> hızBüyüklüğü(<span class="va">self</span>):</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""Hız vektörünün büyüklüğünü döndürür"""</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> math.sqrt(<span class="va">self</span>.vx<span class="op">*</span><span class="va">self</span>.vx<span class="op">+</span><span class="va">self</span>.vy<span class="op">*</span><span class="va">self</span>.vy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hazırlık işlerinin kalanı da tanıdık. Ama bu kez hata vektörünü de hazırlayıp başlangıç değerlerini 0 olarak giriyoruz. Gerçek değer ile sayısal metodlarla hesaplanan değer arasındaki farkı her adımda bu yapıya kaydedeceğiz.</p>
+<p>Bunun yanı sıra sayısal hesaplama ve gerçek vektörleri taşıyacak yapıların da ilk değerlerini dolduruyoruz. Bunu yapma amacımız, hesaplamanın ilk değerlerini bildiğimiz için hesaplama döngüsüne girmelerini engellemek. Daha sonra döngüyü kurarken bu ilk zaman adımını atlayacağız.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sonradan gerekecek kütüphanelerini çağır</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Yerçekimi sabiti [m/s^2]</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>gEarth <span class="op">=</span> <span class="fl">9.81</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç zamanı</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># bitiş zamanı (sn)</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>tSon <span class="op">=</span> <span class="dv">100</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># adım büyüklüğü (sn)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>tAdım <span class="op">=</span> <span class="fl">0.5</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç hızı (m/sn) ve atış açısı (derece)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>v0 <span class="op">=</span> <span class="dv">100</span> </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>yükselmeAçısı <span class="op">=</span> <span class="dv">50</span> </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç konum ve hız</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>pvt0 <span class="op">=</span> zamanKonumHız(t0, <span class="dv">0</span>, <span class="dv">0</span>, v0<span class="op">*</span>math.cos(math.radians(yükselmeAçısı)), v0<span class="op">*</span>math.sin(math.radians(yükselmeAçısı)))</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># ilk değerleri doldur</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>gerçekPvtList <span class="op">=</span> [pvt0]</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>numPvtList    <span class="op">=</span> [pvt0]</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>hataPvtList   <span class="op">=</span> [zamanKonumHız(t0, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Gelelim Hesaplama adımına. Kullanacağımız sayısal integrasyon yöntemi <a href="https://en.0wikipedia.org/wiki/Euler_method">Euler Metodu</a>. Yöntemin detaylarına girmeyeceğim ama eğik atış problemi için yapılan iş özetle şöyle: 1. Başlangıç zamanındaki hız ve ivmenin çok kısa bir süre için sabit olduğunu varsayarak, bir sonraki adım için yeni hızı ve yeni konumu hesapla 2. İlk adımda hesaplanan hız ve ivmenin çok kısa bir süre için sabit olduğunu varsayarak, bir sonraki adım için yeni hızı ve yeni konumu hesapla 3. İkinci adımda hesaplanan hız ve ivmenin çok kısa bir süre için sabit olduğunu varsayarak, bir sonraki adım için yeni hızı ve yeni konumu hesapla 4. …</p>
+<p>Elbette ivme bizim problemde sabit, ama sabit olmasaydı (örneğin Dünya’dan çok uzaklaşıyor olsaydık) ivmeyi tekrar tekrar hesaplamamız gerekecekti.</p>
+<p>Eğik atış probleminde Euler Metodu’nun bir adımının matematiksel ifadesi ise şöyle:</p>
+<p><span class="math inline">\(t_n\)</span> anında yatay eksendeki konum: <span class="math inline">\(r_x(t_n) = r_x(t_{n-1}) + v_x(t_{n-1}) dt\)</span><br>
+<span class="math inline">\(t_n\)</span> anında düşey eksendeki konum: <span class="math inline">\(r_y(t_n) = r_y(t_{n-1}) + v_y(t_{n-1}) dt\)</span></p>
+<p><span class="math inline">\(t_n\)</span> anında yatay eksendeki hız: <span class="math inline">\(v_x(t_n) = v_x(t_{n-1})\)</span><br>
+<span class="math inline">\(t_n\)</span> anında düşey eksendeki hız: <span class="math inline">\(v_y(t_n) = v_y(t_{n-1}) + g dt\)</span></p>
+<p>Yani <span class="math inline">\(t_n\)</span> anındaki konum ve hız, <span class="math inline">\(t_{n-1}\)</span> anındaki konum ve hız ile <span class="math inline">\(dt\)</span> ile ifade edilen adım büyüklüğüne bağlı. Yatay eksende hız değişmiyor, çünkü bunu sağlayacak bir kuvvet ya da ivme yok. Düşey hız ise sabit ivmeye bağlı.</p>
+<p><code>tAnındaZamanKonumHız()</code> metodu bu yazıda verilen bir önceki örnekle aynı ve bize her hesaplama zamanı için “gerçek” konum ve hız değerlerini veriyor. <code>eulerZamanKonumHız()</code> ise, yukarıda bahsettiğimiz matematiksel modelle <em>yaklaşık</em> değerleri her adım için hesaplıyor.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tAnındaZamanKonumHız(t, pvt0, g<span class="op">=</span>gDünya):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Verilen bir t zamanı için yeni konum ve hızı döndürür"""</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    tYeni  <span class="op">=</span> pvt0.t <span class="op">+</span> t</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    rxYeni <span class="op">=</span> pvt0.rx <span class="op">+</span> pvt0.vx <span class="op">*</span> t</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    ryYeni <span class="op">=</span> pvt0.ry <span class="op">+</span> pvt0.vy <span class="op">*</span> t <span class="op">+</span> (<span class="op">-</span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span> <span class="op">*</span> g <span class="op">*</span> t<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    vxYeni <span class="op">=</span> pvt0.vx </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    vyYeni <span class="op">=</span> pvt0.vy <span class="op">+</span> (<span class="op">-</span>g) <span class="op">*</span> t</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> zamanKonumHız(tYeni, rxYeni, ryYeni, vxYeni, vyYeni)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eulerZamanKonumHız(dt, pvt, g<span class="op">=</span>gDünya):</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Verilen bir dt adım büyüklüğü için yeni konum ve hızı döndürür"""</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    tYeni  <span class="op">=</span> pvt.t  <span class="op">+</span> dt</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    rxYeni <span class="op">=</span> pvt.rx <span class="op">+</span> pvt.vx <span class="op">*</span> dt</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    ryYeni <span class="op">=</span> pvt.ry <span class="op">+</span> pvt.vy <span class="op">*</span> dt </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    vxYeni <span class="op">=</span> pvt.vx <span class="op">+</span> <span class="dv">0</span> <span class="op">*</span> dt</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    vyYeni <span class="op">=</span> pvt.vy <span class="op">+</span> (<span class="op">-</span>g) <span class="op">*</span> dt</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> zamanKonumHız(tYeni, rxYeni, ryYeni, vxYeni, vyYeni)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Hesaplama mekanizmamızı da kurduk, artık hesaplama döngüsüne geçelim. İlk iş, irtifayı gerçek listenin ilk adımına ayarlamak oldu. İlk zaman adımını başta doldurduğumuz için döngüde hesaplanacak hedef zaman adımını da adım büyüklüğü kadar ilerlettik. Sonra da döngüye girdik. Döngüde önce gerçek zaman, konum hız vektörünü, sonra sayısal hesaplamayı, en sonda da bu ikisinin farkına karşılık gelen hata vektörünü doldurduk. Hazırlık adımını detaylı bir şekilde yaptığımız için döngü bu kadar basit oldu.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Döngüyü çalıştır</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> gerçekPvtList[<span class="dv">0</span>].t <span class="op">+</span> tAdım</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>h <span class="op">=</span> gerçekPvtList[<span class="dv">0</span>].ry </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> t<span class="op">&lt;=</span>tSon <span class="kw">and</span> h<span class="op">&gt;=</span><span class="dv">0</span>:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    pvtGerçek <span class="op">=</span> tAnındaZamanKonumHız(t, pvt0)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    gerçekPvtList.append( pvtGerçek )</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    pvtNum <span class="op">=</span> eulerZamanKonumHız(tAdım, numPvtList[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>    numPvtList.append( pvtNum )</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    hataPvt <span class="op">=</span> zamanKonumHız(t, pvtNum.rx<span class="op">-</span>pvtGerçek.rx, pvtNum.ry<span class="op">-</span>pvtGerçek.ry, pvtNum.vx<span class="op">-</span>pvtGerçek.vx, pvtNum.vy<span class="op">-</span>pvtGerçek.vy)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    hataPvtList.append(hataPvt)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    h <span class="op">=</span> gerçekPvtList[<span class="op">-</span><span class="dv">1</span>].ry</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    t <span class="op">+=</span> tAdım</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>O halde sonuçları görelim. Bu kez aynı grafiğe hem gerçek hem de sayısal yöntemlerle hesaplanan yaklaşık konum ve hızı basacağız. Sonra da hata grafiklerini çizdireceğiz. Grafik başlıklarına ve veri etiketlerine adım büyüklüğünü yazdırıyoruz ki sonradan bu grafiklere baktığımızda hatırlayabilelim.</p>
+<div class="cell" data-scrolled="true" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># konum grafiği </span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.rx <span class="cf">for</span> pvt <span class="kw">in</span> gerçekPvtList], [pvt.ry <span class="cf">for</span> pvt <span class="kw">in</span> gerçekPvtList], label<span class="op">=</span><span class="st">"gerçek"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.rx <span class="cf">for</span> pvt <span class="kw">in</span> numPvtList], [pvt.ry <span class="cf">for</span> pvt <span class="kw">in</span> numPvtList], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">r"Konum"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x konum (m)"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y konum (m)'</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co"># hiz grafiği</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.vx <span class="cf">for</span> pvt <span class="kw">in</span> gerçekPvtList], [pvt.vy <span class="cf">for</span> pvt <span class="kw">in</span> gerçekPvtList], label<span class="op">=</span><span class="st">"gerçek"</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.vx <span class="cf">for</span> pvt <span class="kw">in</span> numPvtList], [pvt.vy <span class="cf">for</span> pvt <span class="kw">in</span> numPvtList], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">r"Hız"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x hız (m/s)"</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y hız (m/s)'</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a><span class="co"># hata grafikleri </span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">211</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> hataPvtList], [pvt.konumBüyüklüğü() <span class="cf">for</span> pvt <span class="kw">in</span> hataPvtList])</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="vs">r"Konum ve Hız Hatası Değişimi ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"zaman (s)"</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'konum hatası (m)'</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">212</span>)</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> hataPvtList], [pvt.hızBüyüklüğü() <span class="cf">for</span> pvt <span class="kw">in</span> hataPvtList])</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="co"># plt.title(r"Hız Değişimi ($ v = gt $)")</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"zaman (s)"</span>)</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'hız hatası (m/s)'</span>)</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-3.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Hiç fena değil, değil mi? Konum değerlerinde gerçek değerden ne kadar saptığımızı görüyoruz. Hız grafiğinde ise pek bir fark göremiyoruz. Hata analizi için özel olarak ürettiğimiz grafiklere bakarak daha fazla bilgi edinebiliriz elbette. Buna göre konum hatası lineer olarak artıyor ve 16 saniyede 40 metreye ulaşıyor. E zaten 1000 m yol gitmiştik, pek iyi bir performans gösterdiğimiz söylenemez; hatamız %4 nispetinde. Oysa hız konusunda gayet iyiyiz, altı üstü 0.00000000000002 m/s hata yapmışız - grafikte y eksenindeki değerlerin üstündeki “<em>1e-14</em>” ifadesine dikkat.</p>
+<p>Konum ve hızdaki bu kadar farklı hata davranışının sebebi gerçek dinamiğin matematiğinde ve Euler Metodu’nda gizli. Konum değişimi zamanın karesiyle orantılı, hız değişimi ise zamanla doğru orantılı. Euler Metodu lineer sistemleri hatasız olarak modelleyebilirken, lineer olmayan sistemleri hatalı bir şekilde modelleyebiliyor. “Madem lineer sistemler hatasız, hızda niye küçük de olsa bir hata var?” diye soranlar olabilir. Soruyu Orhan Gencebay’dan ilhamla, “hatasız makine olmaz” diye yanıtlayabiliriz; bilgisayarlar çalışma prensipleri gereği gerçel bir sayıyı sınırsız uzunlukta depolayamazlar. Yani bir sayıyı defalarca 1.2345678 ile çarpıp bölerseniz neticede başladığınız yere dönmeyi beklersiniz, ama bilgisayarda bunu yaparsanız küçük de olsa bir hata görürsünüz. İnanmayanlar deneyebilir! Bu örnekte gördüğümüz 10<sup>-14</sup> seviyesindeki bu hata “kayan nokta” (<em>İng. floating point</em>) hataları için normal kabul edilebilecek bir seviye.</p>
+<p>Sayısal metodların doğruluğu genellikle seçilen adım büyüklüğüne bağlıdır. Konum hatasından memnun olmayanlar hesaplamayı 0.1 saniye adım büyüklüğü için tekrar edebilirler. Spoiler vermiş gibi olacağım ama hata 40 metreden 7.5 metreye düşüyor, lakin bilgisayar 5 kat daha fazla sayıda döngü hesaplamak zorunda kalıyor. Çoğumuzun bilgisayarında bu kadar basit bir problem için sorun olmayacaktır, ama eğik atıştan daha karmaşık problemler için bunun bir sorun teşkil edeceğini size garanti edebilirim.</p>
+<p>Adım büyüklüğü küçüldükçe modeldeki hata azalır, ama daha fazla sayıda işlem yapıldığı için yukarıda kayan nokta meselesinde birazcık bahsettiğimiz, bilgisayarın hesaplama hataları diyeceğimiz hatalar artar. Nitekim 0.1 saniye adım büyüklüğünde hız hatası 10<sup>-13</sup> seviyesine yükseliyor.</p>
+<p>Bu örneğimizde de saf Python kullandık, <em>hala</em> <code>numpy</code> gibi daha eğlenceli ve yetenekli yapılara giremedik; bir sonraki aşama için sözüm olsun. En azından, hem eğik atış problemini karmaşıklaştırıp sayısal metodlara giriş yaptık, hem de sınıf yapılarına değindik.</p>
+<p>Bu yazıyı çalıştırılabilir bir Jupyter defteri halinde, yazıdaki iki örneğin kodlarıyla birlikte GitHub sayfamızda bulabilirsiniz.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

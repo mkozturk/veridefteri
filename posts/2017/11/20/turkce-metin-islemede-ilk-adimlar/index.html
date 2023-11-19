@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="İlker Birbil">
+<meta name="dcterms.date" content="2017-11-20">
+
+<title>Veri Defteri - Türkçe Metin İşlemede İlk Adımlar</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Türkçe Metin İşlemede İlk Adımlar</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">metin işleme</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>İlker Birbil </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 20, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Veri bilimine merak salan hemen hemen herkes bir noktada metin işlemeye bulaşır. Kitapların incelenmesinden tutun da, sosyal medyada yazılanları derlemeye kadar pek çok çalışma özünde cümleler ve kelimelerle boğuşmayı gerektirir. Pek eğlencelidir; ben de bayılırım. Hatta birkaç ay önce bir paragrafın hangi yazara ait olduğunu bulmakla ilgili bir <a href="Birbil_2017.pdf">yazı</a> hazırladım.</p>
+<p>Bu yazıda İnsan Hakları Evrensel Beyannamesi’ni örnek metin olarak ele alacağım. Bir yandan basit metin işleme adımlarını yaparken, bir yandan da iki noktayı size göstermek istiyorum:</p>
+<ol type="1">
+<li>İnternet’teki açık kaynak kodlu bir Python paketinin <em>yüklenmeden</em> kullanılması.</li>
+<li>Yeni bir paketin <span style="font-family:Courier">pip</span> komutu ile kurulması.</li>
+</ol>
+<p>Önce dosyayı okuyup bir değişkene atalım. Bu değişkenin tipi, karakter dizisi (string) sınıfından (class <span style="color:darkgreen; font-family:Courier">str</span>) olacak.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'./iheb.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> dosya:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    metin <span class="op">=</span> dosya.read()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'"metin" değişkeninin tipi:'</span>, <span class="bu">type</span>(metin), <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Beyannamenin boşluklar dahil uzunluğu:'</span>, <span class="bu">len</span>(metin), <span class="st">'karakter.</span><span class="ch">\n\n</span><span class="st">'</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Bakalım metin neye benziyor?</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(metin[<span class="dv">0</span>:<span class="dv">760</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>"metin" değişkeninin tipi: &lt;class 'str'&gt; 
+
+Beyannamenin boşluklar dahil uzunluğu: 8503 karakter.
+
+
+İnsan Hakları Evrensel Beyannamesi
+
+Birleşmiş Milletler Genel Kurulu;
+
+İnsanlık topluluğunun bütün bireyleriyle kuruluşlarının bu Bildirgeyi her zaman göz önünde tutarak eğitim ve öğretim yoluyla bu hak ve özgürlüklere saygıyı geliştirmeye, giderek artan ulusal ve uluslararası önlemlerle gerek üye devletlerin halkları ve gerekse bu devletlerin yönetimi altındaki ülkeler halkları arasında bu hakların dünyaca etkin olarak tanınmasını ve uygulanmasını sağlamaya çaba göstermeleri amacıyla tüm halklar ve uluslar için ortak ideal ölçüleri belirleyen bu İnsan Hakları Evrensel Bildirgesini ilan eder.
+
+Madde 1- Bütün insanlar özgür, onur ve haklar bakımından eşit doğarlar. Akıl ve vicdana sahiptirler, birbirlerine karşı kardeşlik anlayışıyla davranmalıdırlar.</code></pre>
+</div>
+</div>
+<p>Herhangi bir metni işlemeye başlamadan önce her zaman bir temizlik yapmak gerekiyor. Özellikle kullanmayacaksak, noktalama işaretlerini ve sayıları temizleyebiliriz. Bunun için Python <span style="font-family:Courier">string</span> paketi işimizi görür. Hatırlarsanız <span style="font-family:Courier">metin</span> değişkeni <span style="color:darkgreen; font-family:Courier">str</span> sınıfındandı. Bu sınıfın sağladığı <span style="font-family:Courier">maketrans</span> fonksiyonunu da istediğimiz dönüştürmeyi yapmakta kullanabiliriz.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> string <span class="im">import</span> punctuation, digits</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cevirici <span class="op">=</span> <span class="bu">str</span>.maketrans(<span class="st">''</span>, <span class="st">''</span>, punctuation)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>metin <span class="op">=</span> metin.translate(cevirici)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>cevirici <span class="op">=</span> <span class="bu">str</span>.maketrans(<span class="st">''</span>, <span class="st">''</span>, digits)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>metin <span class="op">=</span> metin.translate(cevirici)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(metin[<span class="dv">0</span>:<span class="dv">753</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>İnsan Hakları Evrensel Beyannamesi
+
+Birleşmiş Milletler Genel Kurulu
+
+İnsanlık topluluğunun bütün bireyleriyle kuruluşlarının bu Bildirgeyi her zaman göz önünde tutarak eğitim ve öğretim yoluyla bu hak ve özgürlüklere saygıyı geliştirmeye giderek artan ulusal ve uluslararası önlemlerle gerek üye devletlerin halkları ve gerekse bu devletlerin yönetimi altındaki ülkeler halkları arasında bu hakların dünyaca etkin olarak tanınmasını ve uygulanmasını sağlamaya çaba göstermeleri amacıyla tüm halklar ve uluslar için ortak ideal ölçüleri belirleyen bu İnsan Hakları Evrensel Bildirgesini ilan eder
+
+Madde  Bütün insanlar özgür onur ve haklar bakımından eşit doğarlar Akıl ve vicdana sahiptirler birbirlerine karşı kardeşlik anlayışıyla davranmalıdırlar
+
+</code></pre>
+</div>
+</div>
+<p>İlk bakmak istediğim en sık kullanılan kelimeler. Ancak bu aşamaya geçmeden önce küçük-büyük harf farkını ortadan kaldırmalı. Bunu da <span style="color:darkgreen; font-family:Courier">str</span> sınıfının sağladığı <span style="font-family:Courier">lower</span> fonksiyonu ile bir satırda hallederiz.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>metin <span class="op">=</span> metin.lower()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(metin[<span class="dv">0</span>:<span class="dv">70</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>i̇nsan hakları evrensel beyannamesi
+
+birleşmiş milletler genel kurulu
+</code></pre>
+</div>
+</div>
+<p>Güzel. Şimdi kelime sayılarına bakalım. Metin işlemede en sık kullanılan veri saklama biçimine <strong>kelime çantası</strong> (bag of words) deniyor. Kabaca her kelimeyi ve bu kelimenin metinde kaç kez geçtiğini tutuyoruz. Saymaya başlamadan metni kelimelere ayıralım. Bu iş için de yine <span style="color:darkgreen; font-family:Courier">str</span> sınıfının sağladığı <span style="font-family:Courier">split</span> fonksiyonunu kullanabiliriz.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>kelimeler <span class="op">=</span> metin.split()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Toplam kelime sayısı:'</span>, <span class="bu">len</span>(kelimeler))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kelimeler[<span class="dv">0</span>:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Toplam kelime sayısı: 1073
+['i̇nsan', 'hakları', 'evrensel', 'beyannamesi', 'birleşmiş']</code></pre>
+</div>
+</div>
+<p>Artık elimizde bir kelimeler listesi var. Herhangi bi listenin içindekileri saymak için en hızlı yollardan bir tanesi <span style="font-family:Courier">collection</span> paketinden <span style="font-family:Courier">Counter</span> fonksiyonunu kullanmak.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> collections <span class="im">import</span> Counter</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kelime çantasını hazırlamak bir satır</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>kelime_sayi <span class="op">=</span> Counter(kelimeler)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="bu">type</span>(kelime_sayi), <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co"># En sık kullanılan 10 kelimeye</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># tek bir fonksiyon ile bakabiliyoruz.</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> kelime <span class="kw">in</span> kelime_sayi.most_common(<span class="dv">10</span>):</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(kelime)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="ch">\n\n</span><span class="st">Metinde "insan" kelimesi'</span>, kelime_sayi[<span class="st">'insan'</span>], <span class="st">'kez geçiyor.'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'collections.Counter'&gt; 
+
+('ve', 77)
+('madde', 30)
+('bir', 28)
+('vardır', 25)
+('herkesin', 24)
+('hakkı', 22)
+('veya', 20)
+('bu', 15)
+('olarak', 11)
+('herkes', 10)
+
+
+Metinde "insan" kelimesi 3 kez geçiyor.</code></pre>
+</div>
+</div>
+<p>İlk bakışta hallettik gibi gözükse de ufak bir sorunumuz var. Listede “herkes” ve “herkesin” kelimeleri ayrı olarak verilmiş. Aslında bu iki kelimeyi tek bir kelime olarak saymalıyız. Bunun için de kelimelerin köklerine bakmamız gerekecek. Neyse ki Python paketlerinden <span style="font-family:Courier">snowballstemmer</span> kök çıkarma (stemming) işini Türkçe için de yapıyor. Önce nasıl çalıştığını bir test edelim.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> snowballstemmer <span class="im">import</span> stemmer</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>kokbul1 <span class="op">=</span> stemmer(<span class="st">'turkish'</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kokbul1.stemWords(<span class="st">'vardır var'</span>.split()))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kokbul1.stemWords(<span class="st">'bildirgeyi bildirgede'</span>.split()))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(kokbul1.stemWords(<span class="st">'herkes herkesin'</span>.split()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['var', 'var']
+['bildirge', 'bildirge']
+['herkes', 'herke']</code></pre>
+</div>
+</div>
+<p>Fena değil. İlk iki örnekte çalıştı ama asıl bizim istediğimiz gibi “herkesin” ve “herkes” kelimeleri için aynı kökü vermedi. Bunu görünce internette biraz bakındım. Üç yıldır dokunulmamış da olsa <a href="https://github.com/otuncelli/turkish-stemmer-python">şu paketi</a> denemeye karar verdim. Birlikte nasıl çalışacağına bakalım. Bir yandan da yazının başında size göstermek istediğim iki noktadan ilkini halletmiş oluruz.</p>
+<p>Tek yapmanız gereken sayfadaki paketi GIT kullanarak bilgisayarınıza kopyalamak (klonlama) ya da sıkıştırılmış dosyayı indirmek. Ben bu yazının da bulunduğu dizine (./) paketi klonladım. Bu şekilde paketi yüklemeden kullanabilirim.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sys <span class="im">import</span> path</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Python'a indirdiğimiz paketi tanıtalım</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>path.append(<span class="st">'./turkish-stemmer-python'</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> TurkishStemmer <span class="im">import</span> TurkishStemmer</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>kokbul2 <span class="op">=</span> TurkishStemmer()</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([kokbul2.stem(<span class="st">'vardır'</span>), kokbul2.stem(<span class="st">'var'</span>)])</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([kokbul2.stem(<span class="st">'bildirgeyi'</span>), kokbul2.stem(<span class="st">'bildirgede'</span>)])</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([kokbul2.stem(<span class="st">'herkes'</span>), kokbul2.stem(<span class="st">'herkesin'</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['var', 'var']
+['bildirge', 'bildirge']
+['herkes', 'herk']</code></pre>
+</div>
+</div>
+<p>Maalesef bu paket de çok başarılı değil. Olsun. Belki <strong>Veri Defteri</strong> takipçilerinden birisi Python için Türkçe kök bulma konusuna el atar ve hepimizin kullanacağı bir paket daha ortaya çıkar. Belki de hali hazırda böyle bir paket vardır. Bilemiyorum. Neyse, biz şimdilik ilk denediğimiz paket ile devam edelim.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>kelimeler <span class="op">=</span> kokbul1.stemWords(kelimeler)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Kelime çantası</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>kelime_sayi <span class="op">=</span> Counter(kelimeler)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co">#En sık kullanılan 10 kelime</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> kelime <span class="kw">in</span> kelime_sayi.most_common(<span class="dv">10</span>):</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(kelime)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('ve', 77)
+('madde', 30)
+('bir', 29)
+('var', 25)
+('herke', 24)
+('hakkı', 24)
+('veya', 20)
+('hak', 19)
+('bu', 15)
+('özgürlük', 13)</code></pre>
+</div>
+</div>
+<p>Bir metin işleme yazısının kelime bulutu (wordcloud) eksik ise çıplak kalmış sayılır. Hadi bunu da halledip, yazıyı toplayalım. Eğer Python programlama için Anaconda dağıtımını kurduysanız, kelime bulutu çizmek için bir paket olmadığını göreceksiniz. Hatta beraber bakıp teyit edelim. Anaconda ile gelen <span style="font-family:Courier">conda</span> terminal programı ile yeni bir paket aranabilir. Aşağıdaki satırın başındaki ünlem işareti bu satırın terminalde çalıştırılacağını söylüyor.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>conda search wordcloud</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Fetching package metadata ...........
+
+PackageNotFoundError: Packages missing in current channels:
+            
+  - wordcloud
+
+We have searched for the packages in the following channels:
+            
+  - https://repo.continuum.io/pkgs/main/osx-64
+  - https://repo.continuum.io/pkgs/main/noarch
+  - https://repo.continuum.io/pkgs/free/osx-64
+  - https://repo.continuum.io/pkgs/free/noarch
+  - https://repo.continuum.io/pkgs/r/osx-64
+  - https://repo.continuum.io/pkgs/r/noarch
+  - https://repo.continuum.io/pkgs/pro/osx-64
+  - https://repo.continuum.io/pkgs/pro/noarch
+            
+</code></pre>
+</div>
+</div>
+<p>Dediğim gibi böyle bir paket yok. Anaconda dağıtımının yanı sıra kullanabileceğimiz bir diğer paket yöneticisi ise <span style="font-family:Courier">pip</span>. Bu programı da terminalden çalıştırıyoruz.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip search wordcloud</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ajnwordcloud (0.2.3)               - simple wordcloud generator
+bing-cloud-search (0.6)            - A method of turning search terms into
+                                     wordclouds.
+command_history_wordcloud (1.1.1)  - Generates word cloud images for frequency
+                                     of commands usage on your shell
+facebook_wordcloud (1.1)           - A Python tool for generating a word cloud
+                                     for a Facebook chat conversation.
+generatewordcloud (0.3)            - A simple Python (2 or 3) script to
+                                     generate a PNG word-cloud image from a
+                                     bunch of text files. Based on word_cloud.
+matplotlib_venn_wordcloud (0.2)    - Create a Venn diagram with word clouds
+                                     corresponding to each subset.
+persian_wordcloud (1.3.1)          - Persian Word Cloud Generator
+pixiedust-wordcloud (0.2.2)        - Word Cloud Visualization Plugin for
+                                     PixieDust
+pywordcloud (0.2)                  - Generate Word Clouds in Python.
+wcloud (0.1.0)                     - Command line tool to generate wordclouds.
+wordcloud (1.3.1)                  - A little word cloud generator</code></pre>
+</div>
+</div>
+<p>Hah burada bir sürü kelime bulutu paketi var. Aralarından bana en kolay geleni, listenin en sonundaki paket. Onu kuralım.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install wordcloud</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Collecting wordcloud
+Requirement already satisfied: matplotlib in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from wordcloud)
+Requirement already satisfied: pillow in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from wordcloud)
+Requirement already satisfied: numpy&gt;=1.6.1 in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from wordcloud)
+Requirement already satisfied: six&gt;=1.10 in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from matplotlib-&gt;wordcloud)
+Requirement already satisfied: python-dateutil&gt;=2.0 in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from matplotlib-&gt;wordcloud)
+Requirement already satisfied: pytz in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from matplotlib-&gt;wordcloud)
+Requirement already satisfied: cycler&gt;=0.10 in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from matplotlib-&gt;wordcloud)
+Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,&gt;=2.0.1 in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from matplotlib-&gt;wordcloud)
+Requirement already satisfied: olefile in /Users/sibirbil/anaconda3/envs/veridefteri/lib/python3.5/site-packages (from pillow-&gt;wordcloud)
+Installing collected packages: wordcloud
+Successfully installed wordcloud-1.3.1</code></pre>
+</div>
+</div>
+<p>Bu sayade yazının başında anlatmak istediğim ikinci noktayı da çaktırmadan aradan çıkartmış olduk. Şimdi yeni yüklediğimiz kelime bulutu paketini, <a href="https://github.com/amueller/word_cloud">kendi sayfasında</a> verilen en basit örnekle deneyebiliriz. Diğer örneklere de bir göz atmanızı tavsiye ederim. Çok havalı olanları var.</p>
+<div class="cell" data-scrolled="true" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>matplotlib inline</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> wordcloud <span class="im">import</span> WordCloud</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>wordcloud <span class="op">=</span> WordCloud().generate(<span class="st">' '</span>.join(kelimeler))    </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>plt.imshow(wordcloud, interpolation<span class="op">=</span><span class="st">'bilinear'</span>)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>plt.axis(<span class="st">"off"</span>)</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Başlıkta yazdığım gibi burada verdiklerim metin işlemenin sadece ilk adımları. Yapılacak daha çok şey var. Bu yazıda bile, örneğin, “ve, ama, falan” gibi işlevsel kelimeler ya da soru ifade eden ekler ile uğraşmadık. Aslına bakarsanız doğal dil işleme başlı başına bir çalışma alanı. Bu konuya zaten merak sarmış olanlar <a href="http://www.nltk.org/">NLTK</a> paketini inceleyebilirler. Oldukça kapsamlıdır. Biz de ilk bulduğumuz fırsatta farklı metin işleme örneklerini <strong>Veri Defteri</strong> sayfalarına eklemek istiyoruz. Bakalım.</p>
+<hr>
+<p>Her zamanki gibi bu yazıyı, kodları ve kullanılan veriyi <a href="https://github.com/sibirbil/VeriDefteri">GitHub sayfamızda</a> bulabilirsiniz.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

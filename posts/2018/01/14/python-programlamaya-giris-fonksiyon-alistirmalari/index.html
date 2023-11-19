@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2018-01-14">
+
+<title>Veri Defteri - Python Programlamaya Giriş 10 - Fonksiyon Alıştırmaları</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python Programlamaya Giriş 10 - Fonksiyon Alıştırmaları</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Python Programlamaya Giriş</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 14, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Python fonksiyonlarının uygulamalarının ardından, şimdi kendiniz uygulayabileceğiniz birkaç fonksiyon alıştırması verelim. Çözümleri bulmak size ait. Buradaki alıştırmaların ötesinde, daha önceki bölümlerde verdiğimiz örnekleri de bir fonksiyona dönüştürmeyi deneyebilirsiniz. Ayrıca internet kaynaklarında pek çok değişik konuda alıştırma örneği bulabilirsiniz.</p>
+<p>Dizinin bütün yazılarına erişmek için <a href="http://www.veridefteri.com/category/python-giris/"><em>Python Programlamaya Giriş</em></a> kategorimize bakabilirsiniz. Bu dizideki yazılar ayrıca Jupyter defterleri halinde <a href="https://github.com/sibirbil/VeriDefteri/tree/master/Python_Programlama">GitHub depomuzda</a> da mevcut.</p>
+<ul>
+<li>
+Fonksiyona verilen en küçük parametreyi bulma
+</li>
+<li>
+Fibonacci sayıları
+</li>
+<li>
+Satranç atının gidebileceği kareler
+</li>
+<li>
+Karekök fonksiyonu
+</li>
+<li>
+Machin formülü ile pi’yi bulmak
+</li>
+<li>
+İkinci derece denklem kökleri
+</li>
+<li>
+Mükemmel sayılar
+</li>
+</ul>
+<section id="en-küçük-parametre-değeri" class="level2">
+<h2 class="anchored" data-anchor-id="en-küçük-parametre-değeri">En küçük parametre değeri</h2>
+<p>Belirsiz sayıda sayısal parametre alıp, parametreler arasındaki en küçük değeri geri veren bir fonksiyon yazın. (İpucu: Parametre paketlemesi kullandığımızda bütün parametrelerin fonksiyon içinde bir çokuza toplandığını görmüştük. Bu çokuz üzerinde bir döngüyle en küçük değeri bulabilirsiniz.)</p>
+<p>Örnekler:</p>
+<pre><code>enkucuk(7)
+7
+
+enkucuk(3,1,4)
+1
+
+enkucuk(1,2,3,-1,4,-2,5)
+-2</code></pre>
+<p>Parametre listesi boş ise <code>None</code> dönsün (<code>return None</code> komutunu kullanın).</p>
+<pre><code>enkucuk()
+None</code></pre>
+</section>
+<section id="fibonacci-sayıları" class="level2">
+<h2 class="anchored" data-anchor-id="fibonacci-sayıları">Fibonacci sayıları</h2>
+<p>İlk <code>n</code> Fibonacci sayısını bir liste halinde veren bir fonksiyon yazın. Örnekler:</p>
+<pre><code>fib(0)
+[]
+
+fib(1)
+[1]
+
+fib(2)
+[1, 1]
+
+fib(10)
+[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</code></pre>
+</section>
+<section id="satranç-atının-hareketi" class="level2">
+<h2 class="anchored" data-anchor-id="satranç-atının-hareketi">Satranç atının hareketi</h2>
+<p>Satranç tahtasında at L biçiminde hareket eder: Şekilde gösterildiği gibi bir yönde iki kare, sonra ona dik olarak bir kare.</p>
+<p><img src="f8c1b-satranc_at.png"></p>
+<p>Atın tahtadaki pozisyonunu iki parametre olarak alan ve gidebileceği karelerin listesini veren bir fonksiyon yazın. Her kareyi bir ikili çokuzla gösterin, <code>('a',1)</code>, <code>('g',5)</code> gibi. At tahtanın sınırlarına yakınsa, tahtanın dışına çıkacak hamleleri eleyin.</p>
+<p>Örnek:</p>
+<pre><code>athareket('d', 7)
+[('c',5),('e',5),('b',6),('f',6),('b',8),('f',8)]
+
+athareket('f',3)
+[('d',2),('d',4),('e',1),('e',5),('g',5),('g',1),('h',4),('h',2)]</code></pre>
+</section>
+<section id="karekök-fonksiyonu" class="level2">
+<h2 class="anchored" data-anchor-id="karekök-fonksiyonu">Karekök fonksiyonu</h2>
+<p>Verilen bir <span class="math inline">\(N\)</span> sayısının karekökünü bulmak için Babil döneminden beri kullanılan tekrarlamalı (iteratif) bir yöntem vardır: Önce, karekök için bir tahminde bulunun ve buna <span class="math inline">\(x_0\)</span> deyin. Bir sonraki tahminimiz <span class="math display">\[x_1 = \frac{1}{2}\left(x_0 + N/x_0\right)\]</span> olacak. Genel olarak, <span class="math display">\[x_{n+1} = \frac{1}{2}\left(x_n + N/x_n\right)\]</span> kuralıyla ardışık iterasyonlar yaparsak, <span class="math inline">\(x_n\)</span> değerleri hızlıca <span class="math inline">\(N\)</span>’nin kareköküne yakınsayacaktır.</p>
+<p>Bu yöntem, fonksiyon köklerini bulmak için kullanılan en iyi algoritmalardan biri olan Newton yönteminin özel bir durumudur.</p>
+<p>Bu algoritmayı kullanarak, bir sayının karekökünü veren bir fonksiyon yazın.</p>
+<p>Parametreler: * Karekökü alınacak sayı <code>N</code>. * İlk tahmin <code>x0</code>. * Tolerans <code>tol</code>. Varsayılan değer <span class="math inline">\(10^{-10}\)</span>. * Azami iterasyon sayısı <code>maxiter</code>. Varsayılan değer 10.</p>
+<p>Sonuç: * <code>N</code>’nin karekökü için en iyi tahmin</p>
+<p>Fonksiyon içinde, yukarıdaki formülü tekrar tekrar işleterek daha iyi tahminlere ulaşan bir döngü yazın. Her adıımda, hata değeri <span class="math inline">\(|x_n^2 - N|\)</span> ile tolerans <code>tol</code> karşılaştırılsın. Hata,i toleransın altına düşünce döngü sonlansın. Ayrıca, döngü iterasyonları sayısı <code>maxiter</code>’den fazla olursa yine döngü sonlansın. Bu durumda bir uyarı mesajı ekrana yazılsın ve fonksiyon döngüde elde edilen son sonucu versin.</p>
+<p>Örnekler:</p>
+<pre><code>karekok(N=10, x0=1)
+3.162277660168379
+
+karekok(N=10000, x0=0.1)
+10 iterasyonda sonuca ulaşılamadı. 'hata' veya 'maxiter' değerlerini değiştirin
+103.38412392442035
+
+karekok(N=10000, x0=0.1, maxiter=15)
+100.0</code></pre>
+</section>
+<section id="machin-formülü-ile-pi-sayısı" class="level2">
+<h2 class="anchored" data-anchor-id="machin-formülü-ile-pi-sayısı">Machin formülü ile Pi sayısı</h2>
+<p>Pi sayısını hesaplamak için birçok yöntem vardır. Bunların hepsi teorik olarak <span class="math inline">\(\pi\)</span>’ye eşit olsalar da, bazıları belli bir hassasiyete ulaşmak için çok fazla hesap gerektirdikleri için pratikte işe yaramazlar. 1706’da John Machin <span class="math inline">\(\pi\)</span> sayısı için hızlı yakınsayan, böylelikle az sayıda terimle yüksek doğruluk sağlayan bir formül yayınladı.</p>
+<p><span class="math display">\[\pi = 16 \arctan \frac{1}{5} - 4 \arctan \frac{1}{239}\]</span></p>
+<p>Bu formüldeki arktanjant fonksiyonunu hesaplamak için bir Taylor serisi kullanılabilir.</p>
+<p><span class="math display">\[\arctan x = x - \frac{1}{3}x^3 + \frac{1}{5}x^5 - \frac{1}{7} x^7 + \cdots\]</span></p>
+<p>Machin formülünde arktanjantı alınan sayılar küçük oldukları için, serinin az sayıda elemanıyla yüksek hassasiyeti sağlamak mümkün olacaktır.</p>
+<p>Machin formülü ile <span class="math inline">\(\pi\)</span> sayısını yaklaşık olarak hesaplayan bir fonksiyon yazın. Fonksiyon sadece tolerans değerini parametre olarak alsın (varsayılan değer <span class="math inline">\(10^{-8}\)</span>). Arktanjant fonksiyonu için matematik kütüphanesi kullanmayın, Taylor serisindeki terimleri gerekli toleransı sağlayana kadar ekleyin. Yeni eklenen terim toleransın altına düştüğünde durun.</p>
+</section>
+<section id="ikinci-derece-denklemin-kökleri" class="level2">
+<h2 class="anchored" data-anchor-id="ikinci-derece-denklemin-kökleri">İkinci derece denklemin kökleri</h2>
+<p>Bir <span class="math inline">\(x\)</span> değişkeni için genel ikinci derece denklem <span class="math inline">\(ax^2 + bx + c = 0\)</span> olarak ifade edilir. Eğer <span class="math inline">\(a\neq 0\)</span> ise, denklemin iki kökü</p>
+<p><span class="math display">\[x_{1,2} = \frac{-b \pm \sqrt{b^2-4ac}}{2a}\]</span></p>
+<p>formülüyle bulunur. Eğer <span class="math inline">\(a=0\)</span> ise çözüm <span class="math inline">\(x = -c/b\)</span> olur.</p>
+<p>Denklemin katsayıları <code>a</code>, <code>b</code> ve <code>c</code>’yi parametre olarak alan ve denklemin köklerini (ikili çokuz olarak) veren bir fonksiyon yazın. Fonksiyon <code>a</code>’nın 0 olduğu özel durumda tekli çokuz vermeli.</p>
+<p>Diskriminantın (<span class="math inline">\(b^2 -4ac\)</span>) negatif olduğu durumlarda kökler reel sayı değil karmaşık sayı olacaktır. Bu durumlarda da fonksiyonun hatasız çalışması için, karmaşık sayıli matematik kütüphanesini <code>import cmath</code> komutuyla yükleyip, karekök almak için <code>cmath.sqrt()</code> fonksiyonunu kullanabilirsiniz.</p>
+<p>Örnekler:</p>
+<pre><code>kökler(1,0,-4)
+((2+0j), (-2+0j))
+
+kökler(1,0,4)
+(2j, -2j)
+
+kökler(0,1,4)
+-4.0</code></pre>
+</section>
+<section id="mükemmel-sayılar" class="level2">
+<h2 class="anchored" data-anchor-id="mükemmel-sayılar">Mükemmel sayılar</h2>
+<p>Bir sayı bütün çarpanlarının (1 dahil, kendisi hariç) toplamına eşitse, o sayıya <em>mükemmel sayı</em> denir. Sözgelişi, 1+2+3=6 olduğundan, 6 bir mükemmel sayıdır.</p>
+<p>Verilen bir sayı “mükemmel”se <code>True</code>, değilse <code>False</code> veren bir fonksiyon yazın. Örnek:</p>
+<pre><code>mukemmel(6)
+True
+
+mukemmel(10)
+False</code></pre>
+<p>Bu fonksiyonu kullanarak, 10 000’den küçük bütün “mükemmel” sayıları bulun.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

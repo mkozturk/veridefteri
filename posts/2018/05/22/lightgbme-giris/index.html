@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Birol Yüceoğlu">
+<meta name="dcterms.date" content="2018-05-22">
+
+<title>Veri Defteri - LightGBM’e Giriş</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">LightGBM’e Giriş</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">LightGBM</div>
+    <div class="quarto-category">veri setleri</div>
+    <div class="quarto-category">yapay öğrenme</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Birol Yüceoğlu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 22, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Bu yazımızda Microsoft tarafından hazırlanan ve Kaggle gibi platformlarda oldukça popülerleşen <a href="https://github.com/Microsoft/LightGBM">LightGBM</a> kütüphanesini tanıtacağız. <code>LightGBM</code> kullanımı artan gradient boosting yöntemini kullanan bir kütüphane. Gradient Boosting yöntemini kullanan başka kütüphane ve modüller de mevcut. Örneğin <a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html">scikit-learn</a> üzerinden kullanabileceğiniz bir modül var. R kullanmayı tercih edenler için <a href="https://cran.r-project.org/package=gbm">gbm</a> kütüphanesi bir diğer alternatif. Ayrıca R ve Python üzerinde çalışabilen ve yine oldukça popüler bir kütüphane olan <a href="https://github.com/dmlc/xgboost">xgboost</a> da gradient boosting yöntemini kullanan paketlere örnek olarak verilebilir. <code>xgboost</code> ve <code>gbm</code> paketlerini kullanmadığımı söylemem lazım. <code>xgboost</code> paketini Python üzerinden kullanmak çok kolay değil; ancak R üzerinden yüklemek Python’a göre daha kolay. <code>scikit-learn</code> paketine kıyasla <code>LightGBM</code>in avantajı ise oldukça hızlı olması. Hız farkı GPU kullanmadığınızda bile rahatlıkla görebileceğiniz düzeyde. <code>LightGBM</code> aynı zamanda <code>scikit-learn</code> komutlarını kullanmanıza imkan tanıyan bir katman (wrapper) ile geliyor.</p>
+<section id="boosting" class="level1">
+<h1>Boosting</h1>
+<p>Boosting, kullanımı her geçen gün artan topluluk öğrenme (ensemble learning) yöntemlerinden biri. Boosting yöntemlerinin temeli, tahminleri rassal tahminden biraz daha başarılı zayıf öğrenen modellerin (weak learner) topluluk olarak tahmin yapması esasına dayanıyor. Örnek olarak bir ikili sınıflandırma problemi için zayıf öğrenen model, 0.5 olasılıktan biraz daha yüksek başarıyla tahmin yapan bir model olabilir. Boosting yöntemlerinde bu modeller sıralı olarak ve belirli ağırlıklar verilerek oluşturulur. AdaBoost yöntemi hatalı tahminlerin ağırlıklarını arttırarak sıradaki modeli oluşturarak hatayı azaltmaya çalışır. Gradient Boosting ise o iterasyonda yapılan hataları bir sonraki modelde öğrenmeye çalışarak tahmin yapar. Bu sayede ilk modellerde verideki örüntüler kabaca öğrenilir ve ileriki iterasyonlarda da yapılan hatalar düzeltilmeye çalışılır. Hatayı öğrenmek aynı zamanda modelin daha karmaşık yapıları öğrenebilmesini de sağlar. Gradient boosting ismi, tahmin etmeye çalıştığımız hatanın, fonksiyonunun gradyanının negatifine denk gelmesinden gelmektedir.</p>
+</section>
+<section id="lightgbm" class="level1">
+<h1>LightGBM</h1>
+<p><code>LightGBM</code> paketinin <a href="https://lightgbm.readthedocs.io/en/latest/">dokümantasyonu</a> parametreleri açıklama ve API’ı tanıtma konusunda başarılı. Aynı zamanda çeşitli uygulama örnekleri de mevcut. Paketi yüklemek için <code>VC runtime</code> uygulamasını yüklemiş olmanız şart. Uygulama Visual C++ yüklü olmayan bilgisayarlarda da <code>LightGBM</code>’in çalışmasını sağlayacak kütüphaneleri içeriyor. Bunu yükledikten sonra <code>pip</code> ya da <code>conda</code> ile yükleme yapabilirsiniz. Yükleme hakkında detaylı bilgi almak için <a href="https://github.com/Microsoft/LightGBM/tree/master/python-package">paketin dokümanlarına</a> bakabilirsiniz.</p>
+<p>Bu paket benim dikkatimi Kaggle üzerindeki <a href="https://www.kaggle.com/c/instacart-market-basket-analysis">Instacart</a> yarışmasıyla çekmişti. Bu yarışmanın forumlarındaki örneklere bakmanızı da tavsiye ederim. Hem verinin hazırlanması, hem de <code>LightGBM</code>in kullanımı konusunda iyi uygulamalara rastlayabilirsiniz.</p>
+<p>Şimdi <code>LightGBM</code> paketinin kullanımını UCI dizinindeki <a href="https://archive.ics.uci.edu/ml/datasets/bank+marketing">banka pazarlama veri kümesi</a> üzerinden inceleyelim. Amaç müşterilerin özelliklerine ve ekonomik göstergelere bakarak müşterilerin kampanya tekliflerine dönüş yapıp yapmayacağını tahmin etmek. Elimizdeki problem iki sınıftan oluşan bir sınıflandırma problemi, ancak <code>LightGBM</code> farklı problem sınıfları için de kullanılabiliyor.</p>
+<p>Paketleri yükleyerek ve veri kümesini okuyarak başlayalım.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri çerçevesi oluşturmak için Pandas paketini kullanıyoruz.</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri kümesini ikiye bölmek ve performans ölçütlerinin hesaplanması için gerekli modüller.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_auc_score, accuracy_score</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Grafik çizdirmek için gerekli paket.</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># LightGBM paketi.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> lightgbm <span class="im">as</span> lgb</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Uyarı mesajlarını kapatmak için</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri çerçevelerini daha güzel görselleştirmek için</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> display, HTML</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri kümesini okuyalım ve etiketleri ayıralım. Veri çerçevesindeki sütun isimlerini de değiştiriyoruz.</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'bank-additional-full.csv'</span>, delimiter<span class="op">=</span><span class="st">';'</span>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>y<span class="op">=</span> (df[<span class="st">'y'</span>] <span class="op">==</span> <span class="st">'yes'</span>)<span class="op">*</span><span class="dv">1</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>df.drop(<span class="st">'y'</span>, axis<span class="op">=</span><span class="dv">1</span>, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>df.columns <span class="op">=</span> [<span class="st">'yaş'</span>, <span class="st">'iş'</span>, <span class="st">'medeni_durum'</span>, <span class="st">'eğitim'</span>, <span class="st">'gecikme'</span>, <span class="st">'ev'</span>, <span class="st">'borç'</span>, <span class="st">'iletişim'</span>, <span class="st">'ay'</span>, <span class="st">'haftanın_günü'</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>              <span class="st">'süre'</span>, <span class="st">'kampanya'</span>, <span class="st">'önceki_iletişimden_sonra_geçen_gün'</span>, <span class="st">'iletişim_sayısı'</span>, <span class="st">'iletişim_sonucu'</span>, </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>              <span class="st">'işsizlik'</span>, <span class="st">'tüketici_fiyat_endeksi'</span>, <span class="st">'tüketici_güven_endeksi'</span>, <span class="st">'euribor_faizi'</span>, <span class="st">'çalışan_sayısı'</span>] </span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   yaş         iş medeni_durum       eğitim  gecikme   ev borç   iletişim  \
+0   56  housemaid      married     basic.4y       no   no   no  telephone   
+1   57   services      married  high.school  unknown   no   no  telephone   
+2   37   services      married  high.school       no  yes   no  telephone   
+3   40     admin.      married     basic.6y       no   no   no  telephone   
+4   56   services      married  high.school       no   no  yes  telephone   
+
+    ay haftanın_günü  süre  kampanya  önceki_iletişimden_sonra_geçen_gün  \
+0  may           mon   261         1                                 999   
+1  may           mon   149         1                                 999   
+2  may           mon   226         1                                 999   
+3  may           mon   151         1                                 999   
+4  may           mon   307         1                                 999   
+
+   iletişim_sayısı iletişim_sonucu  işsizlik  tüketici_fiyat_endeksi  \
+0                0     nonexistent       1.1                  93.994   
+1                0     nonexistent       1.1                  93.994   
+2                0     nonexistent       1.1                  93.994   
+3                0     nonexistent       1.1                  93.994   
+4                0     nonexistent       1.1                  93.994   
+
+   tüketici_güven_endeksi  euribor_faizi  çalışan_sayısı  
+0                   -36.4          4.857          5191.0  
+1                   -36.4          4.857          5191.0  
+2                   -36.4          4.857          5191.0  
+3                   -36.4          4.857          5191.0  
+4                   -36.4          4.857          5191.0  </code></pre>
+</div>
+</div>
+<p>Verideki değişkenlerin anlamlarını aşağıda ve veri kümesini indirebileceğiniz <a href="https://archive.ics.uci.edu/ml/datasets/bank+marketing">web sayfasında</a> bulabilirsiniz:</p>
+<ul>
+<li>yaş: Müşterinin yaşı.</li>
+<li>iş: Müşterinin işinin tanımı.</li>
+<li>medeni_durum: Müşterinin medeni durumu.</li>
+<li>eğitim: Müşterinin eğitim durumu.</li>
+<li>gecikme: Borcunu ödemekte gecikme yaşadığı kredi var mı?</li>
+<li>ev: Ev kredisi ödüyor mu?</li>
+<li>borç: Başka kredi ödüyor mu?</li>
+<li>iletişim: İletişim için seçtiği telefon tipi (sabit hat, GSM).</li>
+<li>ay: En son iletişim kurulan ay.</li>
+<li>haftanın_günü: En son iletişim kurulan gün (haftanın günü olarak).</li>
+<li>süre: En son iletişim kurulan süre. Bu değişken 0 değerini aldığında etiket de 0 (ya da <code>no</code>) değerini aldığı için sağlıklı bir analiz için bu değişkeni veri kümesinden çıkarıyoruz.</li>
+<li>kampanya: Müşteri için bu kampanya özelinde kaç kere iletişim kurulduğu bilgisi.</li>
+<li>önceki_iletişimden_sonra_geçen_gün: Müşteriyle başka bir kampanya için iletişim kurulan günden bu yana geçen zaman. Değer 999 ise iletişim kurulmadığı anlamına geliyor.</li>
+<li>iletişim_sayısı: Müşteriyle bu kampanya öncesi kurulan iletişim sayısı.</li>
+<li>iletişim_sonucu: Önceki kampanya iletişiminin sonucu.<br>
+</li>
+<li>işsizlik: İşsizlik endeksindeki değişim.</li>
+<li>tüketici_fiyat_endeksi: Tüketici fiyat endeksi.</li>
+<li>tüketici_güven_endeksi: Tüketici güven endeksi.</li>
+<li>euribor_faizi: Euribor faizi (Euro Interbank Offered Rate).</li>
+<li>çalışan_sayısı: Çalışan nüfus sayısı.</li>
+</ul>
+<p>Gördüğümüz gibi son beş değişken daha çok sosyal ve ekonomik göstergelerden oluşuyor. Bu göstergeler kampanya teklifinin yapıldığı zamana ait değerleri içeriyor. Veri kümesinde eksik değerler olup olmadığını inceleyelim.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.isnull().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>yaş                                   0
+iş                                    0
+medeni_durum                          0
+eğitim                                0
+gecikme                               0
+ev                                    0
+borç                                  0
+iletişim                              0
+ay                                    0
+haftanın_günü                         0
+süre                                  0
+kampanya                              0
+önceki_iletişimden_sonra_geçen_gün    0
+iletişim_sayısı                       0
+iletişim_sonucu                       0
+işsizlik                              0
+tüketici_fiyat_endeksi                0
+tüketici_güven_endeksi                0
+euribor_faizi                         0
+çalışan_sayısı                        0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Veri kümesinde eksik değer yok. Aslında bilinmeyen (<code>unknown</code>) gibi değerler mevcut. Ayrıca <code>önceki_iletişimden_sonra_geçen_gün</code> değişkeni de 999 değerini aldığında bu değişkenin tanımlı olmadığı duruma denk geliyor. Şimdilik eksik değerlere odaklanmayalım ancak ileride eksik değerlerle tahmin yapmayı da göreceğiz.</p>
+<p>Veri kümesinde eksik değer bulunmasa da, kategorik değişkenler bulunmakta. Örnek olarak <code>iş</code> sütununu inceleyelim.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'iş'</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>array(['housemaid', 'services', 'admin.', 'blue-collar', 'technician',
+       'retired', 'management', 'unemployed', 'self-employed', 'unknown',
+       'entrepreneur', 'student'], dtype=object)</code></pre>
+</div>
+</div>
+<p>Kategorik değişkenleri sayısal hale getirmemiz gerekiyor. Bu amaçla <code>scikit-learn</code> paketindeki <code>LabelEncoder</code> modülünü kullanabiliriz. Bahsettiğim modül değişkenleri 0 ve değer sayısı - 1 (bu örnekte 12 ayrı değer olduğu için 11) arasındaki sayılara çevirecek. Örnek olarak <code>housemaid</code> 0 değerini alırken <code>student</code> 11 değerini alacak. Kategorik değişkenleri 0 ve 1 değerleri alan kukla değişkenlere çevirmek için <code>LabelBinarizer</code> modülünü kullanabilirsiniz. Veri kümesinin boyutunu arttırmamak için ben <code>LabelEncoder</code>ı kullandım. <code>LightGBM</code> kategorik değişkenleri belirttiğimiz takdirde, bu değişkenleri o bilgiye göre değerlendirebiliyor. Ayrıca, <code>LightGBM</code> birbirini dışlayan (mutually exclusive) sütunları kendi içinde birleştirdiği için yapacağımız iki değişiklik de aynı kapıya çıkacak.</p>
+<p>Veri kümesindeki kategorik değişkenleri sayısal hale getirelim.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> LabelEncoder</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>kategorik_sutunlar <span class="op">=</span> [<span class="st">'iş'</span>, <span class="st">'medeni_durum'</span>, <span class="st">'eğitim'</span>, <span class="st">'gecikme'</span>, <span class="st">'ev'</span>, <span class="st">'borç'</span>, <span class="st">'iletişim'</span>, <span class="st">'ay'</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">'haftanın_günü'</span>, <span class="st">'iletişim_sonucu'</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> kategorik_sutunlar:</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    le <span class="op">=</span> LabelEncoder()</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    df[i] <span class="op">=</span> le.fit_transform(df[i])</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   yaş  iş  medeni_durum  eğitim  gecikme  ev  borç  iletişim  ay  \
+0   56   3             1       0        0   0     0         1   6   
+1   57   7             1       3        1   0     0         1   6   
+2   37   7             1       3        0   2     0         1   6   
+3   40   0             1       1        0   0     0         1   6   
+4   56   7             1       3        0   0     2         1   6   
+
+   haftanın_günü  süre  kampanya  önceki_iletişimden_sonra_geçen_gün  \
+0              1   261         1                                 999   
+1              1   149         1                                 999   
+2              1   226         1                                 999   
+3              1   151         1                                 999   
+4              1   307         1                                 999   
+
+   iletişim_sayısı  iletişim_sonucu  işsizlik  tüketici_fiyat_endeksi  \
+0                0                1       1.1                  93.994   
+1                0                1       1.1                  93.994   
+2                0                1       1.1                  93.994   
+3                0                1       1.1                  93.994   
+4                0                1       1.1                  93.994   
+
+   tüketici_güven_endeksi  euribor_faizi  çalışan_sayısı  
+0                   -36.4          4.857          5191.0  
+1                   -36.4          4.857          5191.0  
+2                   -36.4          4.857          5191.0  
+3                   -36.4          4.857          5191.0  
+4                   -36.4          4.857          5191.0  </code></pre>
+</div>
+</div>
+<p>Burada şunu belirtmem gerekiyor. Yaptığımız dönüşüm işlemini geri dönüşsüz olarak yaptık. Yani dönüştürdüğümüz kolonlardaki değerleri kaybettik. Veri kümesinin orijinal versiyonuyla bir eşleştirme yaparak bu değerleri tekrar elde edebiliriz. Eski değerleri koruyarak bu değişimi yapmak <code>scikit-learn</code> ile biraz daha zor bir işlem ve bu yazının konusunun dışında. Ancak <a href="http://www.veridefteri.com/2018/03/19/python-programlamaya-giris-18-python-referans-modeli-sig-ve-derin-kopyalama/">derin kopyalama</a> ile veri çerçevesinin orijinalinin bir kopyasını oluşturmak mümkün.</p>
+<p>Veri kümesini analize uygun hale getirdiğimize göre eğitim ve sınama için ikiye bölelim ve <code>süre</code> değişkenini kümeden çıkartalım.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df.drop(<span class="st">'süre'</span>, inplace <span class="op">=</span> <span class="va">True</span>, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>df_train, df_test, y_train, y_test <span class="op">=</span> train_test_split(df, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="veri-kümesi-oluşturma" class="level1">
+<h1>Veri kümesi oluşturma</h1>
+<p><code>LightGBM</code>, numpy sıralı nesneleri ve pandas veri çerçeveleri yanında kendi veri kümesi (<code>Dataset</code>) ile de çalışabiliyor. Veri kümesi oluştururken etiket değerlerini (<code>label</code>) ve verinin kendisini (<code>data</code>) veri kümesine tanıtmamız gerekiyor. <code>free_raw_data=False</code> opsiyonuyla da veri kümesini oluştururken kullandığınız veri çerçevesi ya da sıralı nesnelerin kodun ilerleyen kısımlarında kullanılabilmesini sağlıyor. Veri kümelerini oluştururken kategorik değişkenleri tanımlamak mümkün olsa da biz bunu modelin eğitilmesi sırasında yapacağız.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri kümesi oluşturalım.</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lgb_train <span class="op">=</span> lgb.Dataset(data<span class="op">=</span>df_train, label<span class="op">=</span>y_train,  free_raw_data<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="modelin-parametrelerini-belirleme" class="level1">
+<h1>Modelin parametrelerini belirleme</h1>
+<p><code>Scikit-learn</code>’den farklı olarak kuracağımız modelin parametrelerini bir sözlük olarak tanımlamamız gerekiyor. <code>LightGBM</code> daha çok parametre içerdiği için hepsinden bahsetmek yararlı olmayabilir. Ama en önemli parametreleri aşağıda bulabilirsiniz:</p>
+<ul>
+<li><code>task</code>: Eğitim için ‘train’ değerini kullanabiliriz. Bunun yanısıra tahmin ve test için ‘predict’ ve modeli yeni veri ile güncellemek için ‘refit’ değerlerini kullanabiliriz.</li>
+<li><code>boosting_type</code>: Boosting için kullanacağımız yöntemi belirtmek için kullanıyoruz.
+<ul>
+<li>‘gbdt’ karar ağaçları temelli gradient boosting,</li>
+<li>‘rf’ rastgele orman,</li>
+<li>‘goss’ Gradient-based One-Side Sampling, enküçüklemek istediğimiz hata fonksiyonuna çok fazla katkısı olmayan gözlemleri kısmen dışarıda bırakan bir yöntem,</li>
+<li>‘dart’ Dropouts meet Multiple Additive Regression Trees, gradient boosting yönteminde aşırı uyumu engelleyen bir yöntem.</li>
+</ul></li>
+<li><code>objective</code>: Çözeceğimiz problem tipi ve enküçükleyeceğimiz hata fonksiyonunu belirtiyor. <code>LightGBM</code> sınıflandırma, bağlanım, sıralama gibi problemleri çözebilen bir kütüphane. En sık kullanacağız problem tiplerini aşağıda bulabilirsiniz:
+<ul>
+<li>‘binary’: ikili sınıflandırma problemleri için,</li>
+<li>‘regression_l1’ ortalama mutlak hatayı enküçükleyen bağlanım problemleri için,</li>
+<li>‘regression_l2’ ortalama karesel hatayı enküçükleyen bağlanım problemleri için,</li>
+<li>‘multiclass’ çok sınıflı sınıflandırma problemleri için,</li>
+<li>‘lambdarank’ sıralama problemleri için kullanılabilir. Bahsettiklerim dışında birçok amaç fonksiyonunu kullanmanız mümkün.</li>
+</ul></li>
+<li><code>metric</code>: Modelin başarısını değerlendirmek için kullanacağımız değerlendirme ölçütü. <code>LightGBM</code> birden fazla ölçütü desteklediği gibi, bu değeri boş bırakmanız halinde belirttiğiniz <code>objective</code> değerine uygun bir ölçüt seçecektir. Yukarıda belirttiğimiz uygulamalar için aşağıdaki ölçütler uygun olabilir:
+<ul>
+<li>‘AUC’: eğri altı alan</li>
+<li>‘binary_error’: isabetlilik</li>
+<li>‘binary_logloss’: logaritmik kayıp fonksiyonu (sınıflandırma problemlerinde atanan olasılıklara göre değişen bir hata fonksiyonu)</li>
+<li>‘l1’: ortalama mutlak hata</li>
+<li>‘l2’: ortalama karesel hata</li>
+<li>‘multi_error’: çok sınıflı sınıflandırma problemlerinde isabetlilik</li>
+<li>‘multi_logloss’: çok sınıflı sınıflandırma problemlerindeki olasılıksal hata</li>
+</ul></li>
+<li><code>num_leaves</code>: Her iterasyonda oluşturulacak karar ağacının yaprak sayısı. Bu rakamın yüksek olması yöntemin çalışma süresini uzatıp performansını düşürecektir. Boosting iterasyonlarındaki tahminler çok iyi yöntemlere ihtiyaç duymaz.</li>
+<li><code>learning_rate</code>: Bu değer yöntemin ilerledikçe oluşturulan karar ağaçlarının önemindeki azalma oranını gösterir. Değerin yüksek olması hatayı tahmin eden karar ağaçlarının önemini arttıracağı için sonucu kötüleştirebilir.</li>
+<li><code>num_boosting_round</code>: Yöntemde kullanacağımız iterasyon sayısını belirler. İterasyon sayısının yüksek olması aşırı uyuma yol açabilir; düşük olması ise örüntüleri öğrenmemizi engeller. <code>num_leaves</code>, <code>learning_rate</code> ve <code>num_boosting_round</code> değerlerini birlikte değerlendirmemiz gerekir.</li>
+</ul>
+<p>En temel parametrelerden oluşan bir model kurarak başlayalım. Modelimiz bir ikili sınıflandırma problemi. Eniyilenecek ölçüt olarak eğri altı alan değerini seçelim. Modeli eğitmek için <code>train</code> fonksiyonunu kullanacağız ve kategorik öznitelikleri de belirtiyoruz.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Eğitim parametrelerini belirleyelim</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'task'</span>: <span class="st">'train'</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'boosting_type'</span>: <span class="st">'gbdt'</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'objective'</span>: <span class="st">'binary'</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'metric'</span>: <span class="st">'auc'</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'num_leaves'</span>: <span class="dv">31</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'learning_rate'</span>: <span class="fl">0.05</span>,</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'verbose'</span>: <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Kategorik değişkenlerin indeksleri</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>kategorik_indeks <span class="op">=</span> [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">13</span>]</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Kategorik değişkenler: '</span> <span class="op">+</span> <span class="bu">str</span>(df_train.columns[kategorik_indeks].values))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğitim...'</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Modeli eğitelim</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>gbm <span class="op">=</span> lgb.train(params,</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                lgb_train,</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>                categorical_feature <span class="op">=</span> kategorik_indeks)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğitim bitti...'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Kategorik değişkenler: ['iş' 'medeni_durum' 'eğitim' 'gecikme' 'ev' 'borç' 'iletişim' 'ay'
+ 'haftanın_günü' 'iletişim_sonucu']
+Eğitim...
+Eğitim bitti...</code></pre>
+</div>
+</div>
+<p>Şimdi eğittiğimiz modelin başarısına bakalım. Bu amaçla <code>predict</code> fonksiyonunu kullanacağız. Alternatif olarak <code>task</code> değerini değiştirmeyi de tercih edebilirdik.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Tahmin ve değerlendirme</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> gbm.predict(df_test)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğri altı alan değeri:'</span>, roc_auc_score(y_test, y_pred))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'İsabetlilik değeri:'</span>, accuracy_score(y_test, ( y_pred<span class="op">&gt;=</span> <span class="fl">0.5</span>)<span class="op">*</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eğri altı alan değeri: 0.805879217343
+İsabetlilik değeri: 0.901756089666</code></pre>
+</div>
+</div>
+<p>Buraya kadar <a href="http://www.veridefteri.com/2017/11/23/scikit-learn-ile-veri-analitigine-giris/"><code>scikit-learn</code></a> üzerinde yaptıklarımıza oldukça benzer bir akış izledik. Ancak eğittiğimiz modelin başarısını değerlendirmek için bu amaçla oluşturduğumuz veri kümesini kullanabiliriz. Bu sayede, değerlendirme için kullandığımız veri kümesinde en iyi sonucu verecek iterasyonu (dolayısıyla modeli) kullanabiliriz. Bu özellik, aşırı uyum gibi problemlerin önüne geçebilir.</p>
+<p>Bu özelliği kullanmak için iterasyon sayısını arttıralım. Aşağıdaki kodda modelin eğitimini 150 iterasyon boyunca (<code>num_boost_round</code> değeri) sürdürüyoruz. Ancak 25 iterasyon (<code>early_stopping_rounds</code> değeri) boyunca iyileşme sağlayamazsak, modelin eğitilmesini durdurup en iyi sonucu veren iterasyonu kullanacağız. Burada sonuçların bu noktadan sonra tekrar iyileşmeyeceğini varsayıyoruz. Aşırı uyum gibi nedenlerle, bu varsayımın geçerli bir varsayım olduğunu düşünebiliriz.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Değerlendirme veri kümesini oluşturuyoruz.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>lgb_eval <span class="op">=</span> lgb.Dataset(data<span class="op">=</span>df_test, label<span class="op">=</span>y_test, reference<span class="op">=</span>lgb_train,  free_raw_data<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Eğitim parametrelerini belirleyelim</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'task'</span>: <span class="st">'train'</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'boosting_type'</span>: <span class="st">'gbdt'</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'objective'</span>: <span class="st">'binary'</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'metric'</span>: <span class="st">'auc'</span>,</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'num_leaves'</span>: <span class="dv">31</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'learning_rate'</span>: <span class="fl">0.05</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'verbose'</span>: <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğitim...'</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Modeli eğitelim</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Bu sefer değerlendirme veri kümesini de tanıtıyoruz.</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>evals_result<span class="op">=</span>{}</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>gbm <span class="op">=</span> lgb.train(params,</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>                lgb_train,</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>                valid_sets <span class="op">=</span> lgb_eval,</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>                categorical_feature <span class="op">=</span> kategorik_indeks,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>                num_boost_round<span class="op">=</span> <span class="dv">150</span>,</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>                early_stopping_rounds<span class="op">=</span> <span class="dv">25</span>,</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>                evals_result<span class="op">=</span>evals_result)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğitim bitti...'</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Tahmin ve değerlendirme</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> gbm.predict(df_test, num_iteration<span class="op">=</span>gbm.best_iteration)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'En iyi sonucu veren iterasyon: '</span>, gbm.best_iteration)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğri altı alan değeri:'</span>, roc_auc_score(y_test, y_pred))</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'İsabetlilik değeri:'</span>, accuracy_score(y_test, ( y_pred<span class="op">&gt;=</span> <span class="fl">0.5</span>)<span class="op">*</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eğitim...
+[1] valid_0's auc: 0.78742
+Training until validation scores don't improve for 25 rounds.
+[2] valid_0's auc: 0.789475
+[3] valid_0's auc: 0.789526
+[4] valid_0's auc: 0.789663
+[5] valid_0's auc: 0.789849
+[6] valid_0's auc: 0.789768
+[7] valid_0's auc: 0.789819
+[8] valid_0's auc: 0.789839
+[9] valid_0's auc: 0.789914
+[10]    valid_0's auc: 0.797747
+[11]    valid_0's auc: 0.797924
+[12]    valid_0's auc: 0.797741
+[13]    valid_0's auc: 0.797905
+[14]    valid_0's auc: 0.797997
+[15]    valid_0's auc: 0.79871
+[16]    valid_0's auc: 0.798828
+[17]    valid_0's auc: 0.799208
+[18]    valid_0's auc: 0.800333
+[19]    valid_0's auc: 0.800382
+[20]    valid_0's auc: 0.800398
+[21]    valid_0's auc: 0.800523
+[22]    valid_0's auc: 0.800968
+[23]    valid_0's auc: 0.80091
+[24]    valid_0's auc: 0.800688
+[25]    valid_0's auc: 0.800484
+[26]    valid_0's auc: 0.80053
+[27]    valid_0's auc: 0.80241
+[28]    valid_0's auc: 0.803091
+[29]    valid_0's auc: 0.803029
+[30]    valid_0's auc: 0.802915
+[31]    valid_0's auc: 0.803011
+[32]    valid_0's auc: 0.802773
+[33]    valid_0's auc: 0.802956
+[34]    valid_0's auc: 0.803421
+[35]    valid_0's auc: 0.803552
+[36]    valid_0's auc: 0.803796
+[37]    valid_0's auc: 0.804098
+[38]    valid_0's auc: 0.804464
+[39]    valid_0's auc: 0.805213
+[40]    valid_0's auc: 0.805624
+[41]    valid_0's auc: 0.805729
+[42]    valid_0's auc: 0.806006
+[43]    valid_0's auc: 0.806238
+[44]    valid_0's auc: 0.806333
+[45]    valid_0's auc: 0.806415
+[46]    valid_0's auc: 0.806387
+[47]    valid_0's auc: 0.806478
+[48]    valid_0's auc: 0.806487
+[49]    valid_0's auc: 0.80655
+[50]    valid_0's auc: 0.806739
+[51]    valid_0's auc: 0.806779
+[52]    valid_0's auc: 0.80684
+[53]    valid_0's auc: 0.806934
+[54]    valid_0's auc: 0.807166
+[55]    valid_0's auc: 0.807061
+[56]    valid_0's auc: 0.806932
+[57]    valid_0's auc: 0.806948
+[58]    valid_0's auc: 0.807069
+[59]    valid_0's auc: 0.807448
+[60]    valid_0's auc: 0.80764
+[61]    valid_0's auc: 0.807637
+[62]    valid_0's auc: 0.807189
+[63]    valid_0's auc: 0.807577
+[64]    valid_0's auc: 0.807447
+[65]    valid_0's auc: 0.807197
+[66]    valid_0's auc: 0.807345
+[67]    valid_0's auc: 0.807731
+[68]    valid_0's auc: 0.80744
+[69]    valid_0's auc: 0.807468
+[70]    valid_0's auc: 0.80767
+[71]    valid_0's auc: 0.80748
+[72]    valid_0's auc: 0.807401
+[73]    valid_0's auc: 0.807318
+[74]    valid_0's auc: 0.807318
+[75]    valid_0's auc: 0.807065
+[76]    valid_0's auc: 0.807099
+[77]    valid_0's auc: 0.807325
+[78]    valid_0's auc: 0.807164
+[79]    valid_0's auc: 0.807235
+[80]    valid_0's auc: 0.807182
+[81]    valid_0's auc: 0.807137
+[82]    valid_0's auc: 0.806981
+[83]    valid_0's auc: 0.806606
+[84]    valid_0's auc: 0.806676
+[85]    valid_0's auc: 0.806778
+[86]    valid_0's auc: 0.806717
+[87]    valid_0's auc: 0.806822
+[88]    valid_0's auc: 0.806925
+[89]    valid_0's auc: 0.806777
+[90]    valid_0's auc: 0.806597
+[91]    valid_0's auc: 0.806535
+[92]    valid_0's auc: 0.806461
+Early stopping, best iteration is:
+[67]    valid_0's auc: 0.807731
+Eğitim bitti...
+En iyi sonucu veren iterasyon:  67
+Eğri altı alan değeri: 0.807731053993
+İsabetlilik değeri: 0.900056648054</code></pre>
+</div>
+</div>
+<p>67 numaralı iterasyonda en iyi sonucu elde ettik. 25 iterasyon boyunca daha iyi bir sonuç elde edemediğimiz için 92 numaralı iterasyondan sonra modeli eğitmeyi durdurduk.</p>
+<p>Modelle ilgili çeşitli başarı ölçütlerini ve tahmin amacıyla kullandığımız özniteliklerin önemlerini çizdirmek için de fonksiyonlar içeriyor. <code>plot_metric</code> ile modelde kullandığınız başarı ölçütlerinin grafiğini çizdirmeniz mümkün.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğri altı alan...'</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> lgb.plot_metric(evals_result, metric<span class="op">=</span><span class="st">'auc'</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'Eğri Altı Alanın İterasyona Göre Değişimi'</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'İterasyon'</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Eğri Altı Alan Değeri'</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>ax.legend_.remove()</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eğri altı alan...</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Şekle göre ilk 20 iterasyonda başarının ciddi şekilde arttığı görülüyor. 40 numaralı iterasyondan sonra sonuçlardaki iyileşme daha az. 67 numaralı iterasyondan sonra ise sonuçlar kötüleşmeye başlamış (aşırı uyum).</p>
+<p><code>scikit-learn</code> üzerinde olduğu gibi <code>LightGBM</code> de özniteliklerin önemini görmemizi sağlayan bir fonksiyon içeriyor. <code>plot_importance</code> ile modelin, istediğiniz sayıda en önemli özniteliğini ağırlıklarıyla birlikte şekle dökebilirsiniz.</p>
+<p>Aşağıda 10 öznitelik için (ve en iyi sonucu aldığımız iterasyondaki) önem grafiğini görebiliriz.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> lgb.plot_importance(gbm, max_num_features<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">''</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">'Özniteliklerin Önemi'</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">'Öznitelikler'</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p><code>euribor_faizi</code>,<code>yaş</code> ve <code>kampanya</code> önemi yüksek, yani kampanyaya cevabı belirleyen, özniteliklerden.</p>
+</section>
+<section id="eksik-veri-ile-çalışma" class="level1">
+<h1>Eksik veri ile çalışma</h1>
+<p><code>LightGBM</code>, <code>scikit-learn</code> paketinin aksine eksik değerlerle çalışmaya da izin veriyor. Örnek olarak <code>önceki_iletişimden_sonra_geçen_gün</code> değeri 999 olan müşterilerin bu değerini <code>NaN</code> yapalım.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri kümelerinde eksik değerler oluşturuyoruz.</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>df_train[<span class="st">'önceki_iletişimden_sonra_geçen_gün'</span>].replace(<span class="dv">999</span>, np.nan, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>df_test[<span class="st">'önceki_iletişimden_sonra_geçen_gün'</span>].replace(<span class="dv">999</span>, np.nan, inplace <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_train.isnull().<span class="bu">sum</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>yaş                                       0
+iş                                        0
+medeni_durum                              0
+eğitim                                    0
+gecikme                                   0
+ev                                        0
+borç                                      0
+iletişim                                  0
+ay                                        0
+haftanın_günü                             0
+kampanya                                  0
+önceki_iletişimden_sonra_geçen_gün    27753
+iletişim_sayısı                           0
+iletişim_sonucu                           0
+işsizlik                                  0
+tüketici_fiyat_endeksi                    0
+tüketici_güven_endeksi                    0
+euribor_faizi                             0
+çalışan_sayısı                            0
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Gördüğümüz gibi artık veri setinde eksik değerler de var. Modeli eğitip sonuçları alalım.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Veri kümesi oluşturalım.</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>lgb_train <span class="op">=</span> lgb.Dataset(data<span class="op">=</span>df_train, label<span class="op">=</span>y_train,  free_raw_data<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Değerlendirme veri kümesini oluşturuyoruz.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>lgb_eval <span class="op">=</span> lgb.Dataset(data<span class="op">=</span>df_test, label<span class="op">=</span>y_test, reference<span class="op">=</span>lgb_train,  free_raw_data<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Eğitim parametrelerini belirleyelim</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> {</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'task'</span>: <span class="st">'train'</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">'boosting_type'</span>: <span class="st">'gbdt'</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'objective'</span>: <span class="st">'binary'</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'metric'</span>: <span class="st">'auc'</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'num_leaves'</span>: <span class="dv">31</span>,</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">'learning_rate'</span>: <span class="fl">0.05</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'verbose'</span>: <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğitim...'</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Modeli eğitelim</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>evals_result<span class="op">=</span>{}</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>gbm <span class="op">=</span> lgb.train(params,</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>                lgb_train,</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>                valid_sets <span class="op">=</span> lgb_eval,</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>                categorical_feature <span class="op">=</span> kategorik_indeks,</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>                num_boost_round<span class="op">=</span> <span class="dv">150</span>,</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a>                early_stopping_rounds<span class="op">=</span> <span class="dv">25</span>,</span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>                evals_result<span class="op">=</span>evals_result)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğitim bitti...'</span>)</span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Tahmin ve değerlendirme</span></span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> gbm.predict(df_test, num_iteration<span class="op">=</span>gbm.best_iteration)</span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-32"><a href="#cb22-32" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'En iyi sonucu veren iterasyon: '</span>, gbm.best_iteration)</span>
+<span id="cb22-33"><a href="#cb22-33" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Eğri altı alan değeri:'</span>, roc_auc_score(y_test, y_pred))</span>
+<span id="cb22-34"><a href="#cb22-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'İsabetlilik değeri:'</span>, accuracy_score(y_test, ( y_pred<span class="op">&gt;=</span> <span class="fl">0.5</span>)<span class="op">*</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Eğitim...
+[1] valid_0's auc: 0.78742
+Training until validation scores don't improve for 25 rounds.
+[2] valid_0's auc: 0.789475
+[3] valid_0's auc: 0.789526
+[4] valid_0's auc: 0.789663
+[5] valid_0's auc: 0.789849
+[6] valid_0's auc: 0.789768
+[7] valid_0's auc: 0.789819
+[8] valid_0's auc: 0.789839
+[9] valid_0's auc: 0.789914
+[10]    valid_0's auc: 0.797747
+[11]    valid_0's auc: 0.797924
+[12]    valid_0's auc: 0.797677
+[13]    valid_0's auc: 0.798105
+[14]    valid_0's auc: 0.798295
+[15]    valid_0's auc: 0.798434
+[16]    valid_0's auc: 0.799106
+[17]    valid_0's auc: 0.79919
+[18]    valid_0's auc: 0.799513
+[19]    valid_0's auc: 0.800609
+[20]    valid_0's auc: 0.800532
+[21]    valid_0's auc: 0.800621
+[22]    valid_0's auc: 0.801409
+[23]    valid_0's auc: 0.801717
+[24]    valid_0's auc: 0.801748
+[25]    valid_0's auc: 0.801865
+[26]    valid_0's auc: 0.803003
+[27]    valid_0's auc: 0.803296
+[28]    valid_0's auc: 0.803565
+[29]    valid_0's auc: 0.803508
+[30]    valid_0's auc: 0.803256
+[31]    valid_0's auc: 0.803135
+[32]    valid_0's auc: 0.803365
+[33]    valid_0's auc: 0.80334
+[34]    valid_0's auc: 0.803729
+[35]    valid_0's auc: 0.803753
+[36]    valid_0's auc: 0.804338
+[37]    valid_0's auc: 0.804594
+[38]    valid_0's auc: 0.805324
+[39]    valid_0's auc: 0.805672
+[40]    valid_0's auc: 0.806077
+[41]    valid_0's auc: 0.806452
+[42]    valid_0's auc: 0.806624
+[43]    valid_0's auc: 0.806568
+[44]    valid_0's auc: 0.806763
+[45]    valid_0's auc: 0.806802
+[46]    valid_0's auc: 0.806816
+[47]    valid_0's auc: 0.806992
+[48]    valid_0's auc: 0.806969
+[49]    valid_0's auc: 0.806885
+[50]    valid_0's auc: 0.806845
+[51]    valid_0's auc: 0.807258
+[52]    valid_0's auc: 0.807419
+[53]    valid_0's auc: 0.807595
+[54]    valid_0's auc: 0.807708
+[55]    valid_0's auc: 0.807837
+[56]    valid_0's auc: 0.807571
+[57]    valid_0's auc: 0.807663
+[58]    valid_0's auc: 0.808115
+[59]    valid_0's auc: 0.807808
+[60]    valid_0's auc: 0.807867
+[61]    valid_0's auc: 0.808091
+[62]    valid_0's auc: 0.808112
+[63]    valid_0's auc: 0.808062
+[64]    valid_0's auc: 0.807787
+[65]    valid_0's auc: 0.807958
+[66]    valid_0's auc: 0.807626
+[67]    valid_0's auc: 0.807364
+[68]    valid_0's auc: 0.807993
+[69]    valid_0's auc: 0.807935
+[70]    valid_0's auc: 0.807958
+[71]    valid_0's auc: 0.807693
+[72]    valid_0's auc: 0.807753
+[73]    valid_0's auc: 0.807701
+[74]    valid_0's auc: 0.80765
+[75]    valid_0's auc: 0.807728
+[76]    valid_0's auc: 0.807678
+[77]    valid_0's auc: 0.807654
+[78]    valid_0's auc: 0.8077
+[79]    valid_0's auc: 0.807778
+[80]    valid_0's auc: 0.807718
+[81]    valid_0's auc: 0.80772
+[82]    valid_0's auc: 0.807316
+[83]    valid_0's auc: 0.807212
+Early stopping, best iteration is:
+[58]    valid_0's auc: 0.808115
+Eğitim bitti...
+En iyi sonucu veren iterasyon:  58
+Eğri altı alan değeri: 0.808115206918
+İsabetlilik değeri: 0.9005422028</code></pre>
+</div>
+</div>
+<p>Gördüğümüz gibi eksik değerlerle yapılan tahminler biraz daha iyi sonuçlar verdi. Ancak her zaman bu şekilde olacağının bir garantisi yok. Hangi modeli kullanacağımızı belirlemek için birden fazla alternatifi çarpraz doğrulama ve istatistik yöntemleriyle test etmemiz gerekecektir.</p>
+<p><code>LightGBM</code> veri analitiği konusunda kullanabileceğiniz bir çok aracı içeren bir paket. Ancak <code>scikit-learn</code> gibi uçtan uca bir çözüm sunmuyor. Veri işleme ve model sonuçlarını değerlendirme gibi alanlarda <code>scikit-learn</code> altındaki modülleri kullanmak durumunda kaldık. Bu noktada, <code>LightGBM</code> paketinin bir yapay öğrenme kütüphanesi olmadığını ve gradient boosting yöntemine dayanan bir kütüphane olduğunu hatırlatalım.</p>
+<p>Bu yazının Jupyter Notebook dosyasına <a href="https://github.com/sibirbil/VeriDefteri">Github</a> dizinimizden erişebilirsiniz.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Egemen İmre">
+<meta name="dcterms.date" content="2019-03-01">
+
+<title>Veri Defteri - Bilimsel Programlamaya Kolay Başlangıç - 3</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bilimsel Programlamaya Kolay Başlangıç - 3</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Bilimsel Programlama</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Egemen İmre </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 1, 2019</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Bilimsel Programlama’ya Kolay Başlangıç serisinin <a href="https://www.veridefteri.com/2018/08/29/bilimsel-programlamaya-kolay-baslangic-1/">ilk yazısında</a> Hazırlık, Hesaplama ve Sonuçları Görselleştirme adımlarından bahsetmiş ve bunları serbest düşüş problemine uygulamıştık. <a href="http://www.veridefteri.com/2018/09/03/bilimsel-programlamaya-kolay-baslangic-2/">İkinci yazıda</a> ise Hesaplama adımından sonra Veri/Hata Analizi adımını eklemiş ve eğik atış problemini Euler sayısal metodu ile de hesaplayarak hatamızı incelemiştik. Lakin tüm bunları Python’un kendi matematik kütüphanesi olan <code>math</code> ile gerçekleştirdik.</p>
+<p>Serinin üçüncü yazısında ise <code>math</code>’a oranla (genellikle) daha hızlı ve çok daha yetenekli olan <code>numpy</code> ve sonrasında da bunun üstüne bir kat daha çıkarak <code>scipy</code> kütüphanelerine terfi edeceğiz ve kolay yoldan bir ikinci derece diferansiyel denklem çözeceğiz. Bunun için Eğik Atış problemi yerine, nonlineer bir problem olan “iki cisim problemini”, yani Dünya’nın çevresindeki uyduların dinamiğini kullanacağız.</p>
+<p>İki cisim problemi en genel haliyle kütle çekiminden kaynaklanan ivmeden ibaret:</p>
+<p><span class="math display">\[\ddot{\vec{r}} = - \frac{\mu}{r^3} \vec{r} \]</span></p>
+<p>Burada <span class="math inline">\(\vec{r}\)</span> konum vektörünü, <span class="math inline">\(r\)</span> konum vektörünün büyüklüğünü ve $ $ konum vektörünün zamana göre ikinci türevini, ya da daha bilindik adıyla <em>ivmeyi</em> gösteriyor. <span class="math inline">\(\mu\)</span> ise pek tanıdık değil, ama aslında Dünya’nın kütleçekim sabitini gösteriyor. Örneğin Ay’ın ya da bir uydunun, Dünya’nın çevresinde dönerken gelecekteki konum ve hızını bulabilmek için, başlangıçtaki konum ve hızı bu ivmenin integralini alarak ilerleteceğiz. İntegral lafını duyunca tüyleriniz diken diken olduysa korkmayın; integrali biz almayacağız, <em>bilgisayar</em> alacak.</p>
+<p>Matematiğe gelmeden önce, işin kalbindeki veri yapısı olan <code>ZamanKonumHız</code> sınıfının <code>numpy</code> kullanan yeni sürümüne bakalım:</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sonradan gerekecek kütüphaneleri çağır</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.animation <span class="im">as</span> animation</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Kütleçekimi Sabiti [m^3/s^2]</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>muDünya <span class="op">=</span> <span class="fl">398600.5</span><span class="op">*</span><span class="fl">1E9</span>    </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ZamanKonumHız:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   <span class="co">"""</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Zaman, 2D konum ve 2D hız değerlerini içeren vektör sınıfı</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">   """</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>   t <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   r <span class="op">=</span> np.zeros(<span class="dv">2</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>   v <span class="op">=</span> np.zeros(<span class="dv">2</span>)</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, t0, rx0, ry0, vx0, vy0):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">       Zaman, konum ve hızı ilk değerleriyle başlatır.</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">       </span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">       Arguments:</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">           t0  {float} -- zaman (s)</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">           rx0 {float} -- x ekseninde konum (m)</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">           ry0 {float} -- y ekseninde konum (m)</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">           vx0 {float} -- x ekseninde hız (m/s)</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">           vy0 {float} -- y ekseninde hız (m/s)</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">      """</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>       <span class="va">self</span>.t <span class="op">=</span> t0      </span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>       <span class="va">self</span>.r <span class="op">=</span> np.array([rx0, ry0])</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>       <span class="va">self</span>.v <span class="op">=</span> np.array([vx0, vy0])</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> konumBüyüklüğü(<span class="va">self</span>):</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""Konum vektörünün büyüklüğünü döndürür</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="co">               </span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns:</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="co">           float -- Konum vektörünün büyüklüğü ($m$)</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="co">       """</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> np.linalg.norm(<span class="va">self</span>.r)</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> hızBüyüklüğü(<span class="va">self</span>):</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""Hız vektörünün büyüklüğünü döndürür</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="co">        Returns:</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">           float -- Hız vektörünün büyüklüğü ($m^2/s^2$)</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> np.linalg.norm(<span class="va">self</span>.v)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> spesifikEnerji(<span class="va">self</span>):</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="co">       Spesifik enerjiyi hesaplar.</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="co">       Spesifik enerji birim kütleye düşen enerji olarak tanımlanır</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="co">       $e =  </span><span class="ch">\f</span><span class="co">rac{1}{2} v^2 - </span><span class="ch">\f</span><span class="co">rac{\mu}{r} $</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="co">       </span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="co">       Returns:</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co">           float -- spesifik enerji ($m^2/s^2$)</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="co">       """</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> <span class="fl">0.5</span><span class="op">*</span><span class="va">self</span>.v.dot(<span class="va">self</span>.v) <span class="op">-</span> muDünya<span class="op">/</span><span class="va">self</span>.konumBüyüklüğü()</span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>   <span class="kw">def</span> ivme (<span class="va">self</span>, mu<span class="op">=</span>muDünya):</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>       <span class="co">"""</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="co">       İvmeyi hesaplar</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co">       </span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co">       İki cisim problemine göre bu konum ve hıza ait ivmeyi hesaplar.</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="co">       </span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="co">       Keyword Arguments:</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="co">           mu {float} -- Kütleçekimi Sabiti (m^3/s^2) (default: {muDünya})</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="co">       </span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co">       Returns:</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="co">           {ndarray} -- İvme vektörü ($m/s^2$)</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="co">       """</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>       <span class="cf">return</span> <span class="op">-</span>mu<span class="op">/</span>np.power(<span class="va">self</span>.konumBüyüklüğü(), <span class="dv">3</span>) <span class="op">*</span> <span class="va">self</span>.r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Öncelikle, eğik atış problemindeki sınıfa göre ne kadar az şeyin değiştiğine dikkatinizi çekmek isterim. İyi bir sınıf tasarımı sayesinde, çok daha başka bir problemde bile eski veri yapılarımızı kullanmayı başardık.</p>
+<p><code>numpy</code>’a geçişte konum ve hız vektörleri olan <code>r</code> ve <code>v</code>’yi minik ikili array’ler haline getirdik. Bu durum okunaklılığı kaçınılmaz olarak azaltıyor (<code>ry</code> mi daha açık, <code>r[1]</code> mi?), ama bize <code>numpy</code>’ın kuvvetli vektör işlemlerinin kapılarını açtığı için sonuçta çok faydalı.</p>
+<p>Bununla birlikte, <code>__init__</code> vektörü hala <code>t0, rx0, ry0, vx0, vy0</code> değişkenlerini tek tek girmemizi istiyor. Bunları neden vektör olarak vermiyoruz diye merak edebilirsiniz. Bunu yapabiliriz, ama o zaman girdideki her bir vektörün iki elemanlı olduğunu kontrol etmemiz, sonra da ikiden fazla ya da eksik eleman çıkarsa ne yapacağımıza karar vermemiz gerekli. Bu nedenle, daha kodu yazarken, bu tür girdilerde ve arayüzlerde yapılabilecek hataları öngörüp buna göre önlem almak orta vadede sizi (ve kodlarınızı kullanacak başka kişileri) hatadan korur. Bu örnekte, bu sınıfı kullanacak kişileri doğru sayıda veri vermeye zorlayarak sınıfın hatalı şekilde başlatılmasının önüne geçtik.</p>
+<p>Bunun yanı sıra vektör büyüklüklerini hesaplama işini de <code>numpy</code>’ın <code>linalg.norm</code> metoduna emanet ettik. Böylece, örneğin bu sınıfı başka bir zaman 3 boyut için kullanmak istediğimizde bu kısımları değiştirmemiz gerekmeyecek, şimdiden hazırız.</p>
+<p>Bu arada yorumları daha detaylı yazmaya başladık ve parametrelerin birimlerini de özellikle belirttik. Birimler ve arayüzler mühim, 1999 yılında Mars Climate Orbiter tam da bu yüzden <a href="https://www.wired.com/2010/11/1110mars-climate-observer-report/">kaybedildi</a>!</p>
+<p>Eklediğimiz <code>ivme</code> metodu da dikkatli gözlerden kaçmamıştır. Böylece ivme hesaplamasını <code>ZamanKonumHız</code> sınıfının bir yeteneği olarak tanımladık.</p>
+<p>Son olarak <code>spesifikEnerji</code> adlı bir metod da ekledik. Spesifik enerji birim kütleye düşen enerji olarak tanımlanabilir:<br>
+<span class="math inline">\(e = \frac{E}{m} = \frac{1}{2} v^2 - \frac{\mu}{r}\)</span></p>
+<p>Spesifik enerjinin bizim için önemi şurada: <em>İki cisim probleminde enerjinin korunup korunmadığına bakarak hatamızı kontrol edebiliriz</em>. Zira fizik bize enerjinin korunması gerektiğini söylüyor, enerji korunumundan ne kadar uzaklaşırsak yaptığımız hata da o kadar artmış demektir. Bunu da birazdan kullanacağız.</p>
+<p>Bu sınıfı uzun uzadıya anlattığım için şimdiden sıkılmaya başlayan arkadaşlara not: Genellikle bilimsel programlamada bu tarz temel veri yapılarını içeren sınıflar çok kullanılır. Bunları ne kadar özenle hazırlar ve yetenekler kazandırırsanız ileride hayatınız o kadar kolaylaşır.</p>
+<p>Hazırlık kısmının diğer bileşenleri ise geçen yazıdan tanıdık gelecektir:</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Kütleçekimi Sabiti [m^3/s^2]</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>muDünya <span class="op">=</span> <span class="fl">398600.5</span><span class="op">*</span><span class="fl">1E9</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç zamanı</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># bitiş zamanı (sn)</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>tSon <span class="op">=</span> <span class="dv">6000</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># adım büyüklüğü (sn)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>tAdım <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç konum ve hız</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>pvt0 <span class="op">=</span> ZamanKonumHız(t0, <span class="dv">0</span>, <span class="dv">7000</span><span class="op">*</span><span class="fl">1E3</span>, <span class="fl">7.5</span><span class="op">*</span><span class="fl">1E3</span>, <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>İşin matematik kısmını bu örnekte fonkisyonlara toplayacağız. Bu tür fonksiyonlar ve bu fonksiyonları çağıran daha da başka fonksiyonlar <a href="https://en.0wikipedia.org/wiki/Matryoshka_doll">Matruşka Bebekleri</a> gibi iç içe geçerek kodun çok daha derli toplu ve daha önemlisi <em>yeniden kullanılabilir</em> olmasını sağlıyorlar. Aynı kodları defalarca yazmak hem zahmetli hem de hata bulma ve yeni işlev eklemeyi son derece zorlaştırıyor.</p>
+<p>Bir sonraki adımda, bir önceki yazıda değndiğimiz temel fonksiyonları da <code>numpy</code> ile tekrar yazacağız. Yorumlar daha detaylı hale geldi, artık veri tipi bile yazıyor ama temel yapı aynı.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eulerZamanKonumHız(dt, pvt, mu<span class="op">=</span>muDünya):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Verilen bir dt adım büyüklüğü kadar zaman konum ve hızı Euler Metodu ile ilerletir.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Arguments:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">        dt {float} -- adım büyüklüğü (s)</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">        pvt {ZamanKonumHız} -- t zamanında zaman konum hız</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">        mu {float} -- Kütleçekimi Sabiti (m^3/s^2) (default: {muDünya})</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">        {ZamanKonumHız} -- t+dt zamanında zaman konum hız</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    a <span class="op">=</span> pvt.ivme(mu)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    tYeni  <span class="op">=</span> pvt.t <span class="op">+</span> dt</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    rYeni  <span class="op">=</span> pvt.r <span class="op">+</span> pvt.v <span class="op">*</span> dt</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    vYeni  <span class="op">=</span> pvt.v <span class="op">+</span> a <span class="op">*</span> dt</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ZamanKonumHız(tYeni, rYeni[<span class="dv">0</span>], rYeni[<span class="dv">1</span>], vYeni[<span class="dv">0</span>], vYeni[<span class="dv">1</span>])</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hesapDöngüsüEuler(pvt0, tAdım, tSon):</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">    Euler sayısal integrasyon metoduyla konum ve hız değerleri listesini hesaplar.</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">    Arguments:</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">        tAdım {float} -- adım büyüklüğü (s)</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">        pvt0 {ZamanKonumHız} -- başlangıç zamanında zaman konum hız</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">        tSon {float} -- bitiş zamanı (s)</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">        list {ZamanKonumHız} --  her bir zaman adımı için zaman konum hız değerlerini içeren liste</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ilk değerleri doldur</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    numPvtList <span class="op">=</span> [pvt0]</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    t <span class="op">=</span> numPvtList[<span class="dv">0</span>].t <span class="op">+</span> tAdım</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> t<span class="op">&lt;=</span>tSon:</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>        pvtNum <span class="op">=</span> eulerZamanKonumHız(tAdım, numPvtList[<span class="op">-</span><span class="dv">1</span>])</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>        numPvtList.append( pvtNum )</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        t <span class="op">+=</span> tAdım</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (numPvtList)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>eulerZamanKonumHız</code> adlı yapı içinde iki cisim problemine ait ivmeyi hesaplıyoruz. Sonra da konumu bilinen en son hızı sabit kabul ederek, hızı da hesaplanan ivmeyi sabit kabul ederek ilerletiyoruz. Burada yaptığımız şey aslında <em>kısa bir zaman adımı için</em> integral almak, ama bunu <em>sayısal</em> olarak yaptığımız için son derece kolay şekilde hallediyoruz. Tabii ödediğimiz bedel “tam olarak doğru ve hatasız” değil, ancak yaklaşık bir hesaplama yapmak. <code>hesapDöngüsüEuler</code> adımı içinde ise bu küçük zaman adımlarını bir döngü içinde defalarca hesaplayarak <code>tSon</code> değerine kadar tüm konum ve hız çiftlerini elde ediyoruz.</p>
+<p>Bütün matematiği yukarıda anlatılan fonkisyonlara paketlediğimiz için asıl işi yapacak kod sadece ve sadece 1 (bir) satıra indi:</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Euler sayısal integrasyon verisini hesaplayan döngüyü çalıştır</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>eulPvtList <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdım, tSon)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bu çok klasik bir “işi fonksiyonda yap, <code>return</code> ile sonucu döndür ve bu sonucu bir değişkene ata” diyebileceğim (muhtemelen birilerinin çoktan bir <em>pattern</em> adı ile tanımladığı) bir yapı. Başkalarının kodlarını incelerken sıkça karşınıza çıkacak, sonra siz de bol bol kullanacaksınız.</p>
+<p>Konum ve hız grafiklerine bakalım:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># konum grafiği </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.r[<span class="dv">0</span>] <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList], [pvt.r[<span class="dv">1</span>] <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Konum"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x konum (m)"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'y konum (m)'</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.grid(b<span class="op">=</span><span class="va">True</span>, which<span class="op">=</span><span class="st">'major'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># hız grafiği</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.v[<span class="dv">0</span>] <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList], [pvt.v[<span class="dv">1</span>] <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Hız"</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"x hız (m/s)"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"y hız (m/s)"</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.axes().set_aspect(<span class="st">'equal'</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>plt.grid(b<span class="op">=</span><span class="va">True</span>, which<span class="op">=</span><span class="st">'major'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Grafikleri oluşturduğumuz kod <a href="http://www.veridefteri.com/2018/09/03/bilimsel-programlamaya-kolay-baslangic-2/">bir önceki yazıdakinden</a> pek farklı değil, ama eklediğimiz iki satırla eksenlerin ölçeklerini birbirine eşitlediğimize dikkat edin. Böylece daha gerçekçi bir fiziksel gösterim elde ettik.</p>
+<p>Grafiklere yakından bakınca bir tuhaflık göze çarpıyor: ilk grafikte “saat 12” konumundan başlayıp saat yönünde dönüyoruz, ama başladığımız yere geri dönemiyoruz. Aynı durum hız için de geçerli. Normalde iki cisim problemi <em>periyodik</em> bir problem, enerji korunuyor ve bu nedenle de -gördüğümüz grafiklerin aksine- başladığımız konum ve hıza geri dönmeyi bekliyoruz. Diğer bir deyişle, potansiyel ve kinetik enerjinin toplamının değişmemesi gerekiyor. Bizim çözümümüzde enerjinin korunup korunmadığını test etmek için, başlangıç konum ve hızından hesapladığımız “referans” enerji değerinden, her yeni zaman için ne kadar sapıldığını kontrol etmemiz yeterli:</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># enerji grafikleri</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#referans değer - tüm farklar bu değere göre hesaplanacak</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>spEnerjiRef <span class="op">=</span> pvt0.spesifikEnerji()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Euler Spesifik Enerji Değişimi ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"zaman (s)"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r"spesifik enerji ($m^2/s^2$)"</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList], [pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Görünüşe göre spesifik enerji lineer olarak artıyor ve bu artış duracakmış gibi de görünmüyor. Anlaşılan o ki, Euler ilerleticisi <em>enerjiyi korumuyor</em>. Adım büyüklüğünü azaltırsak hatanın da azalacağından daha önce bahsetmiştik. O halde 1, 5 ve 10 saniye için duruma bir göz atalım:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># adım büyüklüğü (sn)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>tAdım5  <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>tAdım10 <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>tAdım1  <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Euler sayısal integrasyon verisini hesaplayan döngüyü çalıştır</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>eulPvtList5  <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdım5, tSon)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>eulPvtList10 <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdım10, tSon)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>eulPvtList1  <span class="op">=</span> hesapDöngüsüEuler(pvt0, tAdım1, tSon)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># enerji grafikleri</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Euler Spesifik Enerji Değişimi"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList1], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList1], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım1) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList5], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList5], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım5) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>plt.plot( [pvt.t <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList10], [np.<span class="bu">abs</span>(pvt.spesifikEnerji()<span class="op">-</span>spEnerjiRef) <span class="cf">for</span> pvt <span class="kw">in</span> eulPvtList10], label<span class="op">=</span><span class="st">"Euler ("</span> <span class="op">+</span> <span class="bu">str</span>(tAdım10) <span class="op">+</span> <span class="st">" s)"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Gerçekten de, adım büyüklüğü azaldıkça enerjideki artış yavaşlıyor. Yani adım büyüklüğünü ne kadar azaltırsak enerjinin korunumuna o oranda yaklaşıyoruz, haliyle konum ve hız hatamız da azalıyor. Teorik olarak, adım büyüklüğü sıfıra giderken enerji hatamızı da sıfırlayabiliriz! Gerçekte, başımıza dert olan kayan nokta hataları nedeniyle hatayı belli bir değerin altına indirmek mümkün değil.</p>
+<p>Bu da sayısal modellerin, neden gerçek matematiksel modellerin yerini almakta zorlanacağını bize anlatıyor - tam matematiksel modeli elde edilemeyen, diferansiyel denklemi çözülemeyen ağır problemleri tenzih ediyorum elbette. Zira Euler ya da Runge-Kutta gibi matematiksel modeller fiziksel gerçekliği değil, sadece <em>problemin fiziğini ifade eden diferansiyel denklemlerin çözümünü</em> modellemeye yarıyor. Enerjinin ya da momentumun korunumunu da modellemek için, bunun için özelleşmiş matematiksel modeller gerekiyor.</p>
+<p>İşin yazılım tarafına baktığınızda ise, bu tür testlerle modellerinizin doğruluğunu ve nasıl davrandığını, istediğiniz doğruluğa ulaşmak için adım büyüklüğünü nasıl seçmeniz gerektiğini kestirebilirsiniz. Ya da enerjinin korunumu en ufak sorunda bozulan hassas bir denge olduğu için, sayısal integrasyon algoritmanıza bir <em>modül testi</em> olarak yazabilirsiniz. İşler yeterince büyüdüğünde, yazılımınızın bir köşesinde bir şeyleri değiştirirken başka bir köşesinde bir şeyleri kırıp dökmek çok kolay olduğu için, bu tür testleri yazıp düzenli olarak çalıştırdığınızda yaptığınız hangi değişikliğin ortalığı karıştırdığını bulmak çok kolay olacaktır.</p>
+<p>Buraya kadar <code>numpy</code> kullanımına basit bir giriş yaptık. Daha ileri matematiksel yöntemler de var. Bunları <code>numpy</code> ile hazırlamak mümkün olsa da, <code>scipy</code> kütüphanesi daha geniş imkanlar sağlıyor. Bunları <a href="http://www.veridefteri.com/2019/03/02/bilimsel-programlamaya-kolay-baslangic-iv/">bir sonraki kısımda</a> göreceğiz.</p>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

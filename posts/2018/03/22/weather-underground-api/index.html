@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Birol Yüceoğlu">
+<meta name="dcterms.date" content="2018-03-22">
+
+<title>Veri Defteri - Weather Underground API</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Weather Underground API</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">veri setleri</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Birol Yüceoğlu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">March 22, 2018</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="weather-underground-api" class="level1">
+<h1>Weather Underground API</h1>
+<p>Önceki yazılarımızda <a href="http://www.veridefteri.com/2017/12/13/veri-defteri-ben-seviyor-cok/">Star Wars</a> ve <a href="http://www.veridefteri.com/2018/01/23/foursquare-api/">FourSquare</a> için uygulama ara yüzlerini (API, Application Programming Interface) kullanmayı görmüştük. API’ları kullanarak çeşitli kaynaktan verilere erişmek, bu verilerle uygulama geliştirmek mümkün. Özellikle hava durumu, sosyal medya ya da demografik veriler gibi kaynaklar, modellerinizde sadece iç kaynaklı verilerle açıklayamayacağınız değişiklikleri anlamanızı sağlayabileceği için yararlı.</p>
+<p>Bu yazıda da hava durumu ile ilgili hizmetler sunan <a href="https://www.wunderground.com/">Weather Underground</a> sitesinin API’ını kullanmayı öğreneceğiz. Hava durumunun satışlar ve ruh hali üzerine etkilerini araştıran bir çok makale var. Weather Underground, güncel hava durumunun yanında 3 ve 10 günlük tahminler ve (kısıtlı da olsa) geçmiş hava durumu verisine de sahip.</p>
+<p><a href="https://www.wunderground.com/weather/api/">Weather Underground</a> API’ını kullanmak için web sayfasından bir kullanıcı oluşturmak yeterli. Ancak ücretsiz olan <code>Developer</code> tipi hesap için günlük limit 500 sorgu, dakikalık limit ise 10 sorgu. Sorgu limitini arttırmak için ödeme yaparak farklı statüdeki kullanıcı hesapları alabilirsiniz.</p>
+<p>API bir çok programlama diliyle kullanılabiliyor. <a href="https://www.wunderground.com/weather/api/d/docs">API dokümantasyonu</a> çok açıklayıcı değil ancak <code>Twitter</code> ve <code>Foursquare</code> gibi API’ların aksine güçlü bir destek hizmetleri var ve sorularınız için kullanıcı forumlarını kullanabilirsiniz.</p>
+<p>Planlar ve kullanıcı limitlerini aşağıda görebilirsiniz.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Image</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>Image(<span class="st">'WU_API.png'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<p><img src="index_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Kullanıcınızı oluşturduktan sonra Weather Underground size bir kullanıcı anahtarı (key) sağlıyor. Bu anahtarı sorgu adreslerine eklemeniz gerekecek.</p>
+<p>İlk olarak, gerekli kütüphaneleri yükleyelim. Bu kütüphaneler API sorgusunun cevabını almak ve veriyi JSON formatına çevirmek için gerekli.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib.request <span class="im">as</span> request</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="hava-durumu" class="level1">
+<h1>Hava Durumu</h1>
+<p>Kullanıcı oluşturduktan sonra API anahtarını ve lokasyonu kullanarak ilk sorgumuzu yapalım. Veri formatı JSON, verideki anahtarları öğrenmek için dokümantasyonu kullanabilirsiniz.</p>
+<p>İlk sorguyu içeren aşağıdaki adreste</p>
+<ul>
+<li>‘xxxx’ benim gizlediğim anahtarımı,</li>
+<li><code>conditions</code> yaptığımız sorgu tipini (farklı sorgu tipleri de göreceğiz),</li>
+<li><code>Turkey/İstanbul</code> da sorgulamak istediğimiz yeri belirtiyor.</li>
+</ul>
+<p>Kısaca sorgu, İstanbul’un güncel hava durumunu sorguluyor. Sorgunun sonuna <code>json</code> şeklinde uzantı da eklememiz gerekiyor.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># xxxx yerine kendi anahtarınızı girmeniz gerekiyor.</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> request.urlopen(<span class="st">'http://api.wunderground.com/api/xxxx/conditions/q/Turkey/Istanbul.json'</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Aldığımız yanıtı JSON formatına çevirip, formatlıyoruz.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> f.read()</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>parsed_json <span class="op">=</span> json.loads(json_string)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json, indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "response": {
+        "version": "0.1",
+        "termsofService": "http://www.wunderground.com/weather/api/d/terms.html",
+        "features": {
+            "conditions": 1
+        }
+    },
+    "current_observation": {
+        "image": {
+            "url": "http://icons.wxug.com/graphics/wu2/logo_130x80.png",
+            "title": "Weather Underground",
+            "link": "http://www.wunderground.com"
+        },
+        "display_location": {
+            "full": "Istanbul, Turkey",
+            "city": "Istanbul",
+            "state": "34",
+            "state_name": "Turkey",
+            "country": "TU",
+            "country_iso3166": "TR",
+            "zip": "00000",
+            "magic": "124",
+            "wmo": "17060",
+            "latitude": "41.00999832",
+            "longitude": "28.95000076",
+            "elevation": "28.0"
+        },
+        "observation_location": {
+            "full": "Cihann\u00fcma, Be\u015fikta\u015f, ",
+            "city": "Cihann\u00fcma, Be\u015fikta\u015f",
+            "state": "",
+            "country": "TR",
+            "country_iso3166": "TR",
+            "latitude": "41.047535",
+            "longitude": "29.006390",
+            "elevation": "240 ft"
+        },
+        "estimated": {},
+        "station_id": "IBEIKTA6",
+        "observation_time": "Last Updated on March 20, 8:42 AM +03",
+        "observation_time_rfc822": "Tue, 20 Mar 2018 08:42:52 +0300",
+        "observation_epoch": "1521524572",
+        "local_time_rfc822": "Tue, 20 Mar 2018 08:43:43 +0300",
+        "local_epoch": "1521524623",
+        "local_tz_short": "+03",
+        "local_tz_long": "Europe/Istanbul",
+        "local_tz_offset": "+0300",
+        "weather": "Mostly Cloudy",
+        "temperature_string": "53.4 F (11.9 C)",
+        "temp_f": 53.4,
+        "temp_c": 11.9,
+        "relative_humidity": "81%",
+        "wind_string": "Calm",
+        "wind_dir": "WNW",
+        "wind_degrees": 293,
+        "wind_mph": 0.0,
+        "wind_gust_mph": 0,
+        "wind_kph": 0,
+        "wind_gust_kph": 0,
+        "pressure_mb": "1002",
+        "pressure_in": "29.59",
+        "pressure_trend": "-",
+        "dewpoint_string": "48 F (9 C)",
+        "dewpoint_f": 48,
+        "dewpoint_c": 9,
+        "heat_index_string": "NA",
+        "heat_index_f": "NA",
+        "heat_index_c": "NA",
+        "windchill_string": "NA",
+        "windchill_f": "NA",
+        "windchill_c": "NA",
+        "feelslike_string": "53.4 F (11.9 C)",
+        "feelslike_f": "53.4",
+        "feelslike_c": "11.9",
+        "visibility_mi": "6.0",
+        "visibility_km": "10.0",
+        "solarradiation": "--",
+        "UV": "-1",
+        "precip_1hr_string": "0.00 in ( 0 mm)",
+        "precip_1hr_in": "0.00",
+        "precip_1hr_metric": " 0",
+        "precip_today_string": "0.00 in (0 mm)",
+        "precip_today_in": "0.00",
+        "precip_today_metric": "0",
+        "icon": "mostlycloudy",
+        "icon_url": "http://icons.wxug.com/i/c/k/mostlycloudy.gif",
+        "forecast_url": "http://www.wunderground.com/global/stations/17060.html",
+        "history_url": "http://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=IBEIKTA6",
+        "ob_url": "http://www.wunderground.com/cgi-bin/findweather/getForecast?query=41.047535,29.006390",
+        "nowcast": ""
+    }
+}</code></pre>
+</div>
+</div>
+<p>Döndürülen veride aşağıdaki kalemler var:</p>
+<ul>
+<li><code>response</code>: Döndürülen cevabın durumunu burada bulabilirsiniz. Alacağınız hataları buradan kontrol edebilirsiniz.</li>
+<li><code>current_observation</code> şu anki hava durumu altında aşağıdaki bilgiler var:
+<ul>
+<li><code>display_location</code> ve <code>observation_location</code> hava durumu sorgusunun yapıldığı ve ölçümün alındığı yerin bilgilerini içeriyor.</li>
+<li>Sıcaklık, nem, rüzgar, basınç, buğulanma sıcaklığı, görüş, radyasyon, UV, yağış gibi hava durumu bilgileri de veriliyor.</li>
+</ul></li>
+</ul>
+</section>
+<section id="tahmin-10-günlük-tahmin" class="level1">
+<h1>Tahmin / 10 Günlük Tahmin</h1>
+<p>Hava durumu tahminlerine <code>forecast</code> sorgusuyla erişebiliriz. <code>forecast</code> yarım günlük tahminler şeklinde önümüzdeki üç günü tahmin ediyor. Daha uzun süreli tahmin için ise <code>forecast10day</code> sorgusunu kullanabilirsiniz. Hava durumu tahmini aynı zamanda <code>simpleforecast</code> anahtarının altında da bulunmakta. Buradaki veriler tablo formatına daha yakın.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> request.urlopen(<span class="st">'http://api.wunderground.com/api/xxxx/forecast/q/Turkey/Istanbul.json'</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> f.read()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>parsed_json <span class="op">=</span> json.loads(json_string)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Metin halindeki hava durumu tahmini'</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'forecast'</span>][<span class="st">'txt_forecast'</span>][<span class="st">'forecastday'</span>][<span class="dv">3</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Metin halindeki hava durumu tahmini
+{
+    "period": 3,
+    "icon": "nt_chancerain",
+    "icon_url": "http://icons.wxug.com/i/c/k/nt_chancerain.gif",
+    "title": "Wednesday Night",
+    "fcttext": "Partly cloudy skies early followed by increasing clouds with showers developing later at night. Low 47F. SW winds shifting to N at 10 to 15 mph. Chance of rain 40%.",
+    "fcttext_metric": "Partly cloudy skies early followed by increasing clouds with showers developing later at night. Low 8C. SW winds shifting to N at 15 to 25 km/h. Chance of rain 40%.",
+    "pop": "40"
+}</code></pre>
+</div>
+</div>
+<p>Şimdi bir de <code>simpleforecast</code> altındaki tahmine bakalım. Göreceğiniz gibi tahmin sıcaklık, yağış, rüzgar gibi konularda çeşitli veriler içeriyor.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Rakamlarla hava durumu tahmini'</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'forecast'</span>][<span class="st">'simpleforecast'</span>][<span class="st">'forecastday'</span>][<span class="dv">0</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rakamlarla hava durumu tahmini
+{
+    "date": {
+        "epoch": "1521561600",
+        "pretty": "7:00 PM +03 on March 20, 2018",
+        "day": 20,
+        "month": 3,
+        "year": 2018,
+        "yday": 78,
+        "hour": 19,
+        "min": "00",
+        "sec": 0,
+        "isdst": "0",
+        "monthname": "March",
+        "monthname_short": "Mar",
+        "weekday_short": "Tue",
+        "weekday": "Tuesday",
+        "ampm": "PM",
+        "tz_short": "+03",
+        "tz_long": "Europe/Istanbul"
+    },
+    "period": 1,
+    "high": {
+        "fahrenheit": "59",
+        "celsius": "15"
+    },
+    "low": {
+        "fahrenheit": "50",
+        "celsius": "10"
+    },
+    "conditions": "Chance of Rain",
+    "icon": "chancerain",
+    "icon_url": "http://icons.wxug.com/i/c/k/chancerain.gif",
+    "skyicon": "",
+    "pop": 30,
+    "qpf_allday": {
+        "in": 0.0,
+        "mm": 0
+    },
+    "qpf_day": {
+        "in": 0.0,
+        "mm": 0
+    },
+    "qpf_night": {
+        "in": 0.0,
+        "mm": 0
+    },
+    "snow_allday": {
+        "in": 0.0,
+        "cm": 0.0
+    },
+    "snow_day": {
+        "in": 0.0,
+        "cm": 0.0
+    },
+    "snow_night": {
+        "in": 0.0,
+        "cm": 0.0
+    },
+    "maxwind": {
+        "mph": 30,
+        "kph": 48,
+        "dir": "WSW",
+        "degrees": 245
+    },
+    "avewind": {
+        "mph": 21,
+        "kph": 34,
+        "dir": "WSW",
+        "degrees": 245
+    },
+    "avehumidity": 63,
+    "maxhumidity": 0,
+    "minhumidity": 0
+}</code></pre>
+</div>
+</div>
+</section>
+<section id="geçmiş-hava-durumu-verisi" class="level1">
+<h1>Geçmiş Hava Durumu Verisi</h1>
+<p>Geçmiş dataya <code>history</code> sorgusu ile erişmek mümkün. Örnek olarak Ataşehir’e yakın bir istasyonun verisini çekebiliriz. Bunun için iki parametreye ihtiyacımız var:</p>
+<ul>
+<li>Ölçümün yapıldığı yer bilgisi olarak kullanacağımız pws’nin (private weather station, kişisel ölçüm istasyonu) kodu (pws:IISTANBU81),</li>
+<li>Tarih bilgisi. Tarih bilgisini url’ye eklememiz gerekecek. 31 Aralık 2017 tarihindeki hava durumuna erişmek için sorgumuzda <code>history_20171231</code> değerini kullanacağız.</li>
+</ul>
+<p>Aşağıdaki sorgu o gün içindeki gözlemleri döndürüyor. Saat saat hava durumunu elde etsek de, yağış gibi veriler geçmiş veri kümelerinde bulunmuyor. Veri kümesi saat saat yapılan bütün gözlemleri içerdiğinden sadece ilk gözleme bakalım.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> request.urlopen(<span class="st">'http://api.wunderground.com/api/xxxx/history_20171231/q/pws:IISTANBU81.json'</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> f.read()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>parsed_json <span class="op">=</span> json.loads(json_string)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'history'</span>][<span class="st">'observations'</span>][<span class="dv">0</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "date": {
+        "pretty": "12:07 AM +03 on December 31, 2017",
+        "year": "2017",
+        "mon": "12",
+        "mday": "31",
+        "hour": "00",
+        "min": "07",
+        "tzname": "Europe/Istanbul"
+    },
+    "utcdate": {
+        "pretty": "9:07 PM GMT on December 30, 2017",
+        "year": "2017",
+        "mon": "12",
+        "mday": "30",
+        "hour": "21",
+        "min": "07",
+        "tzname": "UTC"
+    },
+    "tempm": "9.3",
+    "tempi": "48.7",
+    "dewptm": "5.5",
+    "dewpti": "41.9",
+    "hum": "77",
+    "wspdm": "-1608.8",
+    "wspdi": "-999.9",
+    "wgustm": "-1607.4",
+    "wgusti": "-999.0",
+    "wdird": "-9999",
+    "wdire": "North",
+    "pressurem": "1025.6",
+    "pressurei": "30.29",
+    "windchillm": "-999",
+    "windchilli": "-999",
+    "heatindexm": "-9999",
+    "heatindexi": "-9999",
+    "precip_ratem": "-2539.7",
+    "precip_ratei": "-99.99",
+    "precip_totalm": "-2539.7",
+    "precip_totali": "-99.99",
+    "solarradiation": "",
+    "UV": "",
+    "softwaretype": "Netatmo"
+}</code></pre>
+</div>
+</div>
+<p>Gözlem yerel saatle 00:07’de yapılmış. Yağış ve rüzgarla ilgili kimi kalemler veri de yer alsa da (<code>precip_ratem</code> gibi) gözlem değerleri anlamlı durmuyor.</p>
+<p>Belki ücretli planlarla detaylı geçmiş veriye ulaşmak mümkündür.</p>
+</section>
+<section id="diğer-sorgular" class="level1">
+<h1>Diğer Sorgular</h1>
+<p>Weather Underground API’ını kullanarak <code>hourly</code> ve <code>hourly10day</code> sorgularıyla saatlik tahminlere, <code>geolookup</code> ile istediğiniz yere yakın istasyonlara, <code>currenthurricane</code> sorgusuyla fırtına bilgilerine, <code>tide</code> sorgusuyla gelgit bilgilerine ve <code>webcams</code> sorgusuyla istasyonların kamera görüntülerine ulaşmanız mümkün.</p>
+<p>Saatlik hava durumu tahminiyle (<code>hourly</code>) bir sonraki saate bakalım.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> request.urlopen(<span class="st">'http://api.wunderground.com/api/xxxx/hourly/q/pws:IISTANBU81.json'</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> f.read()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>parsed_json <span class="op">=</span> json.loads(json_string)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'Tahmin zamanı'</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'hourly_forecast'</span>][<span class="dv">0</span>][<span class="st">'FCTTIME'</span>][<span class="st">'pretty'</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>zaman <span class="op">=</span> parsed_json[<span class="st">'hourly_forecast'</span>][<span class="dv">0</span>][<span class="st">'FCTTIME'</span>][<span class="st">'pretty'</span>]</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="sc">{}</span><span class="st"> için sıcaklık'</span>.<span class="bu">format</span>(zaman))</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'hourly_forecast'</span>][<span class="dv">0</span>][<span class="st">'temp'</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="sc">{}</span><span class="st"> için rüzgar hızı'</span>.<span class="bu">format</span>(zaman))</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'hourly_forecast'</span>][<span class="dv">0</span>][<span class="st">'wspd'</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">'</span><span class="sc">{}</span><span class="st"> için rüzgar yönü'</span>.<span class="bu">format</span>(zaman))</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'hourly_forecast'</span>][<span class="dv">0</span>][<span class="st">'wdir'</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Tahmin zamanı
+"9:00 AM +03 on March 20, 2018"
+9:00 AM +03 on March 20, 2018 için sıcaklık
+{
+    "english": "56",
+    "metric": "13"
+}
+9:00 AM +03 on March 20, 2018 için rüzgar hızı
+{
+    "english": "18",
+    "metric": "29"
+}
+9:00 AM +03 on March 20, 2018 için rüzgar yönü
+{
+    "dir": "SW",
+    "degrees": "229"
+}</code></pre>
+</div>
+</div>
+<p>Kadıköy’e yakın kişisel hava durumu istasyonlarını (personal weather station, pws) görelim. Kadıköy’ün koordinatı olarak 40.992756, 29.024704 değerlerini alabiliriz.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>f <span class="op">=</span> request.urlopen(<span class="st">'http://api.wunderground.com/api/xxxx/geolookup/q/40.992756,29.024704.json'</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> f.read()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>parsed_json <span class="op">=</span> json.loads(json_string)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json.dumps(parsed_json[<span class="st">'location'</span>][<span class="st">'nearby_weather_stations'</span>][<span class="st">'pws'</span>], indent <span class="op">=</span> <span class="dv">4</span>))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>f.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "station": [
+        {
+            "neighborhood": "\u00d6zel Saint-Joseph Frans\u0131z Lisesi",
+            "city": "Kad\u0131k\u00f6y",
+            "state": "",
+            "country": "TR",
+            "id": "IKADKY6",
+            "lat": 40.982716,
+            "lon": 29.028534,
+            "distance_km": 1,
+            "distance_mi": 0
+        },
+        {
+            "neighborhood": "Yigit - Kalamis Residence Weather Station",
+            "city": "Kad\u0131k\u00f6y",
+            "state": "",
+            "country": "TR",
+            "id": "IKADKY4",
+            "lat": 40.985214,
+            "lon": 29.036858,
+            "distance_km": 1,
+            "distance_mi": 0
+        },
+        {
+            "neighborhood": "Suadiye",
+            "city": "\u0130stanbul",
+            "state": "\u0130STANBUL",
+            "country": "TR",
+            "id": "ISTANBUL189",
+            "lat": 40.962555,
+            "lon": 29.076281,
+            "distance_km": 5,
+            "distance_mi": 3
+        },
+        {
+            "neighborhood": "Cihann\u00fcma",
+            "city": "Be\u015fikta\u015f",
+            "state": "",
+            "country": "TR",
+            "id": "IBEIKTA6",
+            "lat": 41.047535,
+            "lon": 29.00639,
+            "distance_km": 6,
+            "distance_mi": 3
+        }
+    ]
+}</code></pre>
+</div>
+</div>
+<p>1 ile 6 km mesafede dört istasyon olduğunu görüyoruz. İstasyonların id değerlerini başka sorgular için kullanmanız mümkün.</p>
+<p>Bu yazının Jupyter Notebook dosyasına <a href="https://github.com/sibirbil/VeriDefteri">GitHub dizinimiz</a> üzerinden ulaşabilirsiniz.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

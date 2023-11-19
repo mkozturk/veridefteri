@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Kaan Öztürk">
+<meta name="dcterms.date" content="2017-10-30">
+
+<title>Veri Defteri - Veri Bilimciler İçin Python Ekosistemi</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Veri Bilimciler İçin Python Ekosistemi</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Başlangıç</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Kaan Öztürk </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 30, 2017</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Veri bilimi deyince bugün akla ilk gelen programlama dillerinden biri Python. Python 1996’da doğdu, ama uzun zaman bilimsel uygulamalarda diğer dillerin gölgesinde kaldı. Hakettiği yere son on yıl içinde ulaştı ancak. Son yıllarda programlama dillerinin yaygınlığı sıralamalarında düzenli olarak ilk üçe yerleşiyor.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2017topprogramminlanguages.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">2017’nin en gözde programlama dilleri (<a href="&quot;https://spectrum.ieee.org/computing/software/the-2017-top-programming-languages&quot;">IEEE Spectrum</a>)</figcaption>
+</figure>
+</div>
+<p>Bu başarının kökünde Python’un kolay öğrenilen, kolay okunan bir dil olması yatıyor. Üstelik “çıplak” bir dil değil; çok zengin bir standart kütüphane ile birlikte geliyor. Matematik fonksiyonlarından düzenli ifadelere, süreç kontrolünden HTTP’ye, hatta Tkinter grafik arayüzüne kadar. Bu, Python’un “<em>pilleri içindedir”</em> sloganıyla özetlenen yaklaşımından kaynaklanıyor.</p>
+<p>Python nesneye yönelik bir dil. Python’daki her şey, tamsayılar ve karakterler bile bir nesnedir. Ama nesneye yönelik programlama yapmanız gerekmiyor. En basit kullanımda, nesneleri kullandığınızın farkında bile olmazsınız. <em>Prosedürel programlama </em>ile başlayıp, sonra isterseniz kendi sınıflarınızı tanımlayıp <em>nesneye yönelik programlama</em> yapmaya geçebilirsiniz. Python’un çeşitli fonksiyon araçlarıyla <em>fonksiyonel programlama</em> da yapabilirsiniz.</p>
+<p>Python’u mevcut programlarınızı otomatik olarak çalıştırmak için kullanabilirsiniz. Bir programın çıktısını alıp, bir diğerine uygun hale getiren bir program yazarak iş akışınızı otomatikleştirebilirsiniz. Böylelikle sık yaptığınız analizleri tek bir komutla tamamlayabilir, gerektiğinde kolaylıkla tekrar üretebilirsiniz.</p>
+<p>Yorumlanan bir dil olan Python, derlenen dillere (C, Fortran, vs.) göre daha yavaş çalışır. Bu hız farkı 20-30 kata varabilir. Ama Python’un zaman açısından başka kozları da vardır; program geliştirme sürecini kolaylaştıran bir sadeliğe sahip olması gibi. Sözgelişi, bir düz metin dosyasını tarayıp, içindeki kelimelerin istatistiklerini çıkarmak, n-gramlar oluşturmak Python’da belki bir saatte yapılabilecek bir iştir. Ama bunu C ile yapmaya çalışmak birkaç gün, veya daha fazlasını alabilir. Ortaya çıkan Python programı işini diyelim 2 dakikada tamamlasın, C programı 10 saniyede. Hangisiyle işi daha çabuk bitirdik?</p>
+<p>Tabii bu örnek bir kerelik işlemler için geçerli. Eğer bu işi binlerce kere tekrarlamamız gerekiyorsa C programı için yatırdığımız zaman kendini amorti edebilir. Ama bu durumda bile Python yardımımıza yetişiyor. Python/C uygulama arayüzü sayesinde C programları içinde Python veri yapıları ve fonksiyonlarına erişebilir, Python’un sağladığı yüksek seviyeli işlevlerden faydalanabiliriz. Veya Python programları içinde hesaplama yükü ağır olan kısımları C ile yazıp, bir Python modülü olarak derleyebiliriz. Nitekim Numpy, SciPy, Numba gibi yüksek performanslı paketlerin hızlı çalışması gereken kısımları C ile yazılmıştır.</p>
+<p>Python’un başarısı sadece güzel tasarımından ve kullanım kolaylığından kaynaklanmıyor. Benzer kolaylıkta başka diller de var. Sözgelişi Ruby de sade, kolay öğrenilen ve güçlü bir dildir, ama Python kadar yaygınlaşamadı. Python’un sevilmesinin en büyük sebeplerinden biri, akla gelebilecek neredeyse her uygulama alanında çok kaliteli kütüphaneler ve API’lerin geliştirilmiş olması. Örneğin Web programlama çatısı Django, üç boyutlu veri görselleme için MayaVi, bilimsel hesaplama için SciPy, veri analizi için pandas, sembolik matematik için SymPy, dinamik web sayfalarından veri almak için Scrapy, görüntü işlemek için PIL, oyun geliştirmek için PyGame, grafik arayüz oluşturmak için wxWidgets ve pyQt, ve daha niceleri…</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="vanderplas_python_stack.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Python ve bilimsel programlama ekosistemi (<a href="https://speakerdeck.com/jakevdp/pythons-data-science-stack-jsm-2016">Jake VanderPlas</a>)</figcaption>
+</figure>
+</div>
+<p>Bugün bir veri bilimci Python’u tek başına kullanmaz. Python çekirdeğinin çevresinde oluşan bir ekosistem içindeki modüller ve yazılımlar, veri bilimcilerin alet çantasının vazgeçilmez araçlarıdır. Hepsi açık kaynaklı olan bu araçların bazılarına göz atalım.</p>
+<section id="python-çekirdeği" class="level2">
+<h2 class="anchored" data-anchor-id="python-çekirdeği">Python çekirdeği</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="opengraph-icon-200x200.png" class="img-fluid"></p>
+</div>
+<p>Python olgunlaştıkça, dilin ilk tasarımını değiştirme ihtiyacı ortaya çıktı. Bir yerden sonra anlaşıldı ki, geriye dönük uyumluluğu kaldırmadan gerekli değişiklikleri yapmak mümkün değil. O yüzden 2.6 versiyonuyla beraber 3.0 versiyonu da geliştirildi ve birlikte yayınlandı. Yeni Python’un bazı değişiklikleri, 2.x dalına da geriye dönük uyumluluğu bozmayacak şekilde aktarıldı ve 2.7 versiyonu oluştu. Bu, 2.x dalının son versiyonu oldu. Bundan sonra dilin gelişimi sadece 3.x versiyonundan yürüdü.</p>
+<p>Hangisini kullanmalısınız? Eğer programlamaya yeni başlıyorsanız düşünmeden 3.x dalındaki en yeni versiyonu kullanın. 2.x dalı artık sadece eski kodları çalıştırmak için gerekiyor.Eğer şimdiye kadar 2.x kullandıysanız endişe etmeyin. Sözdizimi açısından iki dil arasındaki farklar çok az. Eski Python kodlarınızı 3.x’e uyumlu hale getirmek için <a href="https://docs.python.org/3/howto/pyporting.html">“Porting Python 2 Code to Python 3”</a> sayfasındaki tavsiyeleri okuyabilirsiniz.</p>
+</section>
+<section id="geliştirme-arayüzü-ide" class="level2">
+<h2 class="anchored" data-anchor-id="geliştirme-arayüzü-ide">Geliştirme arayüzü (IDE)</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="spyder.png" class="img-fluid"></p>
+</div>
+<p>Bir Python programı, Python ifadeleri içeren bir metin dosyasından ibarettir. Python programı yazmak için aslında bir metin editöründen başka bir şeye ihtiyacınız yok (Word olmaz!). Ancak, yorumlanan bir dil olan Python’u etkileşimli kullanmak, mesela kod yazarken bir yandan yorumlayıcıya bazı komutlar vermek, birçok durumda hayatı kolaylaştırır. Bir IDE kullandığınızda, program editörüyle entegre bir yorumlayıcıya ulaşırsınız; <em>komut tamamlama</em> özelliği ile sekme tuşuna bastığınızda bağlama uyumlu olan isimleri listeler; fonksiyon çağrılarının iç belgelerine (docstrings) ulaşıp <em>çevrimiçi yardım</em> alabilirsiniz; programdaki hataları bulmak için bir <em>hata ayıklayıcı</em> kullanabilirsiniz.</p>
+<p>Python ile beraber gelen IDLE arayüzü çok sadedir; bu özelliklerin küçük bir kısmını sağlar. Spyder daha gelişkindir; bilimsel çalışma için geliştirilen IPython yorumlayıcını kullanabilir. Daha profesyonel ve karmaşık projeler için PyCharm veya Eclipse tercih edilebilir.Alternatif olarak, emacs veya atom editörleri için hazırlanmış bazı eklemelerle, bunları bir IDE haline getirebilirsiniz.</p>
+</section>
+<section id="jupyter-notebook" class="level2">
+<h2 class="anchored" data-anchor-id="jupyter-notebook">Jupyter notebook</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="jupyter.png" class="img-fluid"></p>
+</div>
+<p>Jupyter notebook bugün veri bilimcilerin en çok kullandığı araçlardan biri. Bir notebook’un amacı ardışık komutları sırayla kaydetmek, komutların çıktısını kaydetmek ve gerektikçe bunları kolayca tekrar üretmektir. Özellikle etkileşimli çalışma için hazırlanırlar.</p>
+<p>Jupyter notebook, bir <em>çekirdek</em> ile beraber çalışır. Bu çekirdek sadece Python olmak zorunda değildir; R, Julia, veya başka bir dille de çalışabilr. Jupyter, verilen komutu çekirdeğe yollar ve çekirdeğin gönderdiği cevabı ekrana yazar. Ayrıca, açıklamalar için kullanılabilecek düzyazı kısımları da tanımlanabilir. Bu kısımlara Markdown veya HTML formatında yazılabilir.LaTeX komutlarıyla matematiksel ifadeler&nbsp; yazılabilir. Böylece yaptığımız işi ayrıntısıyla adım adım anlattığımız bir laboratuar defteri üretmiş oluruz. Bir Jupyter defteri HTML veya PDF olarak dışa aktarılabilir, veya etkileşimli bir sunum haline getirilebilir.</p>
+</section>
+<section id="numpy" class="level2">
+<h2 class="anchored" data-anchor-id="numpy">Numpy</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="numpy.jpeg" class="img-fluid"></p>
+</div>
+<p>Python dilindeki liste yapısı genel amaçlara uygundur, ama tam da bu yüzden yavaştır. Numpy özel bir dizi tipi (array) tanımlar. Bu dizilerde bütün elemanlar aynı tiptedir (sözgelişi int64 veya float64) ve fiziksel bellekte yanyana yer alırlar. Bu düzen sayesinde dizideki herhangi bir elemana ulaşmak çok daha hızlı olur. Numpy ile istediğiniz boyut ve büyüklükte dizi nesneleri tanımlayabilir, ve bunları hızlı şekilde düzenleyebilirsiniz. Numpy’ın özel matematiksel fonksiyonları, fonksiyonu her elemana ayrı ayrı uygulayacak şekilde hazırlanmışlardır. Söz gelişi, numpy.sqrt(a) çağrısı a’nın her elemanının karekökünü alır. Bu fonksiyonlar hızlı çalışmaları için C ile kodlanmışlardır. Numpy genel amaçlı bir kütüphanedir. Yoğun hesaplama gerektiren birçok paket kendi içinde Numpy dizilerini kullanır.</p>
+</section>
+<section id="matplotlib" class="level2">
+<h2 class="anchored" data-anchor-id="matplotlib">Matplotlib</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="matplotliblogo.png" class="img-fluid"></p>
+</div>
+<p>Python’un yarıresmi grafik ve görselleştirme paketi. Numpy üzerine kurulu. Yüksek kaliteli grafik üretmek çok kolay. matplotlib.pylab arayüzü ile Matlab benzeri komutlar kullanabilirsiniz. Çoğunlukla, ihtiyaç duyduğunuz işleri çok basit komutlarla üretebilirsiniz. Pylab arayüzünün yetersiz kaldığı durumlarda, çok daha geniş özelleştirme imkanı sunan nesne arayüzünü kullanabilirsiniz.</p>
+</section>
+<section id="seaborn" class="level2">
+<h2 class="anchored" data-anchor-id="seaborn">seaborn</h2>
+<div style="float: right; position: relative; top: 0px; padding: 30px;">
+<p><img src="seaborn.svg" class="img-fluid" width="200"></p>
+</div>
+<p>Özellikle istatistiksel analizde ihtiyaç duyulan grafikleri üretmek için hazırlanmış, estetik kaygısı yüksek bir görselleme paketi. matplotlib yapısını kullanarak çeşitli grafik tiplerini kendisine göre tekrar tanımlıyor, ve matplotlib’de olmayan yeni grafik tipleri de ekliyor.</p>
+</section>
+<section id="scipy" class="level2">
+<h2 class="anchored" data-anchor-id="scipy">SciPy</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="scipy.jpeg" class="img-fluid"></p>
+</div>
+<p>Python’da bilimsel hesaplamanın adresi. NumPy dizileri ile çalışır. Optimizasyon, sayısal integral, diferansiyel denklemler, sinyal işleme, Fourier analizi, lineer cebir gibi sayısal işlemler için hazır fonksiyonlar sağlar.</p>
+</section>
+<section id="pandas" class="level2">
+<h2 class="anchored" data-anchor-id="pandas">pandas</h2>
+<div style="float: right; position: relative; top: 0px; padding: 30px;">
+<p><img src="pandas_logo.png" class="img-fluid"></p>
+</div>
+<p>Veri analizi için en güçlü araçlardan biri. Numpy ve matplotlib üzerine kurulu. Veri tablosu bir <em>DataFrame </em>nesnesi olarak saklanır. Veri sütunlarının tipleri farklı olabilir (sayısal, dize, tarih, kategorik, vs.). Sütunlar ve satırlar üzerinden kolayca filtreleme yapılabilir, tablo biçimi değiştirilebilir, CSV, Excel veya başka formlardan veri alınabilir. Veri analizinin olmazsa olmazı.</p>
+</section>
+<section id="nltk" class="level2">
+<h2 class="anchored" data-anchor-id="nltk">nltk</h2>
+<p>Bu kütüphane doğal dil işleme işlemlerinde öncü. Verilen bir metinde ki dil yapısını analiz etmek, kelimeleri ayrıştırmak, kökleri eklerden ayırmak, sınıflandırmak gibi işlerde kullanılan bir paket.</p>
+</section>
+<section id="scikit-learn" class="level2">
+<h2 class="anchored" data-anchor-id="scikit-learn">scikit-learn</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="sklearn.png" class="img-fluid" width="200"></p>
+</div>
+<p>En yaygın yapay öğrenme algoritmalarını barındıran bir paket. Numpy, SciPy ve matplotlib üzerine kurulu. Sınıflandırma, regresyon, öbekleme, model seçme, boyut indirme gibi işlemler için ilk durak. Yardım belgeleri kodu açıklamanın çok ötesine geçiyor; yapay öğrenme algoritmalarını öğreten bir ders kitabı olarak da okunabilir.</p>
+</section>
+<section id="tensorflow" class="level2">
+<h2 class="anchored" data-anchor-id="tensorflow">TensorFlow</h2>
+<div style="float: right; top: 0px; padding: 30px;">
+<p><img src="tensorflowlogo.jpeg" class="img-fluid"></p>
+</div>
+<p>Google kaynaklı bir sayısal hesaplama kütüphanesi. Hesaplamalar, veri akış çizgeleri olarak temsil edilir. Çizge noktaları matematiksel işlemleri, çizgiler ise bunlar arasında akan çok boyutlu veri dizilerini (tensörleri) temsil eder. Bu esnek yapı ile hesaplamalar CPU çekirdeklerine veya GPU’lara dağıtılabilir. İleri seviye yapay öğrenme için birebir.</p>
+</section>
+<section id="keras" class="level2">
+<h2 class="anchored" data-anchor-id="keras">Keras</h2>
+<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<p><img src="keraslogo.png" class="img-fluid"></p>
+</div>
+<p>Derin öğrenme için yüksek seviyeli bir sinir ağları kütüphanesi. Hesap yükünü TensorFlow’a aktarıyor, ama istenirse CNTK veya Theano da kullanabilir.</p>
+<p>Bütün bu paketleri ihtiyacınıza göre sisteminize ayrı ayrı kurabilirsiniz. Alternatif olarak, <a href="https://www.anaconda.com/distribution/">Anaconda</a> veya <a href="https://www.enthought.com/product/canopy">Enthought Canopy</a> gibi bir <em>Python dağıtımı</em> kullanabilirsiniz. Bu dağıtımlar pek çok paketle beraber geliyorlar, ve bu paketlerin birbiriyle çatışmaması için özen gösteriliyor. Kendilerine özgü güncelleme ve kurma komutları var. Üstelik bütün paketler sizin kişisel dizininize kurulduğu için özel izinlere ihtiyaç duymuyorlar. Ofis bilgisayarınıza sorunsuzca kurabilirsiniz örneğin.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
