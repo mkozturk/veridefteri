@@ -28,9 +28,12 @@ Bugün bir veri bilimci Python'u tek başına kullanmaz. Python çekirdeğinin �
 
 ## Python çekirdeği
 
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<!-- <div style="float: left; position: relative; top: 0px; padding: 30px;">
 ![](opengraph-icon-200x200.png)
-</div>
+</div> -->
+
+![](opengraph-icon-200x200.png){style="float: left"}
+
 Python olgunlaştıkça, dilin ilk tasarımını değiştirme ihtiyacı ortaya çıktı. Bir yerden sonra anlaşıldı ki, geriye dönük uyumluluğu kaldırmadan gerekli değişiklikleri yapmak mümkün değil. O yüzden 2.6 versiyonuyla beraber 3.0 versiyonu da geliştirildi ve birlikte yayınlandı. Yeni Python'un bazı değişiklikleri, 2.x dalına da geriye dönük uyumluluğu bozmayacak şekilde aktarıldı ve 2.7 versiyonu oluştu. Bu, 2.x dalının son versiyonu oldu. Bundan sonra dilin gelişimi sadece 3.x versiyonundan yürüdü.
 
 Hangisini kullanmalısınız? Eğer programlamaya yeni başlıyorsanız düşünmeden 3.x dalındaki en yeni versiyonu kullanın. 2.x dalı artık sadece eski kodları çalıştırmak için gerekiyor.Eğer şimdiye kadar 2.x kullandıysanız endişe etmeyin. Sözdizimi açısından iki dil arasındaki farklar çok az. Eski Python kodlarınızı 3.x'e uyumlu hale getirmek için <a href="https://docs.python.org/3/howto/pyporting.html">"Porting Python 2 Code to Python 3"</a> sayfasındaki tavsiyeleri okuyabilirsiniz.
@@ -39,9 +42,11 @@ Hangisini kullanmalısınız? Eğer programlamaya yeni başlıyorsanız düşün
 ## Geliştirme arayüzü (IDE)
 
 
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<!-- <div style="float: left; position: relative; top: 0px; padding: 30px;">
 ![](spyder.png)
-</div>
+</div> -->
+
+![](spyder.png){style="float: right"}
 
 Bir Python programı, Python ifadeleri içeren bir metin dosyasından ibarettir. Python programı yazmak için aslında bir metin editöründen başka bir şeye ihtiyacınız yok (Word olmaz!). Ancak, yorumlanan bir dil olan Python'u etkileşimli kullanmak, mesela kod yazarken bir yandan yorumlayıcıya bazı komutlar vermek, birçok durumda hayatı kolaylaştırır. Bir IDE kullandığınızda, program editörüyle entegre bir yorumlayıcıya ulaşırsınız; <em>komut tamamlama</em> özelliği ile sekme tuşuna bastığınızda bağlama uyumlu olan isimleri listeler; fonksiyon çağrılarının iç belgelerine (docstrings) ulaşıp <em>çevrimiçi yardım</em> alabilirsiniz; programdaki hataları bulmak için bir <em>hata ayıklayıcı</em> kullanabilirsiniz.
 
@@ -50,9 +55,7 @@ Python ile beraber gelen IDLE arayüzü çok sadedir; bu özelliklerin küçük 
 
 ## Jupyter notebook
 
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
-![](jupyter.png)
-</div>
+![](jupyter.png){style="float: left" height=150}
 
 Jupyter notebook bugün veri bilimcilerin en çok kullandığı araçlardan biri. Bir notebook'un amacı ardışık komutları sırayla kaydetmek, komutların çıktısını kaydetmek ve gerektikçe bunları kolayca tekrar üretmektir. Özellikle etkileşimli çalışma için hazırlanırlar.
 
@@ -61,39 +64,38 @@ Jupyter notebook, bir <em>çekirdek</em> ile beraber çalışır. Bu çekirdek s
 
 ## Numpy
 
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
-![](numpy.jpeg)
-</div>
-
+![](numpy.jpeg){style="float: right" height=200}
 
 Python dilindeki liste yapısı genel amaçlara uygundur, ama tam da bu yüzden yavaştır. Numpy özel bir dizi tipi (array) tanımlar. Bu dizilerde bütün elemanlar aynı tiptedir (sözgelişi int64 veya float64) ve fiziksel bellekte yanyana yer alırlar. Bu düzen sayesinde dizideki herhangi bir elemana ulaşmak çok daha hızlı olur. Numpy ile istediğiniz boyut ve büyüklükte dizi nesneleri tanımlayabilir, ve bunları hızlı şekilde düzenleyebilirsiniz. Numpy'ın özel matematiksel fonksiyonları, fonksiyonu her elemana ayrı ayrı uygulayacak şekilde hazırlanmışlardır. Söz gelişi, numpy.sqrt(a) çağrısı a'nın her elemanının karekökünü alır. Bu fonksiyonlar hızlı çalışmaları için C ile kodlanmışlardır. Numpy genel amaçlı bir kütüphanedir. Yoğun hesaplama gerektiren birçok paket kendi içinde Numpy dizilerini kullanır.
 
 ## Matplotlib
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
-![](matplotliblogo.png)
-</div>
+
+![](matplotliblogo.png){style="float: left" height="75"}
 
 Python'un yarıresmi grafik ve görselleştirme paketi. Numpy üzerine kurulu. Yüksek kaliteli grafik üretmek çok kolay. matplotlib.pylab arayüzü ile Matlab benzeri komutlar kullanabilirsiniz. Çoğunlukla, ihtiyaç duyduğunuz işleri çok basit komutlarla üretebilirsiniz. Pylab arayüzünün yetersiz kaldığı durumlarda, çok daha geniş özelleştirme imkanı sunan nesne arayüzünü kullanabilirsiniz.
 
 ## seaborn
-<div style="float: right; position: relative; top: 0px; padding: 30px;">
+<!-- <div style="float: right; position: relative; top: 0px; padding: 30px;">
 ![](seaborn.svg){width=200}
-</div>
+</div> -->
+
+![](seaborn.svg){style="float: right" width=100}
 
 Özellikle istatistiksel analizde ihtiyaç duyulan grafikleri üretmek için hazırlanmış, estetik kaygısı yüksek bir görselleme paketi. matplotlib yapısını kullanarak çeşitli grafik tiplerini kendisine göre tekrar tanımlıyor, ve matplotlib'de olmayan yeni grafik tipleri de ekliyor.
 
 ## SciPy
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
+<!-- <div style="float: left; position: relative; top: 0px; padding: 30px;">
 ![](scipy.jpeg)
-</div>
+</div> -->
+
+![](scipy.jpeg){style="float: left" height="100"}
 
 Python'da bilimsel hesaplamanın adresi. NumPy dizileri ile çalışır. Optimizasyon, sayısal integral, diferansiyel denklemler, sinyal işleme, Fourier analizi, lineer cebir gibi sayısal işlemler için hazır fonksiyonlar sağlar.
 
 
 ## pandas
-<div style="float: right; position: relative; top: 0px; padding: 30px;">
-![](pandas_logo.png)
-</div>
+
+![](pandas_logo.png){style="float: right" height="100"}
 
 Veri analizi için en güçlü araçlardan biri. Numpy ve matplotlib üzerine kurulu. Veri tablosu bir <em>DataFrame </em>nesnesi olarak saklanır. Veri sütunlarının tipleri farklı olabilir (sayısal, dize, tarih, kategorik, vs.). Sütunlar ve satırlar üzerinden kolayca filtreleme yapılabilir, tablo biçimi değiştirilebilir, CSV, Excel veya başka formlardan veri alınabilir. Veri analizinin olmazsa olmazı.
 
@@ -102,26 +104,22 @@ Veri analizi için en güçlü araçlardan biri. Numpy ve matplotlib üzerine ku
 Bu kütüphane doğal dil işleme işlemlerinde öncü. Verilen bir metinde ki dil yapısını analiz etmek, kelimeleri ayrıştırmak, kökleri eklerden ayırmak, sınıflandırmak gibi işlerde kullanılan bir paket.
 
 ## scikit-learn
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
-![](sklearn.png){width=200}
-</div>
+
+![](sklearn.png){style="float: left" width=200}
 
 En yaygın yapay öğrenme algoritmalarını barındıran bir paket. Numpy, SciPy ve matplotlib üzerine kurulu. Sınıflandırma, regresyon, öbekleme, model seçme, boyut indirme gibi işlemler için ilk durak. Yardım belgeleri kodu açıklamanın çok ötesine geçiyor; yapay öğrenme algoritmalarını öğreten bir ders kitabı olarak da okunabilir.
 
 
 ## TensorFlow
 
-<div style="float: right; top: 0px; padding: 30px;">
-![](tensorflowlogo.jpeg)
-</div>
+![](tensorflowlogo.jpeg){style="float: right" height="150"}
 
 Google kaynaklı bir sayısal hesaplama kütüphanesi. Hesaplamalar, veri akış çizgeleri olarak temsil edilir. Çizge noktaları matematiksel işlemleri, çizgiler ise bunlar arasında akan çok boyutlu veri dizilerini (tensörleri) temsil eder. Bu esnek yapı ile hesaplamalar CPU çekirdeklerine veya GPU'lara dağıtılabilir. İleri seviye yapay öğrenme için birebir.
 
 
 ## Keras
-<div style="float: left; position: relative; top: 0px; padding: 30px;">
-![](keraslogo.png)
-</div>
+
+![](keraslogo.png){style="float:left" height=150 fig-align="left"}
 
 Derin öğrenme için yüksek seviyeli bir sinir ağları kütüphanesi. Hesap yükünü TensorFlow'a aktarıyor, ama istenirse CNTK veya Theano da kullanabilir.
 

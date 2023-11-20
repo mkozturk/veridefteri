@@ -59,7 +59,7 @@ Bu metaveri qmd formatındaki dosyanın başına eklenebilir. Belgeniz ipynb for
 
 ### Yazıyı görüntülemek
 
-VSCode Quarto eklentisi kullanıyorsanız editör penceresinin sağ üstündeki "Preview" düğmesine tıklayın. Bu yazıyı (veya `index.qmd` içindeyseniz siteyi) tekrar render edip önizleme açacak.
+VSCode Quarto eklentisi kullanıyorsanız editör penceresinin sağ üstündeki "Preview" düğmesine tıklayın. Bu yazıyı (veya proje kökünde `index.qmd` içindeyseniz siteyi) tekrar render edip önizleme açacak.
 
 Alternatif olarak, komut satırında
 
@@ -79,6 +79,14 @@ Alternatif olarak tarayıcınızda `_site/index.html` sayfasını açarak önizl
 
 ## Yazıyı yayınlamak
 
-Siteyi Github Pages ile host edeceğiz. Yayınlama için ayrıntılı bilgi şurada:
+Siteyi Github Pages ile yayınlıyoruz.
+
+Yazınızı hazırladıktan sonra, terminal açın ve web sitesi projesinin dizini içinde şu komutu verin:
+
+    $ quarto publish gh-pages
+
+Bu komut mevcut belgelerden site içeriğini hazırlayacak, çıktıyı özel bir `gh-pages` dalına yükleyecek, bu dalı GitHub'a push edecek ve sitemizin güncellenmesini sağlayacak.
+
+Ayrıntılı bilgi için:
 
 https://quarto.org/docs/publishing/github-pages.html#publish-command
