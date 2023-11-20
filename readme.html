@@ -152,7 +152,7 @@ categories:
 </section>
 <section id="yazıyı-görüntülemek" class="level3">
 <h3 class="anchored" data-anchor-id="yazıyı-görüntülemek">Yazıyı görüntülemek</h3>
-<p>VSCode Quarto eklentisi kullanıyorsanız editör penceresinin sağ üstündeki “Preview” düğmesine tıklayın. Bu yazıyı (veya <code>index.qmd</code> içindeyseniz siteyi) tekrar render edip önizleme açacak.</p>
+<p>VSCode Quarto eklentisi kullanıyorsanız editör penceresinin sağ üstündeki “Preview” düğmesine tıklayın. Bu yazıyı (veya proje kökünde <code>index.qmd</code> içindeyseniz siteyi) tekrar render edip önizleme açacak.</p>
 <p>Alternatif olarak, komut satırında</p>
 <pre><code>$ quarto render</code></pre>
 <p>veya</p>
@@ -165,7 +165,11 @@ categories:
 </section>
 <section id="yazıyı-yayınlamak" class="level2">
 <h2 class="anchored" data-anchor-id="yazıyı-yayınlamak">Yazıyı yayınlamak</h2>
-<p>Siteyi Github Pages ile host edeceğiz. Yayınlama için ayrıntılı bilgi şurada:</p>
+<p>Siteyi Github Pages ile yayınlıyoruz.</p>
+<p>Yazınızı hazırladıktan sonra, terminal açın ve web sitesi projesinin dizini içinde şu komutu verin:</p>
+<pre><code>$ quarto publish gh-pages</code></pre>
+<p>Bu komut mevcut belgelerden site içeriğini hazırlayacak, çıktıyı özel bir <code>gh-pages</code> dalına yükleyecek, bu dalı GitHub’a push edecek ve sitemizin güncellenmesini sağlayacak.</p>
+<p>Ayrıntılı bilgi için:</p>
 <p>https://quarto.org/docs/publishing/github-pages.html#publish-command</p>
 
 
