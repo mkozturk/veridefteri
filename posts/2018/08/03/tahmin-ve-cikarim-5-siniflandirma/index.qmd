@@ -1,0 +1,26 @@
+---
+title: "Tahmin ve Çıkarım 5 - Sınıflandırma"
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-08-03
+image: 52073-siniflandirmailksayfa.png
+---
+Yaz tatilinin ortası da olsa, bir ders koyalım dedik. Çünkü inek olmak bunu gerektirir...
+
+Bu seferki dersimiz sınıflandırma. Yani yeni bir veri geldiğinde bu verinin hangi sınıfa ait olacağını bulmaya çalışacağız. Örneğin bir grup hastanın farklı test sonuçlarına (öznitelikler) bakarak, elinde test sonuçları ile gelen başka bir hastanın grip olup olmadığını (iki sınıf) anlamak isteyebiliriz. Ya da bir takımın geçmiş performanslarına ve oynadıkları sahaların özelliklerine (öznitelikler) bakarak, bir sonraki maçta mağlup mu, galip mi olacaklarını, yoksa berabere mi kalacaklarını (çoklu sınıf) tahmin etmeyi deneyebiliriz. 
+
+Sınıflandırma işini yaptıktan sonraki sorumuz şu: Sonuçlarımız nasıl? Bu amaçla kullanılan grafik ve tablolardan birkaç örneği de yine bu derste bulabilirsiniz.
+
+<img src="52073-siniflandirmailksayfa.png" alt="" width="300" height="229" />
+
+<strong>Sınıflandırma</strong>
+
+<a href="https://www.dropbox.com/s/83bzfyabo0ox5wg/TahminCikarim_05_Siniflandirma.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/rliy67riv232dwb/TahminCikarim_05_Siniflandirma_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+{{< video https://youtu.be/KBwS_zVhV7g >}}

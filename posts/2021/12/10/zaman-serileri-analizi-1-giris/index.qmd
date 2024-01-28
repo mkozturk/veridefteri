@@ -1,0 +1,434 @@
+---
+title: "Zaman Serileri Analizi 1: Giriş"
+author: Murat Öztürkmen
+categories:
+    - Genel
+date: 2021-12-10
+image: posts/2021/12/10/zaman-serileri-analizi-1-giris/4f68b-zsa2.png
+---
+
+<!-- wp:tadv/classic-paragraph -->
+<p><span style="color: inherit;font-size: 2.25rem;font-weight: 600">1.Olasılıksal (Stochastic) Süreç</span></p>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<p>$t$(zaman) ile indekslenmiş $\left\{Y_{t}: t \in \mathbb{T}\right\}$ ile gösterilen tek deşkenli rassal değişkenler kümesine <strong>zaman serisi</strong> ya da <strong>olasılıksal (stochastic) süreç</strong> adı verilir.</p>
+<p>İndeks kümesi sonlu ya da sonsuz, sürekli ya da kesikli olabilir. Ekonometri ve istatistik alanlarında zaman serisi denildiği zaman genellikle kesikli zaman indeksi anlaşılır. Zaman indeksi kümesinin de birbirine eşit uzaklıkta değerlerden oluştuğu düşünülür ancak bu şart değildir. Biz burada aksi belirtilmedikçe $t_{i}$ değerlerinin eşit uzaklıklı olduğunu varsayacağız. Zamanın reel sayı olduğu sürekli zaman ile indekslenmiş rassal değişkenleri kümesini $\{X(t), t \in \mathbb{T}\}$ ile göstereceğiz.</p>
+<p>Kesikli zaman için indeks kümesi $\mathbb{T}=\{0,\pm 1,\pm 2, \ldots\}$ ve sürekli zaman için $\mathbb{T}=\{-\infty&lt;t&lt;\infty\}$ olarak tanımlanacaktır. Olasılıksal sürecin belirli bir gerçekleşmesini (realizasyonunu) $\left\{y_{t}: t=1,2, \ldots, T\right\}$ ya da $\left\{y_{t}\right\}_{t=1}^{T}$ ile göstereceğiz. t zamanında gözlemlenen değerler skalar (univariate) ya da vektör değerli (multivariate) olabilir. İlk olarak skalar zaman serilerini inceleyeceğiz. Yukarıda yaptığımız zaman serisi tanımında her $t$ zamanında bir rassal değişkenin gözlemlendiğini ve belirli bir süre sonra bu değerlerin tarihinden hareketle bir gözlem kümesinin ortaya çıktığını söyledik. Açıktır ki bu zaman serisinin olasılık yasalarıyla uyumlu bir şekilde ortaya çıkmasını gerektirir.</p>
+<p>$Y$’nin sürekli, $t$’nin ise kesikli olduğunu varsayarsak her t zamanındaki değer için bir marjinal olasılık yoğunluk fonksiyonu tanımlanabilir:</p>
+$$\begin{array}{c} f\left(y_{t}\right) \geq 0 \\ \int_{-\infty}^{\infty} f\left(y_{t}\right) d y_{t}=1 \end{array}$$
+<p>Marjinal yoğunluktan hareketle, eğer tanımlanabiliyorsa, zaman serisinin ortalama fonksiyonu tanımlanabilir:</p>
+$$\mu_{t} \equiv \mathrm{E}\left(Y_{t}\right)=\int_{-\infty}^{\infty} y_{t} f\left(y_{t}\right) d y_{t}$$
+<p>Burada her $t$ zamanında aynı yoğunluk fonksiyonundan sayıların çekildiği varsayılmıştır. Başka bir ifadeyle, zaman serisi türdeş dağılmıştır.</p>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="2.Beklenen-Değer,-Değişinti-(Variance)">2.Beklenen Değer, Değişinti (Variance)</h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<p>Zaman serisinin koşulsuz varyansı ise aşağıdaki gibi tanımlanabilir:</p>
+$$\begin{aligned} \gamma_{0 t} &amp;=\mathrm{E}\left[\left(Y_{t}-\mu_{t}\right)^{2}\right] \\ &amp;=\int_{-\infty}^{\infty}\left(y_{t}-\mu_{t}\right)^{2} f\left(y_{t}\right) d y_{t} \end{aligned}$$
+<p>$\left\{Y_{t}: t \in \mathbb{T}\right\}$ gibi bir zaman serisinin ortak yoğunluk fonksiyonu ise her t zamanında belirli değerleri aşmama olasılığı olarak tanımlanabilir:</p>
+$$F\left(y_{1}, y_{2}, \ldots, y_{T}\right)=P\left(Y_{1} \leq y_{1}, Y_{2} \leq y_{2}, \ldots, Y_{T} \leq y_{T}\right)$$
+<p>Zaman serisi değerleri arasındaki bağımlılık genellikle bu ortak yoğunluk fonksiyonunun açıkça yazılabilmesine izin vermez.</p>
+<p>Eğer rassal değişkenlerin birbirinden bağımsız ve türdeş dağıldığı biliniyorsa, bağımsızlık özelliğinden hareketle, ortak yoğunluk fonksiyonu marjinal yoğunlukların çarpımı olarak yazılabilir.</p>
+$$F\left(y_{1}, y_{2}, \ldots, y_{T}\right)=\prod_{t=1}^{T} f(y) d y$$
+<p><strong><em>Örnek: İki zar atımı deneyi</em></strong></p>
+<p>Her $t$ zamanında iki zarın atıldığını ve $Y_{t}$’nin bu zarların toplamını gösterdiğini düşünelim. Bu durumda $Y_{t}$’nin alabileceği değerler $\{2,3, \ldots, 12\}$ olacaktır. $T = 100$ için bu deneyin tekrarlandığını düşünelim. Şekil bu deneyin bir realizasyonunu göstermektedir.</p>
+<p>Bunu Python ile aşağıdaki gibi kodlayabiliriz:</p>
+</div>
+</div>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor">
+<div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3">
+<pre><span class="c1"># kütüphanelerin çağırılması</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor">
+<div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3">
+<pre><span class="c1"># iki zar atımı için rastgele sayı toplamını veren fonksiyon</span>
+<span class="k">def</span> <span class="nf">iki_zar_atımı</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="o">+</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span>
+
+<span class="c1"># deney parametreleri</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">deney_çıktısı</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">deney_sırası</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># T = 100 kadar zar atımı</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">iki_zar_atımı</span><span class="p">()</span>
+    <span class="n">deney_çıktısı</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">deney_sırası</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># deney çıktısının çizdirilmesi</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">deney_sırası</span><span class="p">,</span> <span class="n">deney_çıktısı</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"$t$"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"$Y_</span><span class="si">{t}</span><span class="s2">$"</span><span class="p">);</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedImage jp-OutputArea-output "><img class="aligncenter wp-image-1488 size-full" src="https://veridefteri.files.wordpress.com/2023/11/08863-zs1.png" alt="" width="721" height="482" /></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="3.Pür-Rassal-Süreç">3.Pür Rassal Süreç</h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<p>$\left\{\epsilon_{t}: t=1,2, \ldots\right\}$ ile gösterilen bir olasılıksal süreç aşağıdaki koşulları sağlıyorsa <strong>pür rassal süreç (white noise process)</strong> adı verilir:</p>
+$$\begin{aligned} \mathrm{E}\left[\epsilon_{t}\right] &amp;=0 \\ \operatorname{Var}\left(\epsilon_{t}\right) &amp;=\sigma^{2} \\ \operatorname{Cov}\left(\epsilon_{t}, \epsilon_{s}\right) &amp;=0, \quad t \neq s \end{aligned}$$
+<p>Bu süreci kısaca $\epsilon_{t} \sim w n\left(0, \sigma^{2}\right)$ ile göstereceğiz.</p>
+<p>Yukarıdaki koşullara ek olarak $\left\{\epsilon_{t}\right\}_{t=1}^{T}$ süreci ortalaması 0 ve değişintisi $\sigma^{2}$ olan bir normal dağılıma uyuyorsa bu sürece Normal (Gaussian) Pür Rassal Süreç adı verilir ve $\epsilon_{t} \sim G W N\left(0, \sigma^{2}\right)$ ile gösterilir. Eger türdeş ve bağımsız (iid) dağılyorsa kısaca $\epsilon_{t} \sim$ iid $N\left(0, \sigma^{2}\right)$ ile gösterilir.</p>
+<p><strong><em>Örnek: Deterministik Doğrusal Trend Süreci</em></strong></p>
+<p>Eğimleri farklı iki doğrusal trend serisini aşağıdaki eşitliğe göre çizelim:</p>
+$$y_{t}=\beta_{0}+\beta_{1} t+\epsilon_{t}, \quad \epsilon_{t} \sim w n\left(0, \sigma^{2}\right)$$</div>
+</div>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor">
+<div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3">
+<pre><span class="c1"># numpy kütüphanesinin çağırılması</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># parametreler</span>
+<span class="n">ortalama</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">standart_sapma</span> <span class="o">=</span> <span class="mi">1</span> 
+<span class="n">örnek_sayısı</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">beyaz_gürültü_hata_terimi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">ortalama</span><span class="p">,</span> <span class="n">standart_sapma</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">örnek_sayısı</span><span class="p">)</span>
+<span class="n">zaman_indisi</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">101</span><span class="p">):</span>
+    <span class="n">zaman_indisi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    
+<span class="c1"># iki doğrusal trend serisinin türetilmesi</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="mi">2</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="n">beyaz_gürültü_hata_terimi</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">2</span><span class="o">+</span><span class="mf">0.8</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">)</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">*</span><span class="n">beyaz_gürültü_hata_terimi</span>
+
+<span class="c1"># serilerin çizdirilmesi</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"$y_</span><span class="si">{t}</span><span class="s2">=2+0.2 t+\sqrt{5 \epsilon_</span><span class="si">{t}</span><span class="s2">}$"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"$y_</span><span class="si">{t}</span><span class="s2">=2+0.8 t+\sqrt{5 \epsilon_</span><span class="si">{t}</span><span class="s2">}$"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"$t$"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"$Y_</span><span class="si">{t}</span><span class="s2">$"</span><span class="p">);</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedImage jp-OutputArea-output "><img class="aligncenter wp-image-1489 size-full" src="https://veridefteri.files.wordpress.com/2023/11/07220-zs2.png" alt="" width="721" height="482" /></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<p><strong><em>Örnek: Sinyal+Şok</em></strong></p>
+<p>Şokların içerildiği, farklı şoklar altında sinyal örneği aşağıdaki eşitliğe göre çizilmiştir:</p>
+$$y_{t}=5 \cos (2 \pi t / 20)+\epsilon_{t}, \quad \epsilon_{t} \sim w n\left(0, \sigma^{2}\right)$$</div>
+</div>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor">
+<div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3">
+<pre><span class="c1"># beyaz gürültü hata terimleri için parametreler</span>
+<span class="n">örnek_sayısı</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">ortalama_alt</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">standart_sapma_alt</span> <span class="o">=</span> <span class="mi">1</span> 
+<span class="n">beyaz_gürültü_hata_terimi_alt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">ortalama_alt</span><span class="p">,</span> <span class="n">standart_sapma_alt</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">örnek_sayısı</span><span class="p">)</span>
+<span class="n">ortalama_üst</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">standart_sapma_üst</span> <span class="o">=</span> <span class="mi">4</span> 
+<span class="n">beyaz_gürültü_hata_terimi_üst</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">ortalama_üst</span><span class="p">,</span> <span class="n">standart_sapma_üst</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">örnek_sayısı</span><span class="p">)</span>
+<span class="c1"># zaman indisi</span>
+<span class="n">zaman_indisi</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">101</span><span class="p">):</span>
+    <span class="n">zaman_indisi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># şokların olmadığı sinyal</span>
+<span class="n">y1</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span>
+<span class="c1"># şokların olduğu durum</span>
+<span class="n">y2</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span><span class="o">+</span><span class="n">beyaz_gürültü_hata_terimi_alt</span>
+<span class="c1"># şokların olduğu durum</span>
+<span class="n">y3</span> <span class="o">=</span> <span class="mi">5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">)</span><span class="o">/</span><span class="mi">20</span><span class="p">)</span><span class="o">+</span><span class="n">beyaz_gürültü_hata_terimi_üst</span>
+
+<span class="c1"># sinyal ve şokların çizdirilmesi</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">,</span> <span class="n">ax3</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">10</span><span class="p">));</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">"Amplitude=5, dalgalanma sıklığı $\omega=1 / 20 .$ Orta: sinyal, Alt: $\epsilon_</span><span class="si">{t}</span><span class="s2"> \sim w n(0,1),$ Üst: $\epsilon_</span><span class="si">{t}</span><span class="s2"> \sim w n(0,4)$"</span><span class="p">);</span>
+
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">y3</span><span class="p">);</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'$y_</span><span class="si">{t}</span><span class="s1">$'</span><span class="p">);</span>
+
+<span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">y1</span><span class="p">);</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'periyodik</span><span class="se">\n</span><span class="s1">sinyal'</span><span class="p">);</span>
+
+<span class="n">ax3</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">y2</span><span class="p">);</span>
+<span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'$y_</span><span class="si">{t}</span><span class="s1">$'</span><span class="p">);</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">();</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedImage jp-OutputArea-output "><img class="aligncenter wp-image-1495 size-full" src="https://veridefteri.files.wordpress.com/2023/11/eb9e1-zs3a.jpg" alt="" width="1084" height="713" /></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="4.Kesin-Durağanlık">4.Kesin Durağanlık</h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<p>Her zaman indeksi kümesi</p>
+$$1 \leq t_{1}&lt;t_{2}&lt;\ldots&lt;t_{k}$$
+<p>için $y_{t_{1}}, y_{t_{2}}, \ldots, y_{t_{k}}$ 'nin ortak dağılımı, her $h \geq 1$ için,</p>
+$$y_{t_{1}+h}, y_{t_{2}+h}, \cdots, y_{t_{k}+h}$$
+<p>'nin ortak dağılımı ile aynı ise $\left\{y_{t}: t=1,2, \ldots\right\}$ zaman serisi <strong>kesin durağandır</strong>.</p>
+<p>Bu tanıma göre bir olasılıksal süreç ancak ve ancak ortak dağılımı (ya da ortak yoğunluk fonksiyonu) her zaman indeksi kümesi için türdeş ise kesin durağandır. Zaman serisi içindeki dinamik korelasyonun yapısı zamanla birlikte değişmez, aynıdır. Kesin durağanlığın pratikte gösterilmesi oldukça zordur. $T$ elemanlı bir zaman serisinden hareketle $T(T-1) / 2$ parametrenin tahminini gerektirir. Bu nedenle, genellikle, daha zayıf bir durağanlık tanımı kullanılır.</p>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="5.Ortak-Değişinti-(Covariance)-Durağanlık">5.Ortak Değişinti (Covariance) Durağanlık</h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<p>Bir zaman serisi, $\left\{y_{t}\right\}_{t=1}^{T}$, aşağıdaki koşulları sağlıyorsa <strong>ortak değişinti durağandır</strong>:</p>
+<p>$\mathrm{E}\left(y_{t}\right)=\mu \quad$ her $t$ için</p>
+<p>$\operatorname{Cov}\left(y_{t}, y_{t-h}\right)=\mathrm{E}\left[\left(y_{t}-\mu\right)\left(y_{t-h}-\mu\right)\right]$</p>
+<p>$=\gamma_{h} \quad$ her $t$ ve herhangi bir tamsayı $h$ için</p>
+<p>Ortak değişinti durağanlık, zayıf durağanlık olarak da isimlendirilir. Kesin durağanlık zayıf durağanlığı gerektirir ancak tersi doğru olmayabilir. Durağan bir zaman serisinin birinci ve ikinci momentleri zamana bağlı değildir. Koşulsuz ortalama sabittir ve zaman içinde değişmez. Benzer şekilde koşulsuz değişinti, pozitif, sonlu bir sayıya eşittir ve zamanla değişmez. Özdeğişim (autocovariance) ise sadece iki zaman noktası arasındaki uzaklığa, h, bağlıdır, zamanla birlikte değişmez.</p>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="6.Döngellik-(Ergodicity)">6.Döngellik (Ergodicity)</h1>
+<p>Bir ortak değişinti-durağan süreç aşağıdaki koşulu sağlıyorsa <strong>döngeldir (ergodic)</strong>:</p>
+$$T \rightarrow \infty, \quad \bar{y}=\frac{1}{T} \sum_{t=1}^{T} y_{t} \stackrel{p}{\longrightarrow} \mathrm{E}\left(Y_{t}\right)$$
+<p>Bu koşulun sağlanması için otokovaryansların toplamının sonlu olması yeterlidir:</p>
+$$\sum_{j=0}^{\infty}\left|\gamma_{j}\right|&lt;\infty$$
+<p>İkinci moment ergodikliği için ise aşağıdaki koşulun sağlanması gerekir:</p>
+$$\frac{1}{T-j} \sum_{t=j+1}^{T}\left(Y_{t}-\mu\right)\left(Y_{t-j}-\mu\right) \stackrel{p}{\longrightarrow} \gamma_{j}$$
+<p><strong><em>Döngellik: Örnek</em></strong></p>
+<p>Bir zaman serisi ortak değişinti durağan olabilir ancak döngel olmayabilir. Örneğin, aşağıdaki olasılıksal süreci düşünelim:</p>
+$$y_{t}^{i}=\mu^{i}+\epsilon_{t}$$
+<p>Burada $\mu^{i}$ ve $\epsilon_{t}$ birbirinden bağımsız iki rassal değişken olsun:</p>
+$$\begin{aligned} \mu^{i} &amp; \sim N\left(0, \sigma_{1}^{2}\right) \\ \epsilon_{t} &amp; \sim \operatorname{iid}\left(0, \sigma_{2}^{2}\right) \end{aligned}$$
+<p>$\left\{y_{t}\right\}$ serisinin ortak değişinti durağan olduğu kolayca gösterilebilir:</p>
+$$\mathrm{E}\left(y_{t}\right)=\mathrm{E}\left(\mu^{i}\right)+\mathrm{E}\left(\epsilon_{t}\right)=0$$$$\begin{array}{c} \operatorname{Var}\left(y_{t}\right)=\mathrm{E}\left[\left(\mu^{i}+\epsilon_{t}\right)^{2}\right]=\sigma_{1}^{2}+\sigma_{2}^{2} \\ \operatorname{Cov}\left(y_{t}, y_{t-h}\right)=\mathrm{E}\left[\left(\mu^{i}+\epsilon_{t}\right)\left(\mu^{i}+\epsilon_{t-h}\right)\right]=\sigma_{1}^{2}, \quad h \neq 0 \end{array}$$
+<p>Döngellik için $T \rightarrow \infty$ iken zaman ortalamalarının beklenti değerine yaklaşması gerekir. $y_{t}^{i}$ 'nin zaman ortalaması alınırsa:</p>
+$$\begin{aligned} \frac{1}{T} \sum_{t=1}^{T} y_{t}^{i} &amp;=\frac{1}{T} \sum_{t=1}^{T}\left(\mu^{i}+\epsilon_{t}\right) \\ &amp;=\mu^{i}+\frac{1}{T} \sum_{t=1}^{T} \epsilon_{t} \\ &amp;=\mu^{i} \neq 0 \end{aligned}$$
+<p>olduğu görülür. Açıktır ki $y_{t}^{i}$ serisi durağan olduğu halde döngel değildir. Serinin ortalaması sıfıra değil $\mu^{i}$ değerine yaklaşmaktadır.</p>
+<p>Serinin benzetimini (simulation) Python ile yapabilir, farklı realizasyonlarını türetebiliriz:</p>
+</div>
+</div>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor">
+<div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3">
+<pre><span class="c1"># ortalama ve beyaz gürültü hata terimi</span>
+<span class="n">örnek_sayısı</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">ortalama</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">standart_sapma1</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">standart_sapma2</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">ortalama_serisi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">ortalama</span><span class="p">,</span> <span class="n">standart_sapma1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">örnek_sayısı</span><span class="p">)</span>
+<span class="n">beyaz_gürültü_hata_terimi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">ortalama</span><span class="p">,</span> <span class="n">standart_sapma2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">örnek_sayısı</span><span class="p">)</span>
+
+<span class="c1"># zaman indisi</span>
+<span class="n">zaman_indisi</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">101</span><span class="p">):</span>
+    <span class="n">zaman_indisi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+
+<span class="c1"># serinin türetilmesi</span>
+<span class="n">yi</span> <span class="o">=</span> <span class="n">ortalama_serisi</span> <span class="o">+</span> <span class="n">beyaz_gürültü_hata_terimi</span>
+
+<span class="c1"># tek bir serinin realizasyonu</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">));</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"$y_</span><span class="si">{t}</span><span class="s2">^</span><span class="si">{i}</span><span class="s2">=\mu^</span><span class="si">{i}</span><span class="s2">+\epsilon_</span><span class="si">{t}</span><span class="s2">$"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">zaman_indisi</span><span class="p">,</span> <span class="n">ortalama_serisi</span><span class="p">,</span> <span class="s1">':'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"ortalama"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"$t$"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"$Y_</span><span class="si">{t}</span><span class="s2">$"</span><span class="p">);</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedImage jp-OutputArea-output "><img class="aligncenter wp-image-1496 size-full" src="https://veridefteri.files.wordpress.com/2023/11/13263-zs4a.jpg" alt="" width="721" height="467" /></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="7.Özdeğişim-(Autocovariance)-Fonksiyonu">7.Özdeğişim (Autocovariance) Fonksiyonu</h1>
+<p>Aralarındaki uzaklik $h=t-s$ olan iki zaman serisi, $Y_{t}$ ve $Y_{s}$ arasındaki ortak değişintiye:</p>
+$$\gamma_{h}=\operatorname{Cov}\left(Y_{t}, Y_{s}\right)=\mathrm{E}\left[\left(Y_{t}-\mathrm{E}\left(Y_{t}\right)\right)\left(Y_{s}-\mathrm{E}\left(Y_{s}\right)\right)\right]$$
+<p>$h$ <strong>özdeğişim (autocovariance)</strong> adı verilir.</p>
+<p>Özdeğişim hem uzaklığa hem de zamana bağlı olabilir. Süreç ortak değişinti durağansa her $t$ için $\mathrm{E}\left(Y_{t}\right)=\mu$ olacağından:</p>
+$$\gamma_{h}=\mathrm{E}\left[\left(Y_{t}-\mu\right)\left(Y_{t-h}-\mu\right)\right]$$
+<p>yazılabilir. Bu durumda özdeğişim sadece $h$’ye bağlıdır.</p>
+<p>Örneklem özdeğişim fonksiyonu:</p>
+$$\hat{\gamma}_{h}=\frac{1}{T} \sum_{t=h+1}^{T}\left(y_{t}-\bar{y}\right)\left(y_{t-h}-\bar{y}\right)$$
+<p>kullanılarak tutarlı bir şekilde tahmin edilebilir. Burada $\bar{y}=\frac{1}{T} \sum_{t=1}^{T} y_{t}$ örneklem ortalamasidir.</p>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="8.Özilinti-Fonksiyonu-(Autocorrelation-Function-ACF)">8.Özilinti Fonksiyonu (Autocorrelation Function-ACF)</h1>
+<p>Bir zaman serisinin <strong>özilinti fonksiyonu</strong> aşağıdaki gibi tanımlanır:</p>
+$$\rho_{h}=\frac{\operatorname{Cov}\left(y_{t}, y_{t-h}\right)}{\sqrt{\operatorname{Var}\left(y_{t}\right) \operatorname{Var}\left(y_{t-h}\right)}}$$
+<p>Durağan süreçler için:</p>
+$$\rho_{h}=\frac{\gamma_{h}}{\gamma_{0}}$$
+<p>yazılabilir. Bu durumda ACF sadece h’ye bağlı olarak değişir.</p>
+<p>$T$ gözlemden oluşan bir zaman serisi gerçekleşmesinden hareketle, $\rho_{h}$ aşağıda formülü verilen örneklem otokorelasyon fonksiyonu ile tutarlı bir şekilde tahmin edilebilir:</p>
+$$\hat{\rho}_{h}=\frac{\hat{\gamma}_{h}}{\hat{\gamma}_{0}}$$</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="9.Dizi-İlinti-Grafiği-(Correlogram)">9.Dizi İlinti Grafiği (Correlogram)</h1>
+<p>Bir zaman serisi gerçekleşmesinin örneklem otokorelasyonlarının $h=1,2, \ldots$ uzakliğına göre grafigine <strong>dizi ilinti grafiği (correlogram)</strong> adı verilir.</p>
+<p>Büyük örneklemlerde Merkezi Limit Teoremi’nden hareketle:</p>
+$$\hat{\rho}_{j} \sim N\left(0, \frac{1}{T}\right)$$
+<p>yazılabilir (Not: $\left.\sqrt{T} \hat{\rho}_{j} \sim N(0,1)\right)$.</p>
+<p>Öyleyse, sıfır çevresinde \%95 güven aralığı $\pm \frac{1.96}{\sqrt{T}}$ formülüyle bulunabilir.</p>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputPrompt jp-InputArea-prompt"> </div>
+<div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput ">
+<h1 id="10.Box-Pierce-Test-İstatistiği">10.Box-Pierce Test İstatistiği</h1>
+<p>İlk $k$ özilintinin sıfır olup olmadığını</p>
+$$H_{0}: \rho_{1}=\rho_{2}=\ldots=\rho_{k}=0$$$$H_{1}: \rho_{j} \neq 0,$$
+<p>herhangi bir j için.</p>
+<p>test etmek amacıyla Box-Pierce tarafından portmanto istatistiği önerilmiştir:</p>
+$$Q(k)=T \sum_{j=1}^{k} \hat{\rho}_{j}^{2}$$
+<p>$Q(k)$ istatistigi bos hipotez altında asimptotik olarak $k$ serbestlik derecesi ile ki-kare dağılımına uyar.</p>
+<p>Box-Pierce test istatistiği Ljung-Box tarafından sonlu örneklem performansını arttırmak amacıyla aşağıdaki gibi değiştirilmiştir:</p>
+$$L B(k)=T(T+2) \sum_{j=1}^{k} \frac{\hat{\rho}_{j}^{2}}{T-j}$$
+<p><strong><em>Örnek: İki Zar Atımı Deneyi</em></strong></p>
+<p>$y_{t}$’nin $t$ zamanında atılan iki zardan üste gelen rakamların toplamını gösterdiğini düşünelim. Zar atımı deneyi birbirinden bağımsız bir şekilde yapıldığından $y_{t}$ ile $y_{s}$ arasındaki özilinti sıfırdır.</p>
+</div>
+</div>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor">
+<div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3">
+<pre><span class="c1"># veri işleme</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pandas.plotting</span> <span class="kn">import</span> <span class="n">autocorrelation_plot</span>
+
+<span class="c1"># deney parametreleri</span>
+<span class="n">T</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">deney_çıktısı</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">deney_sırası</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># T = 100 kadar zar atımı</span>
+<span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">101</span><span class="p">):</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">iki_zar_atımı</span><span class="p">()</span>
+    <span class="n">deney_çıktısı</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">deney_sırası</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    
+<span class="n">deney_verisi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'deney_sırası'</span><span class="p">:</span> <span class="n">deney_sırası</span><span class="p">,</span> <span class="s1">'deney_çıktısı'</span><span class="p">:</span> <span class="n">deney_çıktısı</span><span class="p">})</span>
+
+<span class="c1"># deney çıktısının ve otokorelasyon fonksiyonunun çizdirilmesi</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">10</span><span class="p">));</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">deney_sırası</span><span class="p">,</span> <span class="n">deney_çıktısı</span><span class="p">);</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"$t$"</span><span class="p">);</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"$Y_</span><span class="si">{t}</span><span class="s2">$"</span><span class="p">);</span>
+<span class="n">autocorrelation_plot</span><span class="p">(</span><span class="n">deney_verisi</span><span class="p">[</span><span class="s1">'deney_çıktısı'</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">);</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Gecikme"</span><span class="p">);</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"Otokorelasyon"</span><span class="p">);</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">();</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedImage jp-OutputArea-output "><img class="aligncenter wp-image-1492 size-full" src="https://veridefteri.files.wordpress.com/2023/11/9248d-zs5.png" alt="" width="856" height="712" /></div>
+</div>
+</div>
+</div>
+</div>
+<!-- /wp:tadv/classic-paragraph -->

@@ -1,0 +1,26 @@
+---
+title: Tahmin ve Çıkarım 9 – Destek Vektör Makineleri
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-12-13
+image: 4071f-dvm_title.png
+---
+
+Yeni bir güdümlü öğrenme yöntemi ile tekrar karşınızdayım. Bu konuyu anlatmayı çok seviyorum çünkü işin geometrisi, bütün hikâyeyi açıkça ortaya koyuyor. Öte yandan dersin sonundaki çekirdekler (kernels) kısmında, temel bir optimizasyon bilgisi gerekiyor. Eğer bu konuda fikriniz yoksa lütfen dert etmeyin.  Önemli olan ana fikri kapmak. Arzu ediyorsanız, teknik detayı nasıl olsa öğrenirsiniz.
+
+Bir ders sonra yapay öğrenmeye giriş derslerini bitiriyorum. Ha gayret arkadaşlar.
+
+![](4071f-dvm_title.png){width="300" height="228"}
+
+<strong>Destek Vektör Makineleri</strong>
+
+<a href="https://www.dropbox.com/s/xu6v8feeigxprhy/TahminCikarim_09_Destek_Vektor_Makineleri.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/t240ay27uqg7qoi/TahminCikarim_09_Destek_Vektor_Makineleri_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+{{< video https://youtu.be/VRGZm1wPesY >}}
+

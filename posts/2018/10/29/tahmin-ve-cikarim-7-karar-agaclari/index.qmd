@@ -1,0 +1,32 @@
+---
+title: Tahmin ve Çıkarım 7 - Karar Ağaçları
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-10-29
+image: 29b71-kararagaclarikapak.png
+---
+Diyelim birisine sadece bir yapay öğrenme yöntemi anlatacaksınız ve o kişi bu konulara hiç aşina değil. Hangi yöntemi seçerdiniz?
+
+Benim cevabım kesinlikle karar ağaçları olurdu. İki net sebebim var: 1) İnsanın kafasında bir problemi bölerek çözmeye çalışmasına çok benzeyen bir yapıları var. Onun için sadece yöntemi değil, sonuçları da konuşmak kolay. 2) Karar ağaçları ya da onların bir araya getirilmesi ile oluşturulan yöntemlerle çok iyi sonuçlar elde etmek mümkün.
+
+Aslına bakarsanız son paragraf, yedinci dersin özeti gibi oldu. İlgili dosyaları ve videoyu aşağıda bulabilirsiniz.
+
+<em>Not:</em> Bu ders tam da 29 Ekim'e geldi. O zaman... Yaşasın cumhuriyet!
+
+<img class="alignleft wp-image-1192" src="29b71-kararagaclarikapak.png" alt="" width="325" height="229" />
+
+<strong style="font-size: 1.0625rem"><span style="font-size: 1.0625rem">Karar Ağaçları</span></strong>
+
+<a href="https://www.dropbox.com/s/i7dlvfdl659xf46/TahminCikarim_07_Karar_Agaclari.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/dk91jbypkata9og/TahminCikarim_07_Karar_Agaclari_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+(<a href="https://www.dropbox.com/s/pb3udl3ytd50coy/AdaBoostOzet.pdf?dl=0" target="_blank" rel="noopener">AdaBoost özeti</a>)
+
+
+{{< video https://youtu.be/E8UrmG3xD60 >}}
+

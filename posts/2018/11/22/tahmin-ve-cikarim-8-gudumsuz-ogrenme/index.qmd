@@ -1,0 +1,26 @@
+---
+title: Tahmin ve Çıkarım 8 – Güdümsüz Öğrenme
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-10-29
+image: a6b0b-tc_8.png
+---
+
+Uzunca bir süredir güdümlü öğrenme yöntemlerinden bahsediyoruz. Örneğin çıktıları verilmiş veri kümesini kullanarak geliştirdiğimiz modellerle, test verisini <a href="http://www.veridefteri.com/2018/08/03/tahmin-ve-cikarim-5-siniflandirma/">doğru biçimde etiketlemeye</a> çalıştık.  Bu derste farklı bir şey yapacağız. Sadece girdiler belli olduğunda -yani çıktı belli değilken- veri kümesini anlamlandırmaya ya da veri noktalarını belirli gruplara ayırmaya çalışacağız. Kısacası güdümsüz öğrenmeyi konuşacağız.
+
+Bir heyecanla anlatırken farkında olmadan uzunca bir video hazırlamışım. Neyse ki bu ders, farklı yöntemlerden sırasıyla bahsettiğim bölümlerden oluşuyor. Haliyle çay-kahve molası verip, videoyu bekletebileceğiniz aralar mevcut. İyi seyirler.
+
+![](a6b0b-tc_8.png){width="300" height="225"}
+
+
+<strong style="font-size: 1.0625rem"><span style="font-size: 1.0625rem">Güdümsüz Öğrenme</span></strong>
+
+<a href="https://www.dropbox.com/s/b03mvk3xj4k8jgm/TahminCikarim_08_Gudumsuz_Ogrenme.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/uswnjh7aijltv1f/TahminCikarim_08_Gudumsuz_Ogrenme_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+{{< video https://youtu.be/0rL8PU84dfs >}}

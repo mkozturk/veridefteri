@@ -1,5 +1,5 @@
 ---
-title: "[TODO] Jupyter Notebook - R ve Julia"
+title: "Jupyter Notebook - R ve Julia"
 author: "İlker Birbil"
 categories:
     - Başlangıç
@@ -8,3 +8,29 @@ image: 6502c-walnut-963665_1280.jpg
 date: Nov. 12, 2017
 ---
 
+Nasıl? Jupyter Notebook (JN) kullanmaya başladınız mı? Umarım [bir önceki yazımın](http://www.veridefteri.com/2017/10/30/jupyter-notebook-nedir-2/) faydası olmuştur. Eğer kurulumu yazıda bahsedildiği şekliyle yaptıysanız, hali hazırda bilgisayarınızda Python programlama dili var demektir. Haliyle JN ile bir sayfa açıp Python kullanabilirsiniz. Peki ya diğer programlama dilleri? Bugünkü yazıda JN'ye veri biliminde sıkça kullanılan R ve gittikçe daha çok popülerleşmeye başlayan [Julia](https://julialang.org/) dillerini ekleyelim.
+
+## R
+
+JN'ye farklı dillerle zenginleştirme işine "çekirdek (kernel) ekleme" deniyor. İlk önce R ile başlayacağız ama bilgisayarınızda R yüklü olduğundan emin olalım. Eğer daha önce yüklemediyseniz [şu sayfadan](https://cran.pau.edu.tr/) bilgisayarınızın işletim sistemine uygun olan dosyayı indirip kurun. Bu işlemden sonra artık R kullanabilirsiniz. Bu arada hazır R kurmuşken, [RStudio](https://www.rstudio.com/products/RStudio/)'yu da yüklemenizi tavsiye ederim. Gerçekten çok başarılı bir programlama ara yüzü sunuyor.
+
+R çekirdeğini eklemek için de [şu sayfada](https://github.com/IRkernel/IRkernel) verilen işlemleri yapacağız. İlk yapmanız gereken R programını çalıştırmak. Karşınıza bir terminal penceresi ve R komut satırı çıkacak. Eğer RStudio yüklediyseniz, programı çalıştırıp konsol (console) kısmına geçin. Ardından komut satırına aşağıdaki komutları sırasıyla yazmanız yeterli.
+
+    > install.packages('devtools')
+    > devtools::install_github('IRkernel/IRkernel')
+    > IRkernel::installspec()
+
+<img align="center" src="7d3c5-juliaconsole.png" width=600>
+
+## Julia
+
+Sıra geldi Julia yüklemeye. Ardından da JN'ye Julia çekirdeğini ekleyeceğiz. Bilgisayarınıza Julia kurmak için [şuradan](https://julialang.org/downloads/) işletim sisteminizle uyumlu seçeneği komut satırı sürümü (command line version) olacak şekilde indirip çalıştırın. Yüklediğiniz Julia programını çalıştırdığınızda komut satırı içeren bir pencere çıkacak. Julia kullanmaya hazırsınız. Ben son yıllarda Octave/MATLAB yerine  Julia kullanmaya başladım. Özellikle hızından çok memnunum. Neyse, konu dağılmasın. Asıl işimize dönüp, hemen JN'ye Julia çekirdeğini ekleyelim. Çok kolay. Tek yapmanız gereken Julia komut satırına aşağıdaki satırı yazmak.
+
+    julia> Pkg.add("IJulia")
+
+<img align="center" src="95e5b-rstudioconsole.png" width=600>
+
+<hr/>
+
+<img align="right" src="7e22f-diger_diller.png" width=300> 
+Eğer her şey yolunda gittiyse, JN'yi çalıştırdıktan sonra sağdaki menüden yeni bir defteri üç dilden birisi ile açabilirsiniz. Güle güle kullanın. Eğer daha farklı çekirdekler eklemek isterseniz [şu liste](https://github.com/jupyter/jupyter/wiki/Jupyter-kernels) hiç fena değil.

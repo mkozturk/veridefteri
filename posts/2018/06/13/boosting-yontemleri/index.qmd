@@ -1,0 +1,34 @@
+---
+title: "Boosting Yöntemleri"
+author: "Birol Yüceoğlu"
+categories:
+    - Başlangıç
+    - Ders
+    - Genel
+    - LightGBM
+    - scikit-learn
+    - Veri önişleme
+    - Veri setleri
+    - Yapay öğrenme
+date: 2018-06-13
+---
+
+30 Mayıs'ta Dataİstanbul tarafından düzenlenen bir etkinlikte 'Boosting Yöntemleri: Temeller ve Uygulamalar' adlı bir konuşma yaptım. <a href="https://www.meetup.com/en-AU/dataistanbul/">Dataİstanbul</a> veri bilimi ve yapay öğrenme alanında çalışan ya da kendini geliştirmek isteyen gönüllülerden oluşan bir topluluk. Düzenli aralıklarla bir araya gelerek atölyeler, eğitimler ve seminerler düzenliyorlar. Düzenledikleri etkinlikleri takip etmenizi tavsiye ederim.
+
+Adından da anlaşılacağı gibi konuşmamda, boosting yöntemlerinin temellerini ve LightGBM ile Scikit-Learn paketleri üzerindeki uygulamalarını anlattım. Bu sayede <a href="http://www.veridefteri.com/2018/05/22/lightgbme-giris/">LightGBM'e Giriş</a> yazısıyla kullanımına değindiğimiz konunun arka planındaki teoriye de giriş yapmış olduk. Sunumda bahsettiğim yöntemleri bir bağlanım problemi üzerinden anlattım. Yaptığımız uygulamalar ise sınıflandırma üzerineydi. Konuşmanın ana başlıklarını aşağıda bulabilirsiniz:
+<ul>
+ 	<li>Karar ağaçları ve olası problemleri</li>
+ 	<li>Bagging (bootstrap aggregating) ve rassal orman yöntemleri</li>
+ 	<li>Boosting yönteminin temelleri</li>
+ 	<li>Boosting ve bagging karşılaştırması</li>
+ 	<li>Gradient boosting</li>
+ 	<li>AdaBoost (Adaptive Boosting)</li>
+</ul>
+Uygulamalarda <a href="http://www.veridefteri.com/2018/05/22/lightgbme-giris/">LightGBM'e Giriş</a> yazısını kullandım. LightGBM üzerinde bu çalışmayı yaptıktan sonra Gradient Boosting ve AdaBoost yöntemlerini bir de Scikit-Learn üzerinden çalıştırdık. AdaBoost yöntemini kullandığımızda gözlemlerin bir sınıfa ait olma olasılıklarının dağılımında yaşanabilecek problemleri çözmek için olasılıkların yeniden dağıtılmasını sağlayan CalibrationClassifierCV modülünü gördük.
+
+Aşağıdaki linkten konuşmanın sunum dosyasına erişebilirsiniz.
+
+* <a href="https://veridefteri.files.wordpress.com/2023/11/4c2e7-boosting.pptx">Boosting (Powerpoint)</a>
+* <a href="https://veridefteri.files.wordpress.com/2023/11/31882-boosting.pdf">Boosting (PDF)</a>
+
+Konuşmada kullandığım Jupyter Notebook dosyalarına <a href="https://github.com/sibirbil/VeriDefteri">GitHub dizinimiz</a> üzerinden erişebilirsiniz.

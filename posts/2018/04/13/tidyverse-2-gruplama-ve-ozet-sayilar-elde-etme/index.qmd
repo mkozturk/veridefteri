@@ -1,0 +1,418 @@
+---
+title: Tidyverse
+author: Hazel Kavili
+categories:
+    - Veri önişleme
+date: 2018-03-03
+image: 24198-tidyverse-2-e1523639340572.png
+---
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">Bir önceki <a href="http://www.veridefteri.com/2018/03/03/tidyverse/">yazımda</a> Tidyverse dünyasına bir giriş yapmıştım. Bize nasıl bir iş akışı ve kolaylık sağladığından bahsetmiştim. Şimdi de sıklıkla kullandığımız <code>mutate()</code>, <code>group_by()</code> ve <code>summarise()</code> fonksiyonlarını, aynı veri setiyle nasıl kullanacağımızı anlatacağım.</div>
+<div class="text_cell_render border-box-sizing rendered_html">
+
+![](24198-tidyverse-2-e1523639340572.png){width=800}
+
+Veri setimizi tekrar çalışma alanımıza yükleyip, değişkenleri hatırlamak için ilk 3 satırına bir bakalım:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [1]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre><span class="kp">options</span><span class="p">(</span>jupyter.rich_display <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
+<span class="kp">suppressPackageStartupMessages</span><span class="p">(</span><span class="kn">library</span><span class="p">(</span>tidyverse<span class="p">))</span>
+filmler <span class="o">&lt;-</span> read.csv<span class="p">(</span>file <span class="o">=</span> <span class="s">"movies.csv"</span> <span class="p">,</span> header <span class="o">=</span> <span class="kc">TRUE</span><span class="p">,</span> sep <span class="o">=</span> <span class="s">","</span><span class="p">)</span> 
+<span class="kp">head</span><span class="p">(</span>filmler<span class="p">,</span> n <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  director_name  duration actor_2_name     gross     actor_1_name   
+1 James Cameron  178      Joel David Moore 760505847 CCH Pounder    
+2 Gore Verbinski 169      Orlando Bloom    309404152 Johnny Depp    
+3 Sam Mendes     148      Rory Kinnear     200074175 Christoph Waltz
+  movie_title                               actor_3_name     language country
+1 Avatar                                    Wes Studi        English  USA    
+2 Pirates of the Caribbean: At World's End  Jack Davenport   English  USA    
+3 Spectre                                   Stephanie Sigman English  UK     
+  budget    title_year imdb_score genres
+1 237000000 2009       7.9        Action
+2 300000000 2007       7.1        Action
+3 245000000 2015       6.8        Action</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+İlk fonksiyonumuz <code>mutate()</code>, adı üzerinde bir şeyleri <em>değiştirmek, dönüştürmek</em> için kullanacağız. Mutate fonksiyonu her değer için bir dönüşüm yapıyor ve bunu sizin isimlendireceğiniz yeni bir değişkene atıyor. Örneğin veri setimizde <em>duration</em> (filmlerin süresi) dakika olarak verilmiş ve bunu saat olarak da görmek istediğimizi düşünelim. <code>duration_hour</code> diye isimlendirdiğimiz yeni bir değişken oluşturup, dakikayı saate çeviriyoruz ve virgülden sonra 2 basamağı alacak şekilde gösteriyoruz. Oluşturduğum <code>duration_hour</code> değişkeni de veri setimin son değişkeni olacak şekilde ekleniyor:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [2]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler_sure <span class="o">&lt;-</span> filmler <span class="o">%&gt;%</span> 
+  mutate<span class="p">(</span>duration_hour <span class="o">=</span> <span class="kp">round</span><span class="p">(</span>duration<span class="o">/</span><span class="m">60</span><span class="p">,</span> digits <span class="o">=</span> <span class="m">2</span><span class="p">))</span> 
+
+<span class="kp">head</span><span class="p">(</span>filmler_sure<span class="p">,</span> n <span class="o">=</span> <span class="m">3</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  director_name  duration actor_2_name     gross     actor_1_name   
+1 James Cameron  178      Joel David Moore 760505847 CCH Pounder    
+2 Gore Verbinski 169      Orlando Bloom    309404152 Johnny Depp    
+3 Sam Mendes     148      Rory Kinnear     200074175 Christoph Waltz
+  movie_title                               actor_3_name     language country
+1 Avatar                                    Wes Studi        English  USA    
+2 Pirates of the Caribbean: At World's End  Jack Davenport   English  USA    
+3 Spectre                                   Stephanie Sigman English  UK     
+  budget    title_year imdb_score genres duration_hour
+1 237000000 2009       7.9        Action 2.97         
+2 300000000 2007       7.1        Action 2.82         
+3 245000000 2015       6.8        Action 2.47</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Burada önceki yazımda bahsettiğim zincir (pipe) operatörü ve <code>select</code> fonksiyonunu da tekrar kullanalım ve sadece <code>movie_title</code>, <code>duration</code> ve <code>duration_hour</code> değişkenlerini seçelim ve ilk 5 gözlemi inceleyelim:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [3]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler_sure <span class="o">%&gt;%</span> 
+  select<span class="p">(</span>movie_title<span class="p">,</span> duration<span class="p">,</span> duration_hour<span class="p">)</span> <span class="o">%&gt;%</span> 
+  <span class="kp">head</span><span class="p">(</span>n<span class="o">=</span><span class="m">5</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  movie_title                               duration duration_hour
+1 Avatar                                    178      2.97         
+2 Pirates of the Caribbean: At World's End  169      2.82         
+3 Spectre                                   148      2.47         
+4 The Dark Knight Rises                     164      2.73         
+5 John Carter                               132      2.20</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Mutate fonksiyonunun başka güzelliklerine de değinmek istiyorum. Örneğin veri setimizdeki <code>budget</code> ve <code>gross</code> değişkenlerinin para ile ilgili değişkenler olduğunu, yanlarına ekleyeceğim <code>$</code> sembolü ile özellikle vurgulamak istiyorum. <code>mutate_if</code> <strong>(*)</strong> fonksiyonu "değişkenlerim nümerik ise" diye kontrol edecek ve sonrasında <code>scales</code> paketinin <code>dollar_format</code> fonksiyonu ile eğer nümerik ise başlarına $ sembolü koymasını sağlayacak:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [4]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler <span class="o">%&gt;%</span> 
+  select<span class="p">(</span>movie_title<span class="p">,</span> director_name<span class="p">,</span> budget<span class="p">,</span> gross<span class="p">)</span> <span class="o">%&gt;%</span> 
+  mutate_if<span class="p">(</span><span class="o">~</span><span class="kp">is.numeric</span><span class="p">(</span><span class="m">.</span><span class="p">),</span> scales<span class="o">::</span>dollar_format<span class="p">(</span>prefix <span class="o">=</span> <span class="s">"$"</span><span class="p">))</span> <span class="o">%&gt;%</span> 
+  <span class="kp">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  movie_title                               director_name     budget      
+1 Avatar                                    James Cameron     $237,000,000
+2 Pirates of the Caribbean: At World's End  Gore Verbinski    $300,000,000
+3 Spectre                                   Sam Mendes        $245,000,000
+4 The Dark Knight Rises                     Christopher Nolan $250,000,000
+5 John Carter                               Andrew Stanton    $263,700,000
+6 Spider-Man 3                              Sam Raimi         $258,000,000
+  gross       
+1 $760,505,847
+2 $309,404,152
+3 $200,074,175
+4 $448,130,642
+5 $73,058,679 
+6 $336,530,303</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+İkinci ve üçüncü fonksiyonlarımız ise <code>group_by</code> ve <code>summarise</code>. Belirlediğimiz değişkene/değişkenlere göre gruplama yapmak istiyorsak <code>group_by</code> kullanıyoruz. <code>summarise</code> (veya <code>summarize</code>) ise bize görmek istediğimiz özet bir sayıyı veriyor. Özet sayı, değişkenin ortalama, standard sapma, varyans, minimum, maksimum vb değerleri olabilir.
+
+Bu iki fonksiyonu beraber göstermek istiyorum. İlk olarak yönetmenlerin filmlerinin IMDB puanlarının ortalamasına bakmak ve bunu ortalama puanı yüksek olandan düşük olana doğru sıralamak istiyorsak:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [5]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler <span class="o">%&gt;%</span> group_by<span class="p">(</span>director_name<span class="p">)</span> <span class="o">%&gt;%</span> 
+  summarise<span class="p">(</span>ortalama_puan <span class="o">=</span> <span class="kp">round</span><span class="p">(</span><span class="kp">mean</span><span class="p">(</span>imdb_score<span class="p">),</span> digits <span class="o">=</span> <span class="m">2</span><span class="p">))</span> <span class="o">%&gt;%</span> 
+  arrange<span class="p">(</span>desc<span class="p">(</span>ortalama_puan<span class="p">))</span> <span class="o">%&gt;%</span>  <span class="kp">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  director_name         ortalama_puan
+1 Charles Chaplin       8.60         
+2 Tony Kaye             8.60         
+3 Alfred Hitchcock      8.50         
+4 Damien Chazelle       8.50         
+5 Christopher Nolan     8.43         
+6 Marius A. Markevicius 8.40</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Burada ilk önce hangi değişkene göre gruplamak istiyorsak onu <code>group_by</code> fonksiyonunun içine yazdık ve ardından <code>summarise</code> fonksiyonu ile görmek istediğimiz ortalama_puan değişkenini <code>mean</code> fonksiyonu ile hesapladık.
+
+Başka bir örnek türetelim. Yıllara göre gruplayıp, en yüksek IMDB puanına ve film süresine bakalım:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [6]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler <span class="o">%&gt;%</span> group_by<span class="p">(</span>title_year<span class="p">)</span> <span class="o">%&gt;%</span> 
+  summarise<span class="p">(</span>max_puan <span class="o">=</span> <span class="kp">max</span><span class="p">(</span>imdb_score<span class="p">),</span> max_sure <span class="o">=</span> <span class="kp">max</span><span class="p">(</span>duration<span class="p">))</span> <span class="o">%&gt;%</span> 
+  arrange<span class="p">(</span>desc<span class="p">(</span>max_puan<span class="p">))</span> <span class="o">%&gt;%</span>  
+  <span class="kp">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  title_year max_puan max_sure
+1 1994       9.3      212     
+2 1972       9.2      175     
+3 1974       9.0      220     
+4 2008       9.0      166     
+5 1993       8.9      330     
+6 2003       8.9      280</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bu örnek bize 1994 yılında gösterimdeki filmlerin en yüksek puanının 9.3 ve en yüksek süresinin 212 dakika olduğunu söylüyor. Ama bu iki değerin <em>aynı filme ait olduğu anlamına gelmiyor</em>, buraya dikkat edelim. Bunların hangi filmlere ait olduklarını bilmek istiyorsak da şöyle bir şey deneyebiliriz:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [7]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler <span class="o">%&gt;%</span> 
+  filter<span class="p">(</span>title_year <span class="o">==</span> <span class="m">1994</span><span class="p">,</span> imdb_score <span class="o">==</span> <span class="m">9.3</span> <span class="o">|</span> duration <span class="o">==</span> <span class="m">212</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  director_name   duration actor_2_name     gross    actor_1_name  
+1 Lawrence Kasdan 212      Catherine O'Hara 25052000 Dennis Quaid  
+2 Frank Darabont  142      Jeffrey DeMunn   28341469 Morgan Freeman
+  movie_title               actor_3_name        language country budget  
+1 Wyatt Earp                Isabella Rossellini English  USA     63000000
+2 The Shawshank Redemption  Bob Gunton          English  USA     25000000
+  title_year imdb_score genres   
+1 1994       6.6        Adventure
+2 1994       9.3        Crime</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Son olarak veri setimizde film türlerine göre kaçar film olduğuna bakalım:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [8]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler <span class="o">%&gt;%</span> group_by<span class="p">(</span>genres<span class="p">)</span> <span class="o">%&gt;%</span> 
+  summarise<span class="p">(</span>film_sayisi <span class="o">=</span> n_distinct<span class="p">(</span>movie_title<span class="p">))</span> <span class="o">%&gt;%</span>
+  arrange<span class="p">(</span>desc<span class="p">(</span>film_sayisi<span class="p">))</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  genres    film_sayisi
+1 Comedy    989        
+2 Action    897        
+3 Drama     614        
+4 Adventure 356        
+5 Crime     241        
+6 Biography 201</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Burada bazı filmler birden fazla yazıldığı için (benzeri olmayan film sayısı 3606) <code>n_distinct</code> fonksiyonunu kullandık. Hangi filmlerin birden fazla yazıldığına bakmak istiyorsak da aşağıdaki gibi inceleyebiliriz:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [9]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-r">
+<pre>filmler <span class="o">%&gt;%</span> group_by<span class="p">(</span>movie_title<span class="p">)</span> <span class="o">%&gt;%</span> 
+  summarize<span class="p">(</span>n <span class="o">=</span> n<span class="p">())</span> <span class="o">%&gt;%</span>
+  filter<span class="p">(</span>n <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span> <span class="o">%&gt;%</span> 
+  arrange<span class="p">(</span>desc<span class="p">(</span>n<span class="p">))</span> <span class="o">%&gt;%</span> <span class="kp">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_text output_subarea ">
+<pre>  movie_title               n
+1 Halloween                 3
+2 Home                      3
+3 King Kong                 3
+4 Pan                       3
+5 The Fast and the Furious  3
+6 Victor Frankenstein       3</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bir sonraki yazımda <code>ggplot2</code> paketiyle bu veriler üzerinden görselleştirme örnekleri yapacağım.
+
+<strong>(*)</strong> <code>mutate_at</code>, <code>mutate_if</code>, <code>mutate_all</code>, <code>summarise_at</code>, <code>summarise_if</code>, <code>summarise_all</code> fonksiyonlarına mutlaka bakmanızı tavsiye ederim.
+
+</div>
+</div>
+</div>

@@ -1,0 +1,133 @@
+---
+title: "Tahmin ve Çıkarım (Makine Öğrenmesi? Yapay Öğrenme?)"
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-04-04
+image: 111ee-01giris_1.jpg
+---
+
+"Yapay Öğrenme" mi, yoksa "Makine Öğrenmesi" mi? Belki de "İstatiksel Öğrenme." Açıkçası ben de bir türlü karar veremiyorum. Bir bilgisayar mühendisi kadar iddialı değilim; onun için ilk iki seçeneği kullanmak istemedim. İstatistik bilgim idare eder. Fakat doğruya doğru, mektepli istatistikçilerle aşık atamam. Öte yandan önümüzdeki güz döneminde, bizim üniversitede çoğunluğunu optimizasyon ve istatistikçilerin oluşturduğu bir gruba "Machine Learning" isimli bir yüksek lisans dersi vereceğim. Yani öyle ya da böyle, bu derse iyi hazırlanmam gerek. Kaçış yok. Onun için isme fazla takılmasam iyi olacak.
+
+Çalışmaya başladım. Bir yandan da ders notları hazırlıyorum ki konuyu daha iyi anlayayım. Yüksek lisans dersi İngilizce olacak (Hollandaca da anlatabilirim ama pişman olurlar). İşin güzel tarafı, bu tür derslerde kullandığım sunum dosyalarında fazla yazı olmuyor. Ben de madem az metin var, o zaman neden Türkçe olmasın diye düşündüm. Bir yandan da dersleri videoya çekmeyi deneyeceğim. Bu şekilde hem Veri Defteri için farklı bir kaynağımız daha olur, hem de sizden gelen önerilerle notlarım iyileşir.
+
+Aklımdaki konular şunlar:
+<ol>
+ 	<li><strong>Giriş</strong>
+<ul style="list-style-type: square;">
+ 	<li>Ne yapıyoruz?</li>
+ 	<li>Farklı veri tipleri</li>
+ 	<li>Bağlanım (regression) ve sınıflandırma (classification)</li>
+ 	<li>Güdümlü (supervised) ve güdümsüz (unsupervised) öğrenme</li>
+</ul>
+</li>
+ 	<li><strong>Performans Ölçümü</strong>
+<ul style="list-style-type: square;">
+ 	<li>Eğitim (training) ve test hataları</li>
+ 	<li>Aşırı uyum (overfitting)</li>
+ 	<li>Yanlılık (bias) - Varyans</li>
+ 	<li>Bayes sınıflandırıcısı (classifier) - K-En Yakın Komşu (KEYK)</li>
+</ul>
+</li>
+ 	<li><strong>Doğrusal Bağlanım</strong>
+<ul style="list-style-type: square;">
+ 	<li>Modelin kurulması</li>
+ 	<li>Katsayıların elde edilmesi</li>
+ 	<li>Kategorik değişkenlerin eklenmesi</li>
+ 	<li>KEYK ile karşılaştırma</li>
+</ul>
+</li>
+ 	<li><strong>Düzenlileştirme (Regularization) </strong>
+<ul style="list-style-type: square;">
+ 	<li>Alt küme seçimi</li>
+ 	<li>Çıkıntı (ridge) bağlanımı ve Lasso</li>
+ 	<li>Boyut indirme (dimension reduction)</li>
+</ul>
+</li>
+ 	<li><strong>Sınıflandırma</strong>
+<ul style="list-style-type: square;">
+ 	<li>Lojistik (logistic) Bağlanım</li>
+ 	<li>Doğrusal Ayrımsayıcı Çözümleme (Linear Discriminant Analysis)</li>
+ 	<li>Doğru-yanlış sınıflandırma tabloları</li>
+</ul>
+</li>
+ 	<li><strong>Tekrar Örnekleme (Resampling)</strong>
+<ul style="list-style-type: square;">
+ 	<li>Çapraz geçerlilik sınaması (cross validation)</li>
+ 	<li>Zorlama tekniği (bootstrap technique)</li>
+</ul>
+</li>
+ 	<li><strong>Karar Ağaçları (Decison Trees)</strong>
+<ul style="list-style-type: square;">
+ 	<li>Bağlanım ve sınıflandırma ağaçları</li>
+ 	<li>Rassal Ormanlar (Random Forests)</li>
+ 	<li>Torbalama (bagging) ve takviye (boosting)</li>
+</ul>
+</li>
+ 	<li><strong>Gruplandırma (Clustering)</strong>
+<ul style="list-style-type: square;">
+ 	<li>Ana Bileşenler Analizi (Principal Component Analysis)</li>
+ 	<li>K-Ortalamalar gruplandırma</li>
+ 	<li>Hiyerarşik gruplandırma</li>
+ 	<li>Spektral gruplandırma</li>
+</ul>
+</li>
+ 	<li><strong>Destek Vektör Makineleri (Support Vector Machines)</strong>
+<ul style="list-style-type: square;">
+ 	<li>Ayırıcı düzlemler (separating hyperplanes)</li>
+ 	<li>Destek vektör sınıflandırıcıları (classifiers)</li>
+ 	<li>Çoklu sınıf</li>
+</ul>
+</li>
+ 	<li><strong>Yapay Sinir Ağları (Artificial Neural Networks)</strong>
+<ul style="list-style-type: square;">
+ 	<li>Temel ağ yapısı</li>
+ 	<li>Etkinleştirme (activation) fonksiyonları</li>
+ 	<li>Geri yayılım (backpropagation)</li>
+</ul>
+</li>
+</ol>
+Ta en baştan çok katı bir içeriği garanti etmem oldukça güç elbette. Eminim zaman içinde eklemeler ve çıkarmalar olacaktır. Ancak yine de yukarıdaki konular size bir fikir verir diye tahmin ediyorum. Bu arada içerikten de göreceğiniz üzere sık sık Türkçe teknik terimlere ihtiyacımız olacak. Çeviri için farklı kaynakları düşündüm. En sonunda <a href="http://www.tubaterim.gov.tr/" target="_blank" rel="noopener">TÜBA Türkçe Bilim Terimleri Sözlüğü</a>'nü esas almaya karar verdim.
+
+Ders notlarımı hazırlarken mümkün mertebe bir kitaba bağlı kalmayı seviyorum. Bu sayede dersi takip edenlerin, derste işlemediğim veya iyi anlamadıkları konuları kendi başlarına çalışmaları mümkün oluyor. İstatiksel ya da yapay öğrenme konularında yazılmış çok iyi kitaplar var. Bir süre inceledikten sonra şu kitapta karar kıldım:
+<p class="p1" style="text-align: left; padding-left: 30px;"><span class="s1">"An Introduction to Statistical Learning – with Applications in R,” G. James, D. Witten, T. Hastie, R. Tibshirani. Yedinci baskı, Springer, New York, 2013.</span></p>
+Kitabın teknik ayrıntıları atlayarak ilerlemesini çok sevdiğimi söyleyemem. Ancak aklımı çelen birkaç yanı var. Öncelikle kitabın dijital kopyasına, kullanılan veri kümelerine ve kodlara ücretsiz olarak <a href="http://www-bcf.usc.edu/~gareth/ISL/" target="_blank" rel="noopener">erişilebiliyor</a>. Ayrıca kitabın her bölümünün sonunda bilgisayar başında yapılması istenen uygulamalar verilmiş. Kitap R programlama dilini kullanmış ve tüm kodlar aynı sayfada mevcut. Ancak biraz arayınca Python kodlarını da kolayca bulabilirsiniz. Bir diğer sebep de bu kitabı hazırlayanlardan Hastie ve Tibshirani'nin yanlarına J. Friedman'ı alarak yazdıkları bir <a href="https://web.stanford.edu/~hastie/ElemStatLearn/" target="_blank" rel="noopener">kitap</a> daha olması. Doğrusu o kitap, benim bayağı beğendiğim bir kaynak. Teknik olarak kesinlikle daha fazla ayrıntıya giriyor. Eğer bu ders için seçtiğim kitaptan hoşlanmazsanız, o kitabı takip edebilirsiniz. Orada benim anlatacağım konular daha derinlemesine inceleniyor. Bu arada unutmadan ekleyeyim. Seçtiğim kitap Yapay Sinir Ağları konusuna girmiyor. O konu için birkaç kitaptan yararlanacağım. Zamanı gelince referansları veririm.
+
+Dersin tamamını takip edebilmek için temel bir istatistik, analiz ve lineer cebir bilgisine ihtiyaç var. Kabaca üniversitenin ilk iki yılında öğretilen konular. Eğer bu konuları daha önce hiç görmediyseniz, yine de dersi takip edebilirsiniz  ancak hey ayrıntıya vakıf olmanız maalesef mümkün değil.
+
+Lafı uzatmadan <span style="text-decoration: underline;">iki bölümden oluşan</span> giriş dersi ile başlayalım. Arkası da zamanla gelir...
+
+<img src="111ee-01giris_1.jpg?w=300&amp;h=222" alt="" width="300" height="222" />
+
+&nbsp;
+
+<span style="text-decoration: underline;"><strong>Giriş 1</strong></span>
+
+<a href="https://www.dropbox.com/s/uefrz7s0nqlw2fb/TahminCikarim_01_Giris_1.pdf?dl=0">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/1hek1jtsokg2ncu/TahminCikarim_01_Giris_1_sb.pdf?dl=0">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+{{< video https://youtu.be/G_w22cKr2Ng >}}
+
+<hr />
+
+&nbsp;
+
+<img src="1b7fc-01giris_2.jpg" alt="" width="300" height="223" />
+
+&nbsp;
+
+<span style="text-decoration: underline;"><strong>Giriş 2</strong></span>
+
+<a href="https://www.dropbox.com/s/96nnzya4pa371mf/TahminCikarim_01_Giris_2.pdf?dl=0">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/9ps6pyxlihotiby/TahminCikarim_01_Giris_2_sb.pdf?dl=0">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+{{< video https://youtu.be/kioUbFTOisM >}}

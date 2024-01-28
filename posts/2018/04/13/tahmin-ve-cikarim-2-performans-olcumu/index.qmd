@@ -1,0 +1,55 @@
+---
+title: "Tahmin ve Çıkarım 2 - Performans Ölçümü"
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-04-13
+image: c8f6b-tahmin_cikarim_2_1.jpg
+---
+Yapay öğrenme konusuna <a href="http://www.veridefteri.com/2018/04/04/tahmin-ve-cikarim-makine-ogrenmesi-yapay-ogrenme/">bir önceki ders</a> ile giriş yapmıştık. O derste, makine öğrenmesinin temel fikirlerinden birinin elimizdeki eğitim verisini kullanarak bir model geliştirmek olduğunu söylemiştik.
+
+<img align="center" src="4584a-girdi_cikti_1.png" alt="" width="300" height="111" />
+
+"Tahmin ve Çıkarım" dersinin ilerleyen kısımlarında söz konusu modellerin farklı çeşitlerini inceleyeceğiz. Evet, kullanılabilecek pek çok model mevcut. Ancak çoğu zaman, aynı veri üzerinde çalışsalar bile farklı modellerin sonuçları birbirlerinden farklı çıkar. Bu farklılık için üç sebep sayabilirim:
+<ol>
+ 	<li><strong>Eğitim verisindeki rassallık:</strong> Tahmin ya da çıkarım yapmak için bir örneklem kullanıyoruz. Örneğin, havayı tahmin etmek için 20 günlük bir veri kümesini girdi olarak alalım. Bugünden geriye 20 gün giderek toplayacağımız veri ile elde edeceğimiz sonuçlar, geçen hafta topladığımız 20 günlük veriyle elde ettiğimiz sonuçlardan tamamen farklı olabilir.</li>
+ 	<li><strong>Önerilen modelin <em>gerçek</em> modele uygun olmaması</strong>: Girdi ile çıktı arasındaki ilişkiyi tarif etmek için seçtiğimiz model gerçeği yansıtmayabilir. Kaldı ki modeli eğitim verisini kullanarak önerdiğimiz için eğitim verisindeki rassallık, model seçimimizi kolayca etkileyebilir</li>
+ 	<li><strong>Gürültü:</strong> Neticede gerçek hayatı modellemeye çalışıyoruz. Ve kullandığımız veriden bağımsız olarak, gerçek hayatta bir rastgelelik daima var. Bu rassallık da sonuçların üç aşağı-beş yukarı sapmasına neden olur. İşte kontrol edemediğimiz bu sapmaya <em>gürültü</em> diyoruz. Örneğin, tüm koşulları aynı dahi olsa iki futbol maçının sonuçları birbirlerinden tamamen farklı olabilir (top yuvarlaktır).</li>
+</ol>
+O zaman kilit sorumuz şu: Hangi modeli seçmeli? Böyle bir soruyu cevaplamak için en sık kullanılan yöntem, önerilen modellerin performanslarını karşılaştırmak. İşte bu da bizi, bu dersin konusuna getiriyor. Yani performans ölçülerine...
+
+<p style="text-align: center;"><img class="aligncenter size-medium wp-image-1001" src="58395-girdi_cikti_2.png" alt="" width="300" height="111" /></p>
+
+<blockquote><strong>Not:</strong> Bazı arkadaşlar videoların sağ alt köşesinde benim gözükmemi önerdiler. Anladığım kadarıyla, o şekilde dinleyiciler daha kolay dikkatlerini topluyorlarmış. Doğrudur. Ancak iki sebepten bunu yapamıyorum: 1) Dersi gezerek anlatıyorum. Durmadan kadraja girip-çıkan biri sanki daha çok dikkat dağıtır. 2) Tablet bilgisayar kullanıyorum ve elimdeki kalem ile ekrana yazmam gerekiyor. Açıkçası, videolarda koca bir burun ya da dev bir göz olarak rol almak istemedim.</blockquote>
+<img align="center" src="c8f6b-tahmin_cikarim_2_1.jpg" alt="" width="300" height="226" />
+
+<span style="text-decoration: underline;"><strong>Performans Ölçümü 1</strong></span>
+
+<a href="https://www.dropbox.com/s/xrjlrj08095mpm0/TahminCikarim_02_Performans_Olcum_1.pdf?dl=0">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/tlnv9y046uwpdxp/TahminCikarim_02_Performans_Olcum_1_sb.pdf?dl=0">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+&nbsp;
+
+{{< video https://youtu.be/-03OaC-ONh8 >}}
+
+<hr />
+
+<img src="55f3d-tahmin_cikarim_2_2.jpg" alt="" width="300" height="229" />
+
+<span style="text-decoration: underline;"><strong>Performans Ölçümü 2</strong></span>
+
+<a href="https://www.dropbox.com/s/er7q9m8492iq2nf/TahminCikarim_02_Performans_Olcum_2.pdf?dl=0">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/t06qy292euab22e/TahminCikarim_02_Performans_Olcum_2_sb.pdf?dl=0">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+&nbsp;
+
+{{< video https://youtu.be/69bGRKn1Iz4 >}}

@@ -1,0 +1,852 @@
+---
+title: Tweepy ile Twitter API erişimi - 1
+author: Tevfik Uyar
+categories:
+    - Veri edinme
+date: 2020-01-12
+image: 2aeb4-social_network_analysis_visualization.png
+---
+
+<div class="cell border-box-sizing text_cell rendered"></div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Günümüzde sosyal medyadan elde edilen veriler sosyal bilimlerden pazarlama uygulamalarına kadar pek çok alanda kullanılıyor. Sosyal medya pek çok kullanıcının ürettiği sayısız metin verisini bir arada bulabileceğimiz eşsiz bir alan. Bu nedenle veri bilimiyle ilgilenenler için de müthiş bir deneyim fırsatı sunuyor.
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bu yazımızda Python için Twitter API'sine erişmek için geliştirilmiş Tweepy adlı kütüphanenin nasıl kullanılabileceğine dair bir kaç örnek sunacağız.
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Twitter-API">Twitter API</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Şüphesiz Tweepy kullanarak Twitter'a erişmek için öncelikle bir Twitter API erişimine ihtiyacınız var. Bunun için API anahtarı talebinde bulunmanız, yani API kullanımı için gerekli bilgileri almanız gerekir. Twitter API'ına erişim talebi için aşağıdaki adresi ziyaret ederek Standart API başvurusu yapmanız yeterli:
+
+<a href="https://developer.twitter.com/en/apply-for-access">https://developer.twitter.com/en/apply-for-access</a>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+API erişiminiz varsa artık size özel <em>Consumer Key, Consumer Secret, Access Token ve Access Token Secret</em> değerlerini yaratarak kullanabilirsiniz demektir. Tweepy'ı kullanmak için bu değerlere muhakkak sahip olmanız gerekiyor zira Twitter API'ına ancak değerlerle erişebilirsiniz.
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Şimdi sıra geldi, Tweepy kütüphanesini yüklemeye. Tavsiyem conda ile yüklemenizdir.
+
+</div>
+</div>
+</div>
+<pre>pip3 install tweepy 
+conda install -c conda-forge tweepy</pre>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Artık anahtarlarımız var. Tweepy'ı da kurduk. O halde API değerlerimizi ilgili değişkenlere atayabiliriz. Takdir edersiniz ki ben kendi API bilgilerimi silmek durumunda kaldım :)
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [6]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">consumer_key</span><span class="o">=</span><span class="s2">"burayayaziniz"</span>
+<span class="n">consumer_secret</span><span class="o">=</span><span class="s2">"burayayaziniz"</span>
+<span class="n">access_token</span><span class="o">=</span><span class="s2">"burayayaziniz"</span>
+<span class="n">access_token_secret</span><span class="o">=</span><span class="s2">"burayayaziniz"</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Artık tweepy'ı import edebilir ve OAuth güvenlik doğrulaması yoluyla <em>api</em> bağlantımızı sağlayabiliriz:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [7]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="kn">import</span> <span class="nn">tweepy</span>
+
+<span class="n">auth</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">OAuthHandler</span><span class="p">(</span><span class="n">consumer_key</span><span class="p">,</span> <span class="n">consumer_secret</span><span class="p">)</span>
+<span class="n">auth</span><span class="o">.</span><span class="n">set_access_token</span><span class="p">(</span><span class="n">access_token</span><span class="p">,</span> <span class="n">access_token_secret</span><span class="p">)</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">API</span><span class="p">(</span><span class="n">auth</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bağlantımız sağlandı. Bu noktadan sonra Tweepy metodlarını kullanarak Tweetler üzerinde çeşitli işlemler yapabiliriz. Tweetlerle ilgili metodlarda bir Tweet JSON dönecektir (<strong>Status nesnesi</strong>). Bu JSON'un yapısı hakkında daha fazla bilgi edinmek için Twitter'in kendi geliştirici sayfasındaki <a href="https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/intro-to-tweet-json">şu izahatnameyi</a> inceleyebilirsiniz.
+
+Burada da göreceğiniz üzere, örneğin:
+
+<em>created_at</em>: Tweetin atıldığı tarihi
+<em>text</em>: Tweet metnini
+<em>user</em>: Bir dizi olarak kullanıcı bilgilerini ve bu dizinin içinde:
+<em>user.name</em> kullanıcı adını,
+<em>user.screen_name</em> ise kullanıcının görünen adını içerir.
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Örnekler">Örnekler</h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+API bağlantınızı mevcut Twitter hesabınız üzerinden yaptığınız için, sözgelimi, kendi timeline'ını home_timeline() metodu ile çekebilirsiniz. Bu metodun parametreleri aşağıdaki gibidir:
+
+</div>
+</div>
+</div>
+API.home_timeline([since_id][, max_id][, count][, page])
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Eğer fonskiyonu varsayılan değerleriyle gönderirseniz size ana akışınızdan son 20 tweeti çeker. Bu tweetlerden son 5 adedini kullanıcı adı, görünen adı, atılma zamanı ve tweet metinleriyle aşağıdaki gibi yazdırabiliriz (<em>since_id</em> ile <em>max_id</em> belli iki tweet arasındaki akışı görebilmeniz içindir. Her tweet bir ID'ye sahip olduğundan bu ID'leri kullanarak spesifik bir aralıktaki tweetleri çekebilirsiniz.):
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [116]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">tweetler</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">home_timeline</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1">#Ana ekran akışını çağırıyoruz.</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweetler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">): </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">) </span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">created_at</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1: Medyascope (Medyascopetv): Yarın 12:30'da
+@ilhanuzgel @Metin4020 @IsinElicin https://t.co/nspFzbfJ0O (2020-01-02 14:48:55) 
+
+2: Kuzey Ormanları Savunması (kuzeyormanlari): İstanbul Çevre Şehircilik İl Müdürlüğü önünde rant kanalına karşı basın açıklaması yapıyoruz. 
+
+#YaKanalYaİstanbul… https://t.co/ZGjEM4ZMOW (2020-01-02 14:48:47) 
+
+3: BirGün Gazetesi (BirGun_Gazetesi): Libya Tezkeresi 184 ret oyuna karşı 325 oyla kabul edildi
+https://t.co/rD9M96R586 https://t.co/p5GA2UwpPG (2020-01-02 14:48:45) 
+
+4: Eser Unsalan (eserunsalan): RT @airEref3: Ahmet Altan ve Taraf gazetesinde yazan şerefsizler sadece kumpasları değil bu milletin gençlerinin geleceğini çalan ÖSYM Başk… (2020-01-02 14:48:32) 
+
+5: Gulay Turkmen (gulayturkmen): RT @yelkovansizsaat: tabii ki kurtuluş - tatavla'da bu gelenek son hız devam... genelde yaşlılar evde pişirmeye devam ederken #üstünpalmie… (2020-01-02 14:48:32) 
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<em>(Dikkat: Yukarıdaki tweetlerin ancak belli karaktere kadar yüklendiğine ve tam metin görüntülenemediğine dikkat edin.)</em>
+
+Eğer yukarıdaki kodu bir kaç defa çalıştırırsanız bir süre sonra aşağıdaki gibi <a href="https://developer.twitter.com/en/docs/basics/response-codes">uyarılar</a> alır ve çalışmanız ara vermek zorunda kalırsınız, çünkü Twitter API erişiminin <a href="https://developer.twitter.com/en/docs/basics/rate-limits">bazı limitleri</a> var (Neyse ki bu limitler 15 dakikada bir sıfırlanıyor).
+
+</div>
+</div>
+</div>
+<pre>RateLimitError: [{'message': 'Rate limit exceeded', 'code': 88}]
+
+Twitter error response: status code = 429</pre>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Yine aynı sebeplerle bir kullanıcının tüm takipçilerini çekmek vb. işlemlerde de normal Twitter API bağlantısıyla ancak ve ancak 200 takipçinin getirilmesi gibi sıkıntılarla karşılaşıyoruz. Tweepy'da bu sorunu Cursor adlı metodla aşıyoruz. Cursor, Twitter API'daki erişim limitlerinin etrafından dolaşmanızı sağlıyor. <a href="https://developer.twitter.com/en/docs/basics/cursoring">Temel mantığı</a>, Twitter'ı internet tarayıcısında kullanırken imleci aşağıya kaydırdıkça sonuçların yüklenmesi gibi bir sayfalama aslında. Örneğin ben <em>followers</em> metoduyla 220 kişi getirmeye kalkışırsam sadece 20 kişi getiriyor (200'den küçük bir sayı, mesela 190 getirmek isteseydim olurdu):
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [125]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">takipciler</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">followers</span> <span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">"veridefteri"</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">220</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">takipci</span> <span class="ow">in</span> <span class="n">takipciler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">: @</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">takipci</span><span class="o">.</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">takipci</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1: @bdrykhrmn (Bedriye Kılıç)
+2: @MehmetSahinn22 (Mehmet ŞAHİN)
+3: @maxtillo1 (maxtillo)
+4: @volkantusu (Volkan TUSU)
+5: @yasarisler (Yaşar İşler)
+6: @kebiraaa (kübra...)
+7: @UzAsimcan (asım)
+8: @HusnuHatipoglu (Hüsnü HATİPOĞLU)
+9: @BilimKalemi (Bilim Kalemi)
+10: @hydrylcn (Haydar YALÇIN)
+11: @bilgehan_1923 (Denizci)
+12: @obefintlig (Gürkan Özturan)
+13: @ServetDemir2727 (Doç. Dr. Servet DEMIR)
+14: @JohnVaftizci (St. Vaftizci John)
+15: @sonpancarmotoru (SonPancarMotoru)
+16: @Elzemlavinya (Hello World)
+17: @drera18 (Erkan Agyuz)
+18: @dasdafavcx (HasanS)
+19: @missildar (Merve)
+20: @AIMLlover (Emito)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [178]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">takipciler</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Cursor</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">followers</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">"veridefteri"</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="mi">220</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">takipci</span> <span class="ow">in</span> <span class="n">takipciler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">: @</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">takipci</span><span class="o">.</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">takipci</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1: @bdrykhrmn (Bedriye Kılıç)
+2: @MehmetSahinn22 (Mehmet ŞAHİN)
+3: @maxtillo1 (maxtillo)
+4: @volkantusu (Volkan TUSU)
+5: @yasarisler (Yaşar İşler)
+6: @kebiraaa (kübra...)
+7: @UzAsimcan (asım)
+8: @HusnuHatipoglu (Hüsnü HATİPOĞLU)
+9: @BilimKalemi (Bilim Kalemi)
+10: @hydrylcn (Haydar YALÇIN)
+11: @bilgehan_1923 (Denizci)
+12: @obefintlig (Gürkan Özturan)
+13: @ServetDemir2727 (Doç. Dr. Servet DEMIR)
+14: @JohnVaftizci (St. Vaftizci John)
+15: @sonpancarmotoru (SonPancarMotoru)
+16: @Elzemlavinya (Hello World)
+17: @drera18 (Erkan Agyuz)
+18: @dasdafavcx (HasanS)
+19: @missildar (Merve)
+20: @AIMLlover (Emito)
+21: @AtknK (ATAKAN KARAKAŞ)
+22: @Busrarikn (BüşraArıkan)
+23: @TUAF02FUAT (Fuat YILDIRIM)
+24: @altugyilmaz (Altuğ YILMAZ)
+25: @N2Dome (dome)
+26: @gkhannkaptan (Gökhan Kaptan)
+27: @experimenthalis (Fatih ŞEN)
+28: @OyaDemir12 (Oya Demir)
+29: @UmutDisel (Umut. Dişel)
+30: @tumaykose (Ekrem Tümay Köse)
+31: @alhtyr (Ali Ihtiyar)
+32: @xeribe_ (Bahar)
+33: @rewernew (Rewer)
+34: @Kenanglol1 (Kenan)
+35: @sirbobbydixon (sirbobby)
+36: @mehmetnezih (Nezih)
+37: @metanet (Ensar Basri Kahvεci)
+38: @chimp41 (Mustafa Çelik)
+39: @khrmnhande (Hande)
+40: @eisencarbid (Eisen Carbid)
+41: @ufuksecilmis (ufuk seçilmiş)
+42: @denizeercann (Deniz Ercan)
+43: @simurgian (Simurgian)
+44: @toomanyfaces__ (Ozan)
+45: @sevv_all (Seval)
+46: @havaneserinken1 (havaneserinken)
+47: @snnkbc (Sinan??)
+48: @maydaharun (Harun)
+49: @Haticetugce41 (Haticetugce4)
+50: @okeyedorduncu (GÖZDE ÖRDENK)
+51: @yusufemresahinn (Yusuf Emre Şahin)
+52: @Mustafa70449623 (Mustafa Kaşlı)
+53: @MuhammedBaranC (Muhammed)
+54: @halil64881736 (halil)
+55: @omerfeee (Ömer)
+56: @gokcantatli (goko)
+57: @coskuncengiz (Coşkun CENGİZ)
+58: @cansuisikk (Cansu)
+59: @niyeymiski (asdfghjkl)
+60: @berkiplikci (Berk)
+61: @nedimtunc213 (Nedim Tunc)
+62: @BaskanlikAjansi (Başkanlık Ajansı)
+63: @ildenn (İlden Dirini)
+64: @1soz1kahve (1soz1kahve)
+65: @No4Turkey (Kemal Doğan)
+66: @Celaleddinn07 (ben ne izlemedim az önce)
+67: @SUZANKSKYOL (SUZAN KISIKYOL???)
+68: @denizbroglie (Deniz)
+69: @ErdoganSakin (Sakin Erdoğan)
+70: @ozgurmumcu (Özgür Mumcu)
+71: @kardelen_okay (Kardelen Okay)
+72: @GizemGunduzoz (F.Gizem)
+73: @hakansonmeez34 (Hakan SÖNMEZ)
+74: @Yokavarmali (23)
+75: @simurgenka (Nazlıcan Demir)
+76: @remziduzagac (remzi duzagac)
+77: @Oxygen1923 (hakansu)
+78: @LeadershipNavy (?⚓️Navy Citizenship⚓️?)
+79: @_umutekici_ (Umut)
+80: @mcmurph72369145 (mcmurphy)
+81: @fraundorian (fraundorian)
+82: @BahattinAltunn (Bahattin Altun)
+83: @Jouleli (Tuğba ÖzDjango)
+84: @kazimkivanceren (Kıvanç Eren)
+85: @bimucizeistiyor (Saudade)
+86: @ouroboros__w (egi)
+87: @OverratedChief (.)
+88: @Gezgin__99 (GEZGİN)
+89: @Fatmauyar1298 (Fatma uyar)
+90: @fthkuzu (Fatih Kuzu)
+91: @drisikc (ışık çakın)
+92: @ekinmrv (mervebzkrt)
+93: @oguzabel (Oguzhan)
+94: @naripooool (narin polat)
+95: @the11thdr (Gizem)
+96: @pisagor1335 (Hatice Sivri)
+97: @ruhemsiresi (merve)
+98: @deniz60422219 (deniz)
+99: @neminemt (bêgotin)
+100: @oykuoin (Öykü)
+101: @JaqenHaaghar (Bartu Jaqen H'ghar)
+102: @mamimasas (selin)
+103: @bmancobabannesi (gulpembe)
+104: @HakanKu36645822 (Hakan Kuş)
+105: @cumamay (cuma mayı)
+106: @durmazbatuhan34 (Batuhan Durmaz)
+107: @alidevran031 (Devr-i Alem)
+108: @orhansrtky (Orhan)
+109: @edaengiin (edaengin)
+110: @utku_utku8 (Efe Utku)
+111: @okumayanbilge (Özge)
+112: @surungenbeyin (surungenbeyin)
+113: @emindemired (Emin Demir)
+114: @hnflcn (Hanife Laçin)
+115: @mervetpdmr (m.tpdmr)
+116: @behzattas (behzat taş)
+117: @iloveubutimlost (♡)
+118: @ozlemdoganbiyo (Özlem)
+119: @yesilinarabasi (Mehmet)
+120: @Aa93960836 (AA)
+121: @fraktalnecmi (Doru)
+122: @neslihang1 (neslihan)
+123: @oguzhaanyeni (oğuzhan)
+124: @frhtzkan1 (Ferhat Özkan)
+125: @buraksahin907 (Burak Şahin)
+126: @Cagatay_Ozan (Çağatay Karabulut)
+127: @__Tubigo__ (Tubigo)
+128: @sefa89_ (Sefa)
+129: @giderim34 (HASAN)
+130: @Nikbin181 (Nikbin18)
+131: @ufucksng (Ufuk Süngü)
+132: @Vncnt_Elif (Elif)
+133: @kafeteyna (Yılmaz)
+134: @sedatas_ (Seda Taş)
+135: @bgunsur (BG)
+136: @ekogenc (ekonomist)
+137: @dongelyunusemre (Yunus Emre Döngel)
+138: @bisevimlikiz (bisevimlikız)
+139: @quidadaeternum_ (☪️Furkan☪️)
+140: @yildizm46 (Miracetdin)
+141: @sabahcin (Sabahattin Çinçin ????????????)
+142: @melihdemiroren (melih demirören)
+143: @olmasoylesennur (şen şen şennur)
+144: @erayalp (Eray Alp)
+145: @emre_zdmr (Emre.)
+146: @eymenkur (Eymen Kurdoğlu)
+147: @silistreden (Ahmet Aylin Öztürk)
+148: @_BurakOzkan (Burak Özkan)
+149: @hbhamiburak (Hami Burak Yıldız)
+150: @kostikus (asli kaya)
+151: @ekremkirbas (M. Ekrem Kırbaş)
+152: @_nedenben__ (Türevsiz Birey)
+153: @uzunsongul (songül uzun)
+154: @salihozcelik (Salih Özçelik)
+155: @bugrahanbyrktr (Bugrahan Bayraktar)
+156: @HTarikSengul (H. Tarık Şengül)
+157: @pecertaba (pecertaba)
+158: @ArsenDeniz3 (Arsen Deniz)
+159: @clkkdhnd (Hande Çolakkadıoğlu)
+160: @AKILZON1 (AKILZON (ZONGULDAK))
+161: @1272mcm (m)
+162: @brst56 (brst)
+163: @toprakbeden (Toprak Beden)
+164: @fatmbkt (Fatma Buket)
+165: @zeyneppnilay (Zeynep Kütküt)
+166: @eekorkmz (Ebru)
+167: @36carlito (carlito)
+168: @akkayab_ (Burak)
+169: @EskiKafa10 (Eski Kafa)
+170: @canbican (Can Bican)
+171: @melikeesgin (Melike Esgin)
+172: @muhERCAN (ilhami ERCAN)
+173: @FOzkoyuncu (Fatih Özkoyuncu)
+174: @meliquuee (melike)
+175: @Deftoeasy7 (dorukational)
+176: @triquetricmart1 (triquetricmarten)
+177: @elkimelkim (fataman)
+178: @methespes (methespes)
+179: @attugcu (Akif Tugcu)
+180: @MTKOCAK (Mehmet Tufan KOÇAK)
+181: @ilknurerdogan55 (ilknur erdoğan)
+182: @SuleymanArslan (Yobo)
+183: @aiforsociety (AI for society)
+184: @denizGrbz (Deniz Gurbuz)
+185: @yasaraksi1 (yasar aksu)
+186: @serraorey (Serra Örey)
+187: @itsnogood117 (mmm)
+188: @shuharilol (Eren Güneştaş)
+189: @dnzakt35 (Deniz Akat)
+190: @kubrAgldst (K C)
+191: @shammgoat (Aybek)
+192: @dlrmhcr (Dilara Muhacir)
+193: @unusualbottle (senkron)
+194: @mehtap02011 (mehtap)
+195: @iremdogrusoz (İrem Doğrusöz)
+196: @dirrdil (dırdıl)
+197: @Emre56430351 (Emre)
+198: @feyzan71 (feyzan71)
+199: @anaartel1971ste (ali eşki)
+200: @cahil1psikolog (Cahil1adam)
+201: @MahsuniTurkatar (Mahsuni Türkatar)
+202: @UgurlarSinem (Sinem Uğurlar)
+203: @remdesola (rem)
+204: @atsaky (Yıldıray Atsak)
+205: @tucunc (tuc)
+206: @mustafa_etik (Mustafa Etik)
+207: @av_onier (Av. Erol ÖNİER)
+208: @ayhanozaslan07 (Ayhan Ozaslan)
+209: @horny_terry (alper)
+210: @Met_Aksut (metin aksüt)
+211: @ovoner (Ö.Vehbi Öner)
+212: @OmerKeven (OmerKeven)
+213: @nihasmiharbi (? İbrahim Şahin)
+214: @tnrvrdhilal (T N R V R D)
+215: @ozlemgunal (ozlemaltunel)
+216: @hacioglu (Murat Hacıoğlu)
+217: @zeynepkockrky (Zeynep)
+218: @senayzalioglu (Şenay Zalioğlu Turan)
+219: @degisikyap (Sn.Ukala ?️‍?)
+220: @bulent7caliskan (Çalışkan)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Hemen her işimizde Cursor'ı kullanabiliriz. Mesela yukarıda tweetlerin kısaltılarak geldiğini hatırlayınız. Eğer home_timeline metodunu Cursor ile kullanırsak tweetleri <em>extended</em> modda çağırıp eksiksiz hallerine ulaşabiliriz:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [114]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">tweetler</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Cursor</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">home_timeline</span><span class="p">,</span> <span class="n">tweet_mode</span><span class="o">=</span><span class="s1">'extended'</span><span class="p">,</span> <span class="n">truncated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweetler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">): </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">) </span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">full_text</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">created_at</span><span class="p">))</span>
+    <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1: Medyascope (Medyascopetv): Yarın 12:30'da
+@ilhanuzgel @Metin4020 @IsinElicin https://t.co/nspFzbfJ0O (2020-01-02 14:48:55) 
+
+2: Kuzey Ormanları Savunması (kuzeyormanlari): İstanbul Çevre Şehircilik İl Müdürlüğü önünde rant kanalına karşı basın açıklaması yapıyoruz. 
+
+#YaKanalYaİstanbul diyoruz. Sen de katıl, son su ve nefes kaynaklarımızın, tarım alanlarımızın rant odakları tarafından yağmalanmasına izin vermeyelim. https://t.co/zGjHvp6CMx (2020-01-02 14:48:47) 
+
+3: BirGün Gazetesi (BirGun_Gazetesi): Libya Tezkeresi 184 ret oyuna karşı 325 oyla kabul edildi
+https://t.co/rD9M96R586 https://t.co/p5GA2UwpPG (2020-01-02 14:48:45) 
+
+4: Eser Unsalan (eserunsalan): RT @airEref3: Ahmet Altan ve Taraf gazetesinde yazan şerefsizler sadece kumpasları değil bu milletin gençlerinin geleceğini çalan ÖSYM Başk… (2020-01-02 14:48:32) 
+
+5: Gulay Turkmen (gulayturkmen): RT @yelkovansizsaat: tabii ki kurtuluş - tatavla'da bu gelenek son hız devam... genelde yaşlılar evde pişirmeye devam ederken #üstünpalmie… (2020-01-02 14:48:32) 
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Diyelim RT'leri görmek istemiyoruz... Açıkçası tüm arama taramalarıma rağmen bunun metoda direkt geçilebildiği bir parametre görmedim. Benim bulduğum yöntem aşağıdaki gibi: (Daha etkin bir yöntem varsa öğrenmeyi çok istediğimden bana mesaj gönderirseniz memnun olurum).
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [115]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">tweetler</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Cursor</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">home_timeline</span><span class="p">,</span> <span class="n">tweet_mode</span><span class="o">=</span><span class="s1">'extended'</span><span class="p">,</span> <span class="n">truncated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="k">for</span> <span class="n">tweet</span> <span class="ow">in</span> <span class="n">tweetler</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">"RT @"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tweet</span><span class="o">.</span><span class="n">full_text</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="si">%i</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">): </span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">) </span><span class="se">\n</span><span class="s2">"</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">full_text</span><span class="p">,</span> <span class="n">tweet</span><span class="o">.</span><span class="n">created_at</span><span class="p">))</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1: Medyascope (Medyascopetv): Yarın 12:30'da
+@ilhanuzgel @Metin4020 @IsinElicin https://t.co/nspFzbfJ0O (2020-01-02 14:48:55) 
+
+2: Kuzey Ormanları Savunması (kuzeyormanlari): İstanbul Çevre Şehircilik İl Müdürlüğü önünde rant kanalına karşı basın açıklaması yapıyoruz. 
+
+#YaKanalYaİstanbul diyoruz. Sen de katıl, son su ve nefes kaynaklarımızın, tarım alanlarımızın rant odakları tarafından yağmalanmasına izin vermeyelim. https://t.co/zGjHvp6CMx (2020-01-02 14:48:47) 
+
+3: BirGün Gazetesi (BirGun_Gazetesi): Libya Tezkeresi 184 ret oyuna karşı 325 oyla kabul edildi
+https://t.co/rD9M96R586 https://t.co/p5GA2UwpPG (2020-01-02 14:48:45) 
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Kullanıcı-işlemlerinden-örnekler">Kullanıcı işlemlerinden örnekler</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Peki bir kullanıcının ayrıntılarına erişmek istersek ne yapacağız? Diyelim ki bir kaç hesabın ayrıntılarını yazdırmak istiyoruz. Bunun için <em>get_user</em> metodunu kullanacağız. Bu metoddan bir <em>user</em> nesnesi döner. Bu nesnenin içeriğine Twitter geliştirici sayfasındaki açıklamalardan <a href="https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object">ulaşabilirsiniz</a>. Adresi ziyaret ederseniz göreceğiniz üzere bir kullanıcı hakkındaki bütün detaylar burada yer almaktadır. Örneğin:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [130]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">hesap_listesi</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"veridefteri"</span><span class="p">,</span> <span class="s2">"acikbilim"</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">hesap</span> <span class="ow">in</span> <span class="n">hesap_listesi</span><span class="p">:</span>
+    <span class="n">kullanici</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">hesap</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Kullanıcı adı: @</span><span class="si">%s</span><span class="s2"> [</span><span class="si">%s</span><span class="s2">] (Takip ettikleri: </span><span class="si">%i</span><span class="s2">, Takip eden: </span><span class="si">%i</span><span class="s2">)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">kullanici</span><span class="o">.</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">kullanici</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">kullanici</span><span class="o">.</span><span class="n">friends_count</span><span class="p">,</span> <span class="n">kullanici</span><span class="o">.</span><span class="n">followers_count</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">kullanici</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------------</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Kullanıcı adı: @VeriDefteri [924188418627731457] (Takip ettikleri: 33, Takip eden: 11548)
+Veri Bilimi ve Yapay Öğrenme Üzerine Kısa Notlar
+-------------------------------------
+
+Kullanıcı adı: @AcikBilim [385788851] (Takip ettikleri: 330, Takip eden: 62773)
+BİZİ DESTEKLEMEK İÇİN: https://t.co/cnatuoq2G3
+
+Bağımsız Bilim Medyası. Muhabbet Teorisi, Nöroblog, Bilimfili, Bilimkurgu Kulübü ve daha fazlası.
+-------------------------------------
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Biraz daha somut bir uygulama yapalım. Acaba Veri Defteri hesabının 0 takipçili takipçisi var mı? Bu kod parçacığı 0 kullanıcılı olası yumurta hesapların tespitinde kullanılabilir:
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [181]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">takipciler</span> <span class="o">=</span> <span class="n">tweepy</span><span class="o">.</span><span class="n">Cursor</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">followers</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s2">"veridefteri"</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="c1">#Limitleri zorlamamak için 100 takipçi arasından bakalım.</span>
+<span class="k">for</span> <span class="n">takipci</span> <span class="ow">in</span> <span class="n">takipciler</span><span class="p">:</span>    
+    <span class="n">kullanici</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">takipci</span><span class="o">.</span><span class="n">screen_name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">kullanici</span><span class="o">.</span><span class="n">followers_count</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+        <span class="n">mask_name</span> <span class="o">=</span> <span class="s1">'*'</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">kullanici</span><span class="o">.</span><span class="n">screen_name</span><span class="p">)</span> <span class="c1">#Her ihtimale karşı burada kullanıcı isimlerini maskeleyeyim :)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Kullanıcı adı: @</span><span class="si">%s</span><span class="s2"> (Takip ettikleri: </span><span class="si">%i</span><span class="s2">, Takip eden: </span><span class="si">%i</span><span class="s2">)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">mask_name</span><span class="p">,</span> <span class="n">kullanici</span><span class="o">.</span><span class="n">friends_count</span><span class="p">,</span> <span class="n">kullanici</span><span class="o">.</span><span class="n">followers_count</span><span class="p">))</span>
+    
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Kullanıcı adı: @************ (Takip ettikleri: 160, Takip eden: 0)
+Kullanıcı adı: @******* (Takip ettikleri: 88, Takip eden: 0)
+Kullanıcı adı: @********* (Takip ettikleri: 59, Takip eden: 0)
+Kullanıcı adı: @*************** (Takip ettikleri: 137, Takip eden: 0)
+Kullanıcı adı: @************* (Takip ettikleri: 362, Takip eden: 0)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Gündem-ve-etiketler">Gündem ve etiketler<a class="anchor-link" href="#Gündem-ve-etiketler">¶</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bildiğiniz üzere Twitter'ın sahip olduğu özelliklerden biri de coğrafi olarak düzenlenmiş gündem etiketleri (nam-ı diğer <em>Trending topics</em>). Twitter API'ına erişerek belli bir bölgeye ait gündemi görmek mümkün. Bunun için de <em>trends_place</em> adlı metoddan faydalanıyoruz. Bu metoddan şu <a href="https://developer.twitter.com/en/docs/trends/trends-for-location/api-reference/get-trends-place">adreste</a> görebileceğiniz yapıda bir yanıt dönüyor.
+
+</div>
+</div>
+</div>
+API.trends_place(id[, exclude])
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bu metoda geçilen <em>id</em> ülkeyi belirtmek için kullanılıyor. Burada konumlara id vermek için Yahoo! Where on Earth ID (WOEID) sistemi kullanılıyor. Mevcut konum kodları için <em>api.trends_available</em> metodundan dönen JSON'ı kontrol edebilirsiniz. Bu JSON yanıtını <a href="https://codebeautify.org/jsonviewer/f83352">şu sayfadan</a> da görebilirsiniz. Buradan baktığımızda İstanbul'un kodunun 2344116 olduğunu görüyoruz. Bakalım İstanbul'un şu andaki gündemi neymiş?
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In [168]:</div>
+<div class="inner_cell">
+<div class="input_area">
+<div class=" highlight hl-ipython3">
+<pre><span class="n">gundem</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">trends_place</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s2">"2344116"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">trend</span> <span class="ow">in</span> <span class="n">gundem</span><span class="p">[</span><span class="s1">'trends'</span><span class="p">]:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2"> (</span><span class="si">%s</span><span class="s2">)"</span> <span class="o">%</span> <span class="p">(</span><span class="n">trend</span><span class="p">[</span><span class="s1">'name'</span><span class="p">],</span> <span class="n">trend</span><span class="p">[</span><span class="s1">'tweet_volume'</span><span class="p">]))</span>
+    
+</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="output_wrapper">
+<div class="output">
+<div class="output_area">
+<div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>#LibyaTezkeresi (24242)
+#iyikivarsınEren (37715)
+MahkumaYeniYılda BeyazSayfa (47490)
+#SözleşmeliyeAcilenKadro (43407)
+#egitimtakvimi2020 (55034)
+#parol (None)
+Veinze Socks (None)
+Saadet Partisi (None)
+Alper Boğuşlu (None)
+Cihangir İslam (None)
+Hasic (None)
+Marco Knoop (None)
+Doğu Akdeniz'de (None)
+Genel Sağlık Sigortası (None)
+Cüneyt Özdemir (None)
+Viagra (None)
+Lejyoner (None)
+Mehmetçik (None)
+Orkan Çınar (None)
+Kanal Çanakkale (None)
+Mobilyada KDV (None)
+Güney Kıbrıs (None)
+Aytun Çıray (None)
+DevletinDini KHKmıAdaletmi (None)
+Engin Altay (None)
+istanbul fatih'te (None)
+Libya Tezkeresine (None)
+#trabzonseninleberatalbayrak (None)
+#BarışManço (16617)
+#SarıKamıştaBuluşmayaSon3 (None)
+#OurHappinessJISOODay (392434)
+#TikTok (20509)
+#BedelliAskerlikUzaktanEğitim (None)
+#Poşet30olduYalanı (None)
+#CerenDamar (None)
+#아미가치는클래식 (268780)
+#WelcomeBackHanbin (378408)
+#SunshineDonghyukDay (74551)
+#sgkDMDnincihazınıöde (13489)
+#Eyt2020SeçimDiyor (None)
+#harunbayılbayıl (None)
+#iyikidoğdunEren (None)
+#WonhoWillBeBack (79142)
+#yemekhakkımadokunma (None)
+#ipeke (None)
+#Azerin (None)
+#oncemaas (None)
+#MüşteriDeğilÖğrenciyiz (None)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Arkası-yarın">Arkası yarın</h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt"></div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+Bu yazıda Tweepy'ın kullanımına yönelik bir giriş yaptık ve temel çalışma mantığını görmüş olduk. Sıradaki yazılarda daha somut taramalar ve bazı analizler yapacağız. Görüşmek üzere.
+
+</div>
+</div>
+</div>

@@ -1,0 +1,181 @@
+---
+title: Tidyverse
+author: Hazel Kavili
+categories:
+    - Veri önişleme
+date: 2018-03-03
+image: 5115d-screen-shot-2018-03-01-at-14.41.31.png
+---
+
+Veri bilimiyle uğraşan birçok insanın karşısında satırlar ve sütunlardan oluşan tablolar mevcut. Bu tabloları bazen API’lar, bazen Excel, csv, txt dosyaları, bazen de veri tabanları sayesinde elde ediyoruz (tabi sadece bunlarla da sınırlı değil). Bunlar kimi zaman düzenli, ama çoğu zaman düzenleme (temizlik) isteyen tablolar. Tidyverse de burada devreye giriyor: bize düzenlemeleri, görselleştirmeleri, modellemeleri kolay bir şekilde yapabilmemizi sağlayan, R’ın birçok paketini içinde bulunduran büyükçe bir paket. Hepsiyle beraber ve en önemlisi Tidyverse bize bir iş akışı (workflow) sunar. Veri bilimi ile uğraşanların sistematik bir şekilde ilerlemesine, işlemler arasında bağlantıların kolay kurulup anlaşılmasına yardımcı olur. Aşağıdaki şemada, tidyverse’ün sağladığı akışı ve kullanabileceğiniz bazı paketleri görebilirsiniz:
+
+![](ee179-workflow3.png){width="800"}
+
+Yukarıda bahsedilen tabloları, R dünyasında <em>data frame</em> veya şu anda yaygın halde kullanılan <em>tibble</em> olarak adlandırıyoruz.
+
+Satırlarda gözlemler, sütunlarda değişkenler olacak şekilde aşağıda düzenli, örnek bir data frame var:
+
+![](be026-dataframe.png){width="800"}
+
+Son yıllarda hem okuduklarımdan hem gittiğim konferanslardan hem de içinde bulunduğum <a href="https://rladies.org">R-Ladies</a> topluluğunda veri bilimi eğitimi veren arkadaşlarımızdan edindiğim bilgiler doğrultusunda, bu işe yeni başlayanlara bu alanı sevdirmek için tidyverse yöntemleriyle yazılarıma devam edeceğim. Nedenlerine sevgili <a href="https://github.com/mine-cetinkaya-rundel/2017-07-05-teach-ds-to-new-user">Mine Çetintaka-Rundell</a> useR!2017’deki sunumunda çeşitli örneklerle değinmişti. Aşağıdaki örnekleri kendi çalışma alanınızda da deneyebilirsiniz, <em>mtcars</em> R’ın içinde hazır bir veri seti, arabaların benzin tüketimleriyle ve bazı fiziksel özellikleriyle ilgili. Bu iki örnek de aynı sonucu verecektir.
+
+İlk önce <code>install.packages("tidyverse")</code> ile paketi yükleyelim ve <code>library(tidyverse)</code> ile de paketi çalışır hale getirelim:
+<pre class="r"><code>install.packages("tidyverse")</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+Ardından <code>mtcars</code> veri setine şöyle bir bakalım:
+<pre class="r"><code>head(mtcars)</code></pre>
+<pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
+## Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+## Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+## Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+## Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1</code></pre>
+İlk önce <em>base</em> R işlemleriyle yeni bir değişken oluşturalım ve bu değişkenin ismi <code>transmission</code> olsun. Bunu da <code>am</code> değişkenindeki 1 ve 0’lara göre yapalım: 0 olursa “automatic”, 1 olursa “manual” olsun.
+<pre class="r"><code>mtcars$transmission[mtcars$am == 0] = "automatic"
+mtcars$transmission[mtcars$am == 1] = "manual"</code></pre>
+Burada <code>$</code> işareti iki şekilde kullanılmış: sizin veri setinizden bir değişken seçmenize (subset yani alt kümeleme gibi düşünebilirsiniz) ve veri setinizde bir değişken oluşturmada. Bunu ayırt etmesi kolay değil.
+
+Aynı işlemi bir de tidyverse ile yapalım. <code>mutate</code> ve <code>case_when</code> kullanarak:
+<pre class="r"><code>mtcars &lt;- mtcars %&gt;%
+  mutate(
+    transmission = 
+      case_when(
+        am == 0 ~ "automatic",
+        am == 1 ~ "manual"
+      )
+    )</code></pre>
+<code>mutate</code> dönüştürmek demek. <code>case_when</code> ise sizi <code>if</code> ve <code>else if</code> yapılarını uzun uzun yazmaktan kurtarır. İkinci yazım şekli adım adım daha okunabilir, kolay yazılabilir ve takip edilebilir.
+<div id="dplyra-giris" class="section level3">
+<h3>dplyr’a giriş</h3>
+dplyr, veri manipülasyonu işlemlerini yapabileceğiniz, birçok temel problemi çözen ve bunları aklıda kalıcı fiillerle yapan bir paket. <code>select</code>, <code>filter</code>, <code>muatate</code>, <code>group_by</code>, <code>arrange</code>, <code>summarise</code> bunlardan birkaçı. Ayrıntılı bilgiye <a href="http://dplyr.tidyverse.org">bu sayfadan</a> ulaşabilirsiniz.
+
+Bu bölümde size <em>movies</em> veri setini çalışma alanınıza indirip, okuyup, bir değişkene atadıktan sonra işlenmeye hazır hale getirmeyi anlatacağım. <em>movies</em> veri setini indirebileceğiniz <a href="https://www.dropbox.com/s/009shbt1l8kvq0e/movies.csv?dl=0">link burada</a>.
+<pre class="r"><code>filmler &lt;- read.csv(file = "movies.csv" , header = TRUE, sep = ",") </code></pre>
+<code>read.csv()</code>, <code>read.xlsx()</code>, <code>read.table()</code> gibi fonksiyonlar verinizi çalışma alanınıza almanızı sağlar. <em>&lt;-</em> operatörü, atama operatörüdür. Burada, veri setimizi okuyup, atama operatörü ile <em>filmler</em> isimli bir değişkene atamış olduk.
+
+Şimdi veri setimize bir bakalım. <code>head()</code> fonksiyonu bize veri setimizin ilk 6 gözlemini, <code>tail()</code> fonksiyonu son 6 gözlemini veriyor. Ancak <em>n</em> argümanını değiştirerek istediğiniz kadar gözlemi getirebilirsiniz:
+<pre class="r"><code>head(filmler, n = 5)</code></pre>
+<pre><code>##       director_name duration     actor_2_name     gross    actor_1_name
+## 1     James Cameron      178 Joel David Moore 760505847     CCH Pounder
+## 2    Gore Verbinski      169    Orlando Bloom 309404152     Johnny Depp
+## 3        Sam Mendes      148     Rory Kinnear 200074175 Christoph Waltz
+## 4 Christopher Nolan      164   Christian Bale 448130642       Tom Hardy
+## 5    Andrew Stanton      132  Samantha Morton  73058679    Daryl Sabara
+##                                 movie_title         actor_3_name language
+## 1                                   Avatar             Wes Studi  English
+## 2 Pirates of the Caribbean: At World's End        Jack Davenport  English
+## 3                                  Spectre      Stephanie Sigman  English
+## 4                    The Dark Knight Rises  Joseph Gordon-Levitt  English
+## 5                              John Carter          Polly Walker  English
+##   country    budget title_year imdb_score genres
+## 1     USA 237000000       2009        7.9 Action
+## 2     USA 300000000       2007        7.1 Action
+## 3      UK 245000000       2015        6.8 Action
+## 4     USA 250000000       2012        8.5 Action
+## 5     USA 263700000       2012        6.6 Action</code></pre>
+<pre class="r"><code>tail(filmler, n = 3)</code></pre>
+<pre><code>##         director_name duration       actor_2_name gross actor_1_name
+## 3704 Neill Dela Llana       80    Edgar Tancangco 70071  Ian Gamazon
+## 3705     Edward Burns       95 Caitlin FitzGerald  4584  Kerry Bishé
+## 3706         Jon Gunn       90   Brian Herzlinger 85222  John August
+##             movie_title    actor_3_name language     country budget
+## 3704            Cavite        Quynn Ton  English Philippines   7000
+## 3705         Newlyweds  Daniella Pineda  English         USA   9000
+## 3706 My Date with Drew         Jon Gunn  English         USA   1100
+##      title_year imdb_score      genres
+## 3704       2005        6.3    Thriller
+## 3705       2011        6.4      Comedy
+## 3706       2004        6.6 Documentary</code></pre>
+<code>str(filmler)</code>, <code>summary(filmler)</code> ve <code>dim(filmler)</code> fonksiyonlarını da çalıştırıp veri setinizi daha yakından tanıyabilirsiniz. <code>str</code> structure (yapı), <code>summary</code> özet, <code>dim</code> dimension (boyut) demektir.
+
+Şimdi gelelim dplyr’ın nimetlerine.
+
+Örneğin veri setinizdeki 13 değişkenle iş yapmak yerine, sadece bazı değişkenleri <em>seçmek</em> istiyorsunuz. Kullanacağınız fonksiyon: <code>select()</code>
+<pre class="r"><code>filmler_ulkeler &lt;- filmler %&gt;% select(country, budget, imdb_score) %&gt;% head(n=3)
+filmler_ulkeler</code></pre>
+<pre><code>##   country    budget imdb_score
+## 1     USA 237000000        7.9
+## 2     USA 300000000        7.1
+## 3      UK 245000000        6.8</code></pre>
+Seçmek istediğiniz kolonların sayı sırasını biliyorsanız sayı değerlerini yazabilir, setinizde istemediğiniz değişkeni önüne eksi (-) yazarak çıkarabilirsiniz:
+<pre class="r"><code>filmler_ulkeler &lt;- filmler %&gt;% select(2:6, -4) %&gt;% head(n=3)
+filmler_ulkeler</code></pre>
+<pre><code>##   duration     actor_2_name    actor_1_name
+## 1      178 Joel David Moore     CCH Pounder
+## 2      169    Orlando Bloom     Johnny Depp
+## 3      148     Rory Kinnear Christoph Waltz
+##                                 movie_title
+## 1                                   Avatar 
+## 2 Pirates of the Caribbean: At World's End 
+## 3                                  Spectre </code></pre>
+Burada yeni bir operatörle karşı karşıyayız: <em>%&gt;%</em> Buna <em>pipe</em> operatörü deniyor, biz de <em>zincir</em> operatörü demeyi tercih ediyoruz. Bu operatör soldakinin çıktısını, sağdakine girdi olarak veriyor. Örneğin yukarıda <em>filmler</em> veri setini alıyor, <em>country, budget, imdb_score</em> değişkenlerini seçiyor. Ve yeni bir değişkene, <em>filmler_ülkeler</em>, değişkenine atama yapıyor.
+
+Pekiyi gözlemlerin içinden bazılarını <em>filtrelemek</em> istiyorsanız, <em>örneğin Christopher Nolan’ın imdb puanı 7’den büyük olan filmlerini</em> görmek istiyorsunuz, bu durumda kullanacağınız fonksiyon: <code>filter()</code>:
+<pre class="r"><code>filmler_puanlar &lt;- filmler %&gt;% filter(imdb_score &gt; 7, director_name == "Christopher Nolan")
+
+filmler_puanlar</code></pre>
+<pre><code>##       director_name duration   actor_2_name     gross        actor_1_name
+## 1 Christopher Nolan      164 Christian Bale 448130642           Tom Hardy
+## 2 Christopher Nolan      152   Heath Ledger 533316061      Christian Bale
+## 3 Christopher Nolan      169  Anne Hathaway 187991439 Matthew McConaughey
+## 4 Christopher Nolan      148      Tom Hardy 292568851   Leonardo DiCaprio
+## 5 Christopher Nolan      128    Liam Neeson 205343774      Christian Bale
+## 6 Christopher Nolan      118  Maura Tierney  67263182           Al Pacino
+## 7 Christopher Nolan      130   Hugh Jackman  53082743      Christian Bale
+## 8 Christopher Nolan      113  Thomas Lennon  25530884       Callum Rennie
+##              movie_title         actor_3_name language country    budget
+## 1 The Dark Knight Rises  Joseph Gordon-Levitt  English     USA 250000000
+## 2       The Dark Knight        Morgan Freeman  English     USA 185000000
+## 3          Interstellar         Mackenzie Foy  English     USA 165000000
+## 4             Inception  Joseph Gordon-Levitt  English     USA 160000000
+## 5         Batman Begins        Morgan Freeman  English     USA 150000000
+## 6              Insomnia          Crystal Lowe  English     USA  46000000
+## 7          The Prestige    Scarlett Johansson  English     USA  40000000
+## 8               Memento             Jorja Fox  English     USA   9000000
+##   title_year imdb_score    genres
+## 1       2012        8.5    Action
+## 2       2008        9.0    Action
+## 3       2014        8.6 Adventure
+## 4       2010        8.8    Action
+## 5       2005        8.3    Action
+## 6       2002        7.2     Drama
+## 7       2006        8.5     Drama
+## 8       2000        8.5   Mystery</code></pre>
+Filter fonksiyonu ile tüm mantıksal operatörleri kullanabilirsiniz. Öğrendiğimiz iki fonksiyonu birleştirmek gerekirse:
+<pre class="r"><code>filmler_UK &lt;- filmler %&gt;% select(country, title_year, imdb_score) %&gt;% 
+  filter (imdb_score &gt;= 6 &amp; country == "UK") 
+
+head(filmler_UK)</code></pre>
+<pre><code>##   country title_year imdb_score
+## 1      UK       2015        6.8
+## 2      UK       2009        7.5
+## 3      UK       2008        6.7
+## 4      UK       2012        7.8
+## 5      UK       2016        7.8
+## 6      UK       2007        7.5</code></pre>
+Bu yazıdaki son fonksiyon da gözlemlerinizi, seçeceğiniz değişkene göre sıralamak istediğiniz zaman kullanacağınız fonksiyon: <code>arrange()</code>
+<pre class="r"><code>filmler_butce &lt;- filmler %&gt;% select(movie_title, imdb_score, budget) %&gt;% arrange(budget)
+
+head(filmler_butce)</code></pre>
+<pre><code>##          movie_title imdb_score budget
+## 1         Tarnation         7.2    218
+## 2 My Date with Drew         6.6   1100
+## 3            Primer         7.0   7000
+## 4            Cavite         6.3   7000
+## 5         Newlyweds         6.4   9000
+## 6    Pink Flamingos         6.1  10000</code></pre>
+Eğer gözlemleri bir (ya da daha fazla) değişkene göre artan sıralamak istiyorsanız fazladan bir şey yazmanız gerekmiyor, ama azalan sıralamak istiyorsanız:
+<pre class="r"><code>filmler_butce &lt;- filmler %&gt;% select(movie_title, imdb_score, budget) %&gt;% arrange(desc(budget))
+
+head(filmler_butce)</code></pre>
+<pre><code>##                                 movie_title imdb_score    budget
+## 1                                    Kites         6.0 600000000
+## 2  The Messenger: The Story of Joan of Arc         6.4 390000000
+## 3 Pirates of the Caribbean: At World's End         7.1 300000000
+## 4                              John Carter         6.6 263700000
+## 5                                  Tangled         7.8 260000000
+## 6                             Spider-Man 3         6.2 258000000</code></pre>
+Bir sonraki yazıda <code>mutate()</code>, <code>group_by()</code> ve <code>summarise()</code> fonksiyonlarını aynı veri seti üzerinden anlatacağım.
+
+</div>

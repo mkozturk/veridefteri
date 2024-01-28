@@ -1,0 +1,33 @@
+---
+title: "Tahmin ve Çıkarım 4 - Boyut Küçültme"
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-06-19
+image: e904d-tahmincikarim4.png
+---
+
+Aramızda kalsın ama yapay öğrenme<span style="font-size: 1.0625rem"> için çoğu zaman o kadar da fazla veriye ihtiyaç yok. Hatta bazen sıkı bir temizlik gerekiyor. Evet, y</span><span style="font-size: 1.0625rem">üzlerce değişkenden oluşan bir veri kümesi tutmak artık çocuk oyuncağı.  Fakat sonuçlar çok iyi olsa da, değişken sayısı artınca modeli yorumlamak ve çıkarım yapmak güçleşiyor. Belki de birkaç değişkeni modelden atmak hiç fena olmayabilir. İyi de atılacak değişkenleri nasıl seçeceğiz?</span>
+
+<span style="font-size: 1.0625rem">Bazı durumlarda ise örnek sayımız, değişken sayısının altında kalıyor. Mesela insanların hastanede yaptırdıkları 50 farklı test sonucunu (kan değeri, şeker ölçümü, vb.) değişkenleriniz olarak kullandığınızı düşünün. Öte yandan bu bilgi mahrem olduğu için sadece 30 kişi bu değerlerini sizinle paylaşmış olsun. Bu durumda kullandığımız öğrenme modelinin, örneğin bir önceki derste gördüğümüz doğrusal bağlanım yaklaşımının, sonuçlarına güvenebilir miyiz?</span>
+
+Her iki soru da modellerin boyutları, yani değişken sayısı  üzerine. Bu sorulara verilebilecek bazı cevapları bu derste anlattım. Ders boyunca yapay öğrenme yöntemi olarak doğrusal bağlanım kullanıldığını varsaydım. Ancak bu derste anlatılanlar, ileride konuşacağımız diğer yöntemlere de kolayca uygulanabilir.
+
+Sunum dosyasını ve videoyu aşağıda bulabilirsiniz.
+
+<strong><img src="e904d-tahmincikarim4.png" alt="" width="300" height="225" /></strong>
+
+&nbsp;
+
+<strong>Boyut Küçültme</strong>
+
+<a href="https://www.dropbox.com/s/4gthpimoxts221j/TahminCikarim_04_BoyutKucultme.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/ntnoa5515cthlp2/TahminCikarim_04_BoyutKucultme_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+{{< video https://youtu.be/5ESeGBQhmik >}}

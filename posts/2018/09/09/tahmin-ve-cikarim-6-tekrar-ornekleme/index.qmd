@@ -1,0 +1,30 @@
+---
+title: Tahmin ve Çıkarım 6 – Tekrar Örnekleme
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-09-09
+image: 3420c-tekrarorneklemeilksayfa.png
+---
+
+Bizim üniversitede "Machine Learning" dersini vermeye başladım. Buradaki notları İngilizce'ye çevirerek kullandığım için üniversitedeki derse hızlı bir başlangıç yapabildim. Sağolasın Veri Defteri!
+
+Öte yandan dersi kanlı canlı öğrencilerin karşısında anlatıyor olmamın da başka avantajları var: hangi kısımlar daha kolay anlaşılıyor, nereleri daha hızlı geçebilirim anlıyorum. Önümüzdeki sene notlarımı güncellerim gibi gözüküyor. Ve tabii o durumda aynı değişiklikleri buradaki Türkçe notlarımda da yaparım.
+
+![İlk derste telaffuz olayını tatlıya bağladık.](34788-dmt5ebrxcaaxpmj.jpg){width=300,height=120,fig-align="left"}
+
+Önceki derslerde, aşırı öğrenme denen belanın ilacı diyerek, veri kümesinin farklı alt kümeleri ile çalışmaktan bahsetmiştim. Bir de asıl başarı eğitim verisiyle değil, test verisiyle elde edilir demiştim. İşte bu hafta, elimizdeki veriyi eğitim ve test alt kümelerine bölmek için kullanılan tekrar örnekleme yöntemlerini anlattım. Öyle böyle derken <a href="http://www.veridefteri.com/2018/04/04/tahmin-ve-cikarim-makine-ogrenmesi-yapay-ogrenme/" target="_blank" rel="noopener">planladığım derslerin</a> çoğu gitti azı kaldı.
+
+<img src="3420c-tekrarorneklemeilksayfa.png" alt="" width="300" height="228" />
+
+
+<strong>Tekrar Örnekleme</strong>
+
+<a href="https://www.dropbox.com/s/m1ab1jexfpzn1qw/Tahmin_Cikarim_06_Tekrar_Ornekleme.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/dqltw472emg61y7/Tahmin_Cikarim_06_Tekrar_Ornekleme_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+{{< video https://youtu.be/8LvAux9_l1Q >}}

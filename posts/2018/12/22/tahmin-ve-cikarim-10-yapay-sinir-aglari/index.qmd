@@ -1,0 +1,28 @@
+---
+title: Tahmin ve Çıkarım 10 - Yapay Sinir Ağları
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-12-22
+image: b0413-tc10.png
+---
+
+Geldik en son derse. Yapay Sinir Ağları. Bu sefer teknik kısmına biraz daha fazla zaman ayırdım. Ne de olsa artık daha tecrübelisiniz. İnanın bana, yavaş yavaş daha teknik konulara girmek ufkunuzu açacaktır. Hiç gözünüzde büyütmeyin...
+
+Bu dersle birlikte, makine öğrenmesine basit bir giriş yapmak için gerekli gördüğüm konuları tamamlıyorum. Elbette eksiği noksanı vardır. Olsun. Buradan birkaç şey kapsanız bana fazlasıyla yeter. Neticede bir hoca en fazla bir kıvılcım yakabilir; gerisi öğrenciye kalmış.
+
+Zamanında video dersler vermek üzerine bir<a href="https://www.birgun.net/haber-detay/bir-mucadele-bicimi-olarak-video-177644.html" target="_blank" rel="noopener"> yazı</a> yazmıştım. Gel gör ki, ilk dersimi hazırlamam tahminimden çok daha uzun sürdü. Meğer, sınıfta ders vermekten ne kadar farklıymış! Ekranla, kendi sesimle, dar mekânla mücadele etmem gerekti. Bu işi biraz kıvırdım, biraz kıvıramadım. Sırada diğer dersler olur umarım. Hele öyle bir dersi, bir sınıfta diğer insanlara karşı anlatırken kaydetmeyi başarırsam, işte o zaman değmeyin keyfime.
+
+![](b0413-tc10.png){width="300" height="220"}
+
+<strong>Yapay Sinir Ağları</strong>
+
+<a href="https://www.dropbox.com/s/dcw5gksua0l514w/TahminCikarim_10_Yapay_Sinir_Aglari.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/r83bh881xlzyrh3/TahminCikarim_10_Yapay_Sinir_Aglari_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+
+{{< video https://youtu.be/ezIvTwcO7WQ >}}

@@ -1,0 +1,50 @@
+---
+title: "Tahmin ve Çıkarım 3 - Doğrusal Bağlanım"
+author: İlker Birbil
+categories:
+    - Ders
+    - Genel
+    - Tahmin ve Çıkarım
+    - Yapay öğrenme
+date: 2018-05-08
+image: 3cc1b-tahmin_cikarim_3_1.png
+---
+
+Sizi bilmem ama ben artık makine öğrenmesi yöntemlerini anlatmaya hazırım. Şu ana kadar yaptığımız derslerde hep genel bilgileri konuştuk. Bu dersle birlikte ilk  yöntemimiz doğrusal bağlanımı işleyeceğiz.  Dersi izlediğinizde oldukça basit bir yöntem olduğunu siz de göreceksiniz. Fakat bu basitliği nedeniyle kullanılmadığını düşünmeyin sakın. Aksine bu yöntem birkaç sebeple sıkça kullanılıyor:
+<ol>
+ 	<li>Doğrusal bağlanımın tarihi, makine öğrenmesine nazaran oldukça eski. Bunun da etkisiyle üzerinde gerçekten çok çalışılmış bir yöntem; yani doğrusal bağlanım konusunda kaynak bol.</li>
+ 	<li>Basitliğinin de verdiği avantajla, parametre ve model analizleri derinlemesine yapılmış. Bu sayede doğrusal bağlanım ile elde edilen sonuçlar üzerine çok şey söyleyebiliyoruz.</li>
+ 	<li>İlerleyen derslerde göreceğimiz <em>modern</em> yöntemlerin bazılarının temeli doğrusal bağlanıma dayanıyor. Dolayısıyla bu <em>basit</em> yöntemi hatmetmek her zaman iyi bir fikir.</li>
+ 	<li>Yapay sinir ağları gibi çok daha karmaşık yöntemlerin sonuçları ile karşılaştırmak için sıklıkla doğrusal bağlanım kullanılıyor. Kısacası bugün öğreneceğiniz yöntemi bir temel olarak görmek mümkün.</li>
+</ol>
+İki videodan oluşan ders malzemesini aşağıda bulabilirsiniz. İyi çalışmalar.
+
+<img src="3cc1b-tahmin_cikarim_3_1.png" alt="" width="300" height="225" />
+
+<strong>Doğrusal Bağlanım 1</strong>
+
+<a href="https://www.dropbox.com/s/aqrkh4gi1xxat1d/TahminCikarim_03_Dogrusal_Baglanim_1.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/v6gclagugy783cz/TahminCikarim_03_Dogrusal_Baglanim_1_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+&nbsp;
+
+{{< video https://youtu.be/WKKWzXwDfr0 >}}
+
+<hr />
+
+<img src="3a8a3-tahmin_cikarim_3_2.png" alt="" width="300" height="225" />
+
+&nbsp;
+
+<strong>Doğrusal Bağlanım 2</strong>
+
+<a href="https://www.dropbox.com/s/uwxlf3zb88yxkpa/TahminCikarim_03_Dogrusal_Baglanim_2.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a>
+
+<a href="https://www.dropbox.com/s/touvkznsg6dkd8g/TahminCikarim_03_Dogrusal_Baglanim_2_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a>
+
+&nbsp;
+
+{{< video https://youtu.be/SZvCJahi3UQ >}}
