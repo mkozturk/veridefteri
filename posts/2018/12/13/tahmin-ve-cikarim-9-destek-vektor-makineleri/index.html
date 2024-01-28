@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="İlker Birbil">
-<meta name="dcterms.date" content="2017-11-12">
+<meta name="dcterms.date" content="2018-12-13">
 
-<title>Veri Defteri - Jupyter Notebook - R ve Julia</title>
+<title>Veri Defteri - Tahmin ve Çıkarım 9 – Destek Vektör Makineleri</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,10 +110,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Jupyter Notebook - R ve Julia</h1>
+<h1 class="title">Tahmin ve Çıkarım 9 – Destek Vektör Makineleri</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">Ders</div>
     <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Tahmin ve Çıkarım</div>
+    <div class="quarto-category">Yapay öğrenme</div>
   </div>
   </div>
 
@@ -131,7 +133,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 12, 2017</p>
+      <p class="date">December 13, 2018</p>
     </div>
   </div>
   
@@ -141,26 +143,15 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Nasıl? Jupyter Notebook (JN) kullanmaya başladınız mı? Umarım <a href="http://www.veridefteri.com/2017/10/30/jupyter-notebook-nedir-2/">bir önceki yazımın</a> faydası olmuştur. Eğer kurulumu yazıda bahsedildiği şekliyle yaptıysanız, hali hazırda bilgisayarınızda Python programlama dili var demektir. Haliyle JN ile bir sayfa açıp Python kullanabilirsiniz. Peki ya diğer programlama dilleri? Bugünkü yazıda JN’ye veri biliminde sıkça kullanılan R ve gittikçe daha çok popülerleşmeye başlayan <a href="https://julialang.org/">Julia</a> dillerini ekleyelim.</p>
-<section id="r" class="level2">
-<h2 class="anchored" data-anchor-id="r">R</h2>
-<p>JN’ye farklı dillerle zenginleştirme işine “çekirdek (kernel) ekleme” deniyor. İlk önce R ile başlayacağız ama bilgisayarınızda R yüklü olduğundan emin olalım. Eğer daha önce yüklemediyseniz&nbsp;<a href="https://cran.pau.edu.tr/">şu sayfadan</a> bilgisayarınızın işletim sistemine uygun olan dosyayı indirip kurun.&nbsp;Bu işlemden sonra artık R kullanabilirsiniz.&nbsp;Bu arada hazır R kurmuşken, <a href="https://www.rstudio.com/products/RStudio/">RStudio</a>’yu da yüklemenizi tavsiye ederim. Gerçekten çok başarılı bir programlama ara yüzü sunuyor.</p>
-<p>R çekirdeğini eklemek için de <a href="https://github.com/IRkernel/IRkernel">şu sayfada</a> verilen işlemleri yapacağız. İlk yapmanız gereken R programını çalıştırmak. Karşınıza bir terminal penceresi ve R komut satırı çıkacak. Eğer RStudio yüklediyseniz, programı çalıştırıp konsol (console) kısmına geçin. Ardından komut satırına aşağıdaki komutları sırasıyla yazmanız yeterli.</p>
-<pre><code>&gt; install.packages('devtools')
-&gt; devtools::install_github('IRkernel/IRkernel')
-&gt; IRkernel::installspec()</code></pre>
-<p><img align="center" src="7d3c5-juliaconsole.png" width="600"></p>
-</section>
-<section id="julia" class="level2">
-<h2 class="anchored" data-anchor-id="julia">Julia</h2>
-<p>Sıra geldi Julia yüklemeye. Ardından da JN’ye Julia çekirdeğini ekleyeceğiz. Bilgisayarınıza Julia kurmak için <a href="https://julialang.org/downloads/">şuradan</a> işletim sisteminizle uyumlu seçeneği komut satırı sürümü (command line version) olacak şekilde indirip çalıştırın. Yüklediğiniz Julia programını çalıştırdığınızda komut satırı içeren bir pencere çıkacak. Julia kullanmaya hazırsınız. Ben son yıllarda Octave/MATLAB yerine&nbsp; Julia kullanmaya başladım. Özellikle hızından çok memnunum. Neyse, konu dağılmasın. Asıl işimize dönüp, hemen JN’ye Julia çekirdeğini ekleyelim. Çok kolay. Tek yapmanız gereken Julia komut satırına aşağıdaki satırı yazmak.</p>
-<pre><code>julia&gt; Pkg.add("IJulia")</code></pre>
-<p><img align="center" src="95e5b-rstudioconsole.png" width="600"></p>
-<hr>
-<p><img align="right" src="7e22f-diger_diller.png" width="300"> Eğer her şey yolunda gittiyse, JN’yi çalıştırdıktan sonra sağdaki menüden yeni bir defteri üç dilden birisi ile açabilirsiniz. Güle güle kullanın.&nbsp;Eğer daha farklı çekirdekler eklemek isterseniz <a href="https://github.com/jupyter/jupyter/wiki/Jupyter-kernels">şu liste</a>&nbsp;hiç fena değil.</p>
+<p>Yeni bir güdümlü öğrenme yöntemi ile tekrar karşınızdayım. Bu konuyu anlatmayı çok seviyorum çünkü işin geometrisi, bütün hikâyeyi açıkça ortaya koyuyor. Öte yandan dersin sonundaki çekirdekler (kernels) kısmında, temel bir optimizasyon bilgisi gerekiyor. Eğer bu konuda fikriniz yoksa lütfen dert etmeyin.&nbsp; Önemli olan ana fikri kapmak. Arzu ediyorsanız, teknik detayı nasıl olsa öğrenirsiniz.</p>
+<p>Bir ders sonra yapay öğrenmeye giriş derslerini bitiriyorum. Ha gayret arkadaşlar.</p>
+<p><img src="4071f-dvm_title.png" width="300" height="228"></p>
+<p><strong>Destek Vektör Makineleri</strong></p>
+<p><a href="https://www.dropbox.com/s/xu6v8feeigxprhy/TahminCikarim_09_Destek_Vektor_Makineleri.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a></p>
+<p><a href="https://www.dropbox.com/s/t240ay27uqg7qoi/TahminCikarim_09_Destek_Vektor_Makineleri_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a></p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/VRGZm1wPesY" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

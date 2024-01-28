@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="İlker Birbil">
-<meta name="dcterms.date" content="2017-11-12">
+<meta name="dcterms.date" content="2018-09-09">
 
-<title>Veri Defteri - Jupyter Notebook - R ve Julia</title>
+<title>Veri Defteri - Tahmin ve Çıkarım 6 – Tekrar Örnekleme</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,10 +110,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Jupyter Notebook - R ve Julia</h1>
+<h1 class="title">Tahmin ve Çıkarım 6 – Tekrar Örnekleme</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">Ders</div>
     <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Tahmin ve Çıkarım</div>
+    <div class="quarto-category">Yapay öğrenme</div>
   </div>
   </div>
 
@@ -131,7 +133,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 12, 2017</p>
+      <p class="date">September 9, 2018</p>
     </div>
   </div>
   
@@ -141,26 +143,22 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Nasıl? Jupyter Notebook (JN) kullanmaya başladınız mı? Umarım <a href="http://www.veridefteri.com/2017/10/30/jupyter-notebook-nedir-2/">bir önceki yazımın</a> faydası olmuştur. Eğer kurulumu yazıda bahsedildiği şekliyle yaptıysanız, hali hazırda bilgisayarınızda Python programlama dili var demektir. Haliyle JN ile bir sayfa açıp Python kullanabilirsiniz. Peki ya diğer programlama dilleri? Bugünkü yazıda JN’ye veri biliminde sıkça kullanılan R ve gittikçe daha çok popülerleşmeye başlayan <a href="https://julialang.org/">Julia</a> dillerini ekleyelim.</p>
-<section id="r" class="level2">
-<h2 class="anchored" data-anchor-id="r">R</h2>
-<p>JN’ye farklı dillerle zenginleştirme işine “çekirdek (kernel) ekleme” deniyor. İlk önce R ile başlayacağız ama bilgisayarınızda R yüklü olduğundan emin olalım. Eğer daha önce yüklemediyseniz&nbsp;<a href="https://cran.pau.edu.tr/">şu sayfadan</a> bilgisayarınızın işletim sistemine uygun olan dosyayı indirip kurun.&nbsp;Bu işlemden sonra artık R kullanabilirsiniz.&nbsp;Bu arada hazır R kurmuşken, <a href="https://www.rstudio.com/products/RStudio/">RStudio</a>’yu da yüklemenizi tavsiye ederim. Gerçekten çok başarılı bir programlama ara yüzü sunuyor.</p>
-<p>R çekirdeğini eklemek için de <a href="https://github.com/IRkernel/IRkernel">şu sayfada</a> verilen işlemleri yapacağız. İlk yapmanız gereken R programını çalıştırmak. Karşınıza bir terminal penceresi ve R komut satırı çıkacak. Eğer RStudio yüklediyseniz, programı çalıştırıp konsol (console) kısmına geçin. Ardından komut satırına aşağıdaki komutları sırasıyla yazmanız yeterli.</p>
-<pre><code>&gt; install.packages('devtools')
-&gt; devtools::install_github('IRkernel/IRkernel')
-&gt; IRkernel::installspec()</code></pre>
-<p><img align="center" src="7d3c5-juliaconsole.png" width="600"></p>
-</section>
-<section id="julia" class="level2">
-<h2 class="anchored" data-anchor-id="julia">Julia</h2>
-<p>Sıra geldi Julia yüklemeye. Ardından da JN’ye Julia çekirdeğini ekleyeceğiz. Bilgisayarınıza Julia kurmak için <a href="https://julialang.org/downloads/">şuradan</a> işletim sisteminizle uyumlu seçeneği komut satırı sürümü (command line version) olacak şekilde indirip çalıştırın. Yüklediğiniz Julia programını çalıştırdığınızda komut satırı içeren bir pencere çıkacak. Julia kullanmaya hazırsınız. Ben son yıllarda Octave/MATLAB yerine&nbsp; Julia kullanmaya başladım. Özellikle hızından çok memnunum. Neyse, konu dağılmasın. Asıl işimize dönüp, hemen JN’ye Julia çekirdeğini ekleyelim. Çok kolay. Tek yapmanız gereken Julia komut satırına aşağıdaki satırı yazmak.</p>
-<pre><code>julia&gt; Pkg.add("IJulia")</code></pre>
-<p><img align="center" src="95e5b-rstudioconsole.png" width="600"></p>
-<hr>
-<p><img align="right" src="7e22f-diger_diller.png" width="300"> Eğer her şey yolunda gittiyse, JN’yi çalıştırdıktan sonra sağdaki menüden yeni bir defteri üç dilden birisi ile açabilirsiniz. Güle güle kullanın.&nbsp;Eğer daha farklı çekirdekler eklemek isterseniz <a href="https://github.com/jupyter/jupyter/wiki/Jupyter-kernels">şu liste</a>&nbsp;hiç fena değil.</p>
+<p>Bizim üniversitede “Machine Learning” dersini vermeye başladım. Buradaki notları İngilizce’ye çevirerek kullandığım için üniversitedeki derse hızlı bir başlangıç yapabildim. Sağolasın Veri Defteri!</p>
+<p>Öte yandan dersi kanlı canlı öğrencilerin karşısında anlatıyor olmamın da başka avantajları var: hangi kısımlar daha kolay anlaşılıyor, nereleri daha hızlı geçebilirim anlıyorum. Önümüzdeki sene notlarımı güncellerim gibi gözüküyor. Ve tabii o durumda aynı değişiklikleri buradaki Türkçe notlarımda da yaparım.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="34788-dmt5ebrxcaaxpmj.jpg" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">İlk derste telaffuz olayını tatlıya bağladık.</figcaption>
+</figure>
+</div>
+<p>Önceki derslerde, aşırı öğrenme denen belanın ilacı diyerek, veri kümesinin farklı alt kümeleri ile çalışmaktan bahsetmiştim. Bir de asıl başarı eğitim verisiyle değil, test verisiyle elde edilir demiştim. İşte bu hafta, elimizdeki veriyi eğitim ve test alt kümelerine bölmek için kullanılan tekrar örnekleme yöntemlerini anlattım. Öyle böyle derken <a href="http://www.veridefteri.com/2018/04/04/tahmin-ve-cikarim-makine-ogrenmesi-yapay-ogrenme/" target="_blank" rel="noopener">planladığım derslerin</a> çoğu gitti azı kaldı.</p>
+<p><img src="3420c-tekrarorneklemeilksayfa.png" alt="" width="300" height="228"></p>
+<p><strong>Tekrar Örnekleme</strong></p>
+<p><a href="https://www.dropbox.com/s/m1ab1jexfpzn1qw/Tahmin_Cikarim_06_Tekrar_Ornekleme.pdf?dl=0" target="_blank" rel="noopener">Renkli PDF</a></p>
+<p><a href="https://www.dropbox.com/s/dqltw472emg61y7/Tahmin_Cikarim_06_Tekrar_Ornekleme_sb.pdf?dl=0" target="_blank" rel="noopener">Siyah-Beyaz PDF</a></p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/8LvAux9_l1Q" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="İlker Birbil">
-<meta name="dcterms.date" content="2017-11-12">
+<meta name="author" content="Birol Yüceoğlu">
+<meta name="dcterms.date" content="2018-06-13">
 
-<title>Veri Defteri - Jupyter Notebook - R ve Julia</title>
+<title>Veri Defteri - Boosting Yöntemleri</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,10 +110,16 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Jupyter Notebook - R ve Julia</h1>
+<h1 class="title">Boosting Yöntemleri</h1>
   <div class="quarto-categories">
     <div class="quarto-category">Başlangıç</div>
+    <div class="quarto-category">Ders</div>
     <div class="quarto-category">Genel</div>
+    <div class="quarto-category">LightGBM</div>
+    <div class="quarto-category">scikit-learn</div>
+    <div class="quarto-category">Veri önişleme</div>
+    <div class="quarto-category">Veri setleri</div>
+    <div class="quarto-category">Yapay öğrenme</div>
   </div>
   </div>
 
@@ -124,14 +130,14 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>İlker Birbil </p>
+             <p>Birol Yüceoğlu </p>
           </div>
   </div>
     
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 12, 2017</p>
+      <p class="date">June 13, 2018</p>
     </div>
   </div>
   
@@ -141,26 +147,37 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Nasıl? Jupyter Notebook (JN) kullanmaya başladınız mı? Umarım <a href="http://www.veridefteri.com/2017/10/30/jupyter-notebook-nedir-2/">bir önceki yazımın</a> faydası olmuştur. Eğer kurulumu yazıda bahsedildiği şekliyle yaptıysanız, hali hazırda bilgisayarınızda Python programlama dili var demektir. Haliyle JN ile bir sayfa açıp Python kullanabilirsiniz. Peki ya diğer programlama dilleri? Bugünkü yazıda JN’ye veri biliminde sıkça kullanılan R ve gittikçe daha çok popülerleşmeye başlayan <a href="https://julialang.org/">Julia</a> dillerini ekleyelim.</p>
-<section id="r" class="level2">
-<h2 class="anchored" data-anchor-id="r">R</h2>
-<p>JN’ye farklı dillerle zenginleştirme işine “çekirdek (kernel) ekleme” deniyor. İlk önce R ile başlayacağız ama bilgisayarınızda R yüklü olduğundan emin olalım. Eğer daha önce yüklemediyseniz&nbsp;<a href="https://cran.pau.edu.tr/">şu sayfadan</a> bilgisayarınızın işletim sistemine uygun olan dosyayı indirip kurun.&nbsp;Bu işlemden sonra artık R kullanabilirsiniz.&nbsp;Bu arada hazır R kurmuşken, <a href="https://www.rstudio.com/products/RStudio/">RStudio</a>’yu da yüklemenizi tavsiye ederim. Gerçekten çok başarılı bir programlama ara yüzü sunuyor.</p>
-<p>R çekirdeğini eklemek için de <a href="https://github.com/IRkernel/IRkernel">şu sayfada</a> verilen işlemleri yapacağız. İlk yapmanız gereken R programını çalıştırmak. Karşınıza bir terminal penceresi ve R komut satırı çıkacak. Eğer RStudio yüklediyseniz, programı çalıştırıp konsol (console) kısmına geçin. Ardından komut satırına aşağıdaki komutları sırasıyla yazmanız yeterli.</p>
-<pre><code>&gt; install.packages('devtools')
-&gt; devtools::install_github('IRkernel/IRkernel')
-&gt; IRkernel::installspec()</code></pre>
-<p><img align="center" src="7d3c5-juliaconsole.png" width="600"></p>
-</section>
-<section id="julia" class="level2">
-<h2 class="anchored" data-anchor-id="julia">Julia</h2>
-<p>Sıra geldi Julia yüklemeye. Ardından da JN’ye Julia çekirdeğini ekleyeceğiz. Bilgisayarınıza Julia kurmak için <a href="https://julialang.org/downloads/">şuradan</a> işletim sisteminizle uyumlu seçeneği komut satırı sürümü (command line version) olacak şekilde indirip çalıştırın. Yüklediğiniz Julia programını çalıştırdığınızda komut satırı içeren bir pencere çıkacak. Julia kullanmaya hazırsınız. Ben son yıllarda Octave/MATLAB yerine&nbsp; Julia kullanmaya başladım. Özellikle hızından çok memnunum. Neyse, konu dağılmasın. Asıl işimize dönüp, hemen JN’ye Julia çekirdeğini ekleyelim. Çok kolay. Tek yapmanız gereken Julia komut satırına aşağıdaki satırı yazmak.</p>
-<pre><code>julia&gt; Pkg.add("IJulia")</code></pre>
-<p><img align="center" src="95e5b-rstudioconsole.png" width="600"></p>
-<hr>
-<p><img align="right" src="7e22f-diger_diller.png" width="300"> Eğer her şey yolunda gittiyse, JN’yi çalıştırdıktan sonra sağdaki menüden yeni bir defteri üç dilden birisi ile açabilirsiniz. Güle güle kullanın.&nbsp;Eğer daha farklı çekirdekler eklemek isterseniz <a href="https://github.com/jupyter/jupyter/wiki/Jupyter-kernels">şu liste</a>&nbsp;hiç fena değil.</p>
+<p>30 Mayıs’ta Dataİstanbul tarafından düzenlenen bir etkinlikte ‘Boosting Yöntemleri: Temeller ve Uygulamalar’ adlı bir konuşma yaptım. <a href="https://www.meetup.com/en-AU/dataistanbul/">Dataİstanbul</a> veri bilimi ve yapay öğrenme alanında çalışan ya da kendini geliştirmek isteyen gönüllülerden oluşan bir topluluk. Düzenli aralıklarla bir araya gelerek atölyeler, eğitimler ve seminerler düzenliyorlar. Düzenledikleri etkinlikleri takip etmenizi tavsiye ederim.</p>
+Adından da anlaşılacağı gibi konuşmamda, boosting yöntemlerinin temellerini ve LightGBM ile Scikit-Learn paketleri üzerindeki uygulamalarını anlattım. Bu sayede <a href="http://www.veridefteri.com/2018/05/22/lightgbme-giris/">LightGBM’e Giriş</a> yazısıyla kullanımına değindiğimiz konunun arka planındaki teoriye de giriş yapmış olduk. Sunumda bahsettiğim yöntemleri bir bağlanım problemi üzerinden anlattım. Yaptığımız uygulamalar ise sınıflandırma üzerineydi. Konuşmanın ana başlıklarını aşağıda bulabilirsiniz:
+<ul>
+<li>
+Karar ağaçları ve olası problemleri
+</li>
+<li>
+Bagging (bootstrap aggregating) ve rassal orman yöntemleri
+</li>
+<li>
+Boosting yönteminin temelleri
+</li>
+<li>
+Boosting ve bagging karşılaştırması
+</li>
+<li>
+Gradient boosting
+</li>
+<li>
+AdaBoost (Adaptive Boosting)
+</li>
+</ul>
+<p>Uygulamalarda <a href="http://www.veridefteri.com/2018/05/22/lightgbme-giris/">LightGBM’e Giriş</a> yazısını kullandım. LightGBM üzerinde bu çalışmayı yaptıktan sonra Gradient Boosting ve AdaBoost yöntemlerini bir de Scikit-Learn üzerinden çalıştırdık. AdaBoost yöntemini kullandığımızda gözlemlerin bir sınıfa ait olma olasılıklarının dağılımında yaşanabilecek problemleri çözmek için olasılıkların yeniden dağıtılmasını sağlayan CalibrationClassifierCV modülünü gördük.</p>
+<p>Aşağıdaki linkten konuşmanın sunum dosyasına erişebilirsiniz.</p>
+<ul>
+<li><a href="https://veridefteri.files.wordpress.com/2023/11/4c2e7-boosting.pptx">Boosting (Powerpoint)</a></li>
+<li><a href="https://veridefteri.files.wordpress.com/2023/11/31882-boosting.pdf">Boosting (PDF)</a></li>
+</ul>
+<p>Konuşmada kullandığım Jupyter Notebook dosyalarına <a href="https://github.com/sibirbil/VeriDefteri">GitHub dizinimiz</a> üzerinden erişebilirsiniz.</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
