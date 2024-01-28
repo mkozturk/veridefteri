@@ -2,6 +2,15 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2022/02/07/zaman-serileri-analizi-10-kaynaklar/index.html",
+      "/posts/2022/02/07/zaman-serileri-analizi-9-guncel-ongoru-yaklasimlari/index.html",
+      "/posts/2022/01/29/zaman-serileri-analizi-8-dogrusal-olmayan-zaman-serileri/index.html",
+      "/posts/2022/01/22/zaman-serileri-analizi-7-vektor-ozbaglanim-modelleri/index.html",
+      "/posts/2022/01/15/zaman-serileri-analizi-6-spektral-analiz-ve-zaman-serileri-filtreleri/index.html",
+      "/posts/2022/01/08/zaman-serileri-analizi-5-duraganlik-ve-birim-kok-testleri/index.html",
+      "/posts/2022/01/01/zaman-serileri-analizi-4-ongoru-simdigoru-ve-tahmin/index.html",
+      "/posts/2021/12/24/zaman-serileri-analizi-3-dogrusallik-ve-arma-modellerinin-tahmini/index.html",
+      "/posts/2021/12/17/zaman-serileri-analizi-2-dogrusal-zaman-serileri/index.html",
       "/posts/2021/12/10/zaman-serileri-analizi-1-giris/index.html",
       "/posts/2020/02/03/binder-ile-jupyter-defterleri-paylasmak/index.html",
       "/posts/2020/01/12/tweepy-ile-twitter-api-erisimi-1/index.html",
