@@ -285,7 +285,7 @@ MS Word belgelerinin içinden metin almak, belge yaratmak ve varolan belgeye iç
 
 ### PDF
 
-PDF dosyalarından bilgi almak, PDF dosyası yaratmak, mevcut dosyada değişiklik yapmak gibi işler için [_pyPDF2_](https://pythonhosted.org/PyPDF2/) modülünü kullanabilirsiniz. Sweigart'ın _Automate The Boring Stuff with Python_ [kitabında] (https://automatetheboringstuff.com/chapter13/) bu modülün kullanımına dair açıklayıcı örnekler bulabilirsiniz.
+PDF dosyalarından bilgi almak, PDF dosyası yaratmak, mevcut dosyada değişiklik yapmak gibi işler için [_pyPDF2_](https://pythonhosted.org/PyPDF2/) modülünü kullanabilirsiniz. Sweigart'ın _Automate The Boring Stuff with Python_ [kitabında](https://automatetheboringstuff.com/chapter13/) bu modülün kullanımına dair açıklayıcı örnekler bulabilirsiniz.
 
 ### ZIP
 Python standart kütüphanesindeki [_zipfile_ modülü](https://docs.python.org/3/library/zipfile.html), ZIP formatında sıkıştırma ve açma fonksiyonları sağlar.

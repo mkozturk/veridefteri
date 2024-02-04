@@ -4,24 +4,6 @@ description: "Veri Bilimi ve Yapay Öğrenme"
 listing:
   contents: 
     - posts
-    - path: https://veridefteri.wordpress.com/2020/01/12/tweepy-ile-twitter-api-erisimi-1/
-      title: Tweepy ile Twitter API Erişimi
-      date: 2020-01-12
-      author: Tevfik Uyar
-      categories: 
-        - Veri edinme
-    - path: https://veridefteri.wordpress.com/2018/04/13/tidyverse-2-gruplama-ve-ozet-sayilar-elde-etme/
-      title: Tidyverse 2 – Gruplama ve Özet Sayılar Elde Etme
-      date: 2018-04-13
-      author: Hazel Kavili
-      categories:
-        - Veri önişleme
-    - path: https://veridefteri.wordpress.com/2018/03/03/tidyverse/
-      title: Tidyverse
-      date: 2018-03-03
-      author: Hazel Kavili
-      categories:
-        - Veri önişleme
   sort: "date desc"
   type: grid
   categories: true

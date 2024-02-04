@@ -7,6 +7,8 @@ categories:
     - pandas
     - veri önişleme
 eval: false
+aliases: 
+  - http://veridefteri.com/2017/10/30/groupby/index.html
 ---
 
 Pandas paketi veri analizi ve işlemesi için hazırlanmış bir Python paketidir. Bu paket çeşitli formatlardaki dosyaları (Excel, Csv, Txt gibi) okumayı, bu formatlarda dosyalar oluşturmayı kolaylaştırır. Aynı zamanda pandas paketi ile oluşturulan veri çerçeveleri (dataframe) sayesinde farklı formatlardaki (sayı, metin, tarih) veriyi birlikte tutmak, bu verileri işlemek ve basit analizler yapmak mümkündür.
