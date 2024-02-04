@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -63,6 +97,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../../styles.css">
 </head>
@@ -112,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title">
 <h1 class="title">Zaman Serileri Analizi 6: Spektral Analiz ve Zaman Serileri Filtreleri</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Zaman serileri</div>
   </div>
   </div>
 
@@ -140,8 +176,425 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="giriş" class="level1">
+<h1>1. Giriş</h1>
+<p>Önceki yazılarımızda özellikle iktisadi ve finansal zaman serilerinde sıklıkla görülen ortak değişen durağan doğrusal olasılıksal (covariance stationary linear stochastic processes) süreçlerle ilgilenmiştik. Buradaki modeller esasen hem zaman alanında hem de frekans alanındadır.</p>
+<p>ARMA süreçleri belli sayıda parametreye sahiptir ve zaman serileri analizinin standart teorisi için bir köşetaşıdır. Her ARMA süreci, doğrusal durum uzayı (linear state space) biçiminde gösterilebilir.</p>
+<p>Frekans alanındaki analiz aynı zamanda <strong>spektral analiz (spectral analysis)</strong> olarak adlandırılır. Özünde, spektral analiz, eşdeğişen durağan bir sürecin özdeğişim fonksiyonunun alternatif bir temsilini sağlar.</p>
+<p>Fourier dönüşümü ve tersi, iki temsil arasında eşleme yapmak için kullanılır. Bu yazıda spektral analizle ilgili bazı temel kavramlara değindikten sonra zaman serilerinde bazı filtreler göz atacağız.</p>
+</section>
+<section id="spektral-analiz" class="level1">
+<h1>2. Spektral Analiz</h1>
+<section id="spektral-yoğunluklar" class="level2">
+<h2 class="anchored" data-anchor-id="spektral-yoğunluklar">2.1. Spektral Yoğunluklar</h2>
+<p><span class="math inline">\(\left\{X_{t}\right\}\)</span>, <span class="math inline">\(\sum_{k} \gamma(k)^{2}&lt;\infty\)</span> koşulunu sağlayan özdeğişim fonksiyonu <span class="math inline">\(\gamma\)</span> ile ortak değişen durağan süreç olsun. <span class="math inline">\(\left\{X_{t}\right\}\)</span> nin <strong>spektral yoğunluğu (spectral density)</strong> olan <span class="math inline">\(f\)</span>, özdeğişim fonksiyonu <span class="math inline">\(\gamma\)</span> nın, kesikli zaman Fourier dönüşümü (discrete time Fourier transform ) olarak tanımlanır:</p>
+<p><span class="math display">\[
+f(\omega):=\sum_{k \in \mathbb{Z}} \gamma(k) e^{-i \omega k}, \quad \omega \in \mathbb{R}
+\]</span></p>
+<p><span class="math inline">\(\gamma\)</span> nın çift olduğundan hareketle, tüm <span class="math inline">\(t\)</span> ler için <span class="math inline">\(\gamma(t)=\gamma(-t)\)</span> için,</p>
+<p><span class="math display">\[
+f(\omega)=\gamma(0)+2 \sum_{k \geq 1} \gamma(k) \cos (\omega k)
+\]</span></p>
+<p>olduğunu gösterebiliriz.</p>
+<p><strong><em>Örnek: Beyaz Gürültü Süreci</em></strong></p>
+<p><span class="math inline">\(\left\{\varepsilon_{t}\right\}\)</span> biçiminde, <span class="math inline">\(\sigma\)</span> standart sapmaya sahip bir beyaz gürültü süreci düşünelim. Bu durumda, <span class="math inline">\(f(\omega)=\sigma^{2}\)</span> olacaktır. Dolayısıyla <span class="math inline">\(f\)</span> sabit bir fonksiyondur. Bu, “tüm frekansların eşit olarak mevcut olduğu” şeklinde yorumlanabilir. Beyaz ışığın, eğer frekans, beyaz gürültü teriminin kökenini sağlayan bir bağlantı olan görünür spektruma atıfta bulunduğunu düşünürsek, tam da bu özelliğe sahiptir diyebiliriz.</p>
+<p><strong><em>Örnek: AR, MA ve ARMA</em></strong></p>
+<p><span class="math inline">\(X_{t}=\theta \varepsilon_{t-1}+\varepsilon_{t}\)</span> biçimindeki <span class="math inline">\(\operatorname{MA}(1)\)</span> süreci için spektral yoğunluk fonksiyonu:</p>
+<p><span class="math display">\[
+f(\omega)=\sigma^{2}\left(1+2 \theta \cos (\omega)+\theta^{2}\right)
+\]</span></p>
+<p><span class="math inline">\(X_{t}=\phi X_{t-1}+\varepsilon_{t}\)</span> biçimindeki <span class="math inline">\(\operatorname{AR}(1)\)</span> süreci için spektral yoğunluk fonksiyonu:</p>
+<p><span class="math display">\[
+f(\omega)=\frac{\sigma^{2}}{1-2 \phi \cos (\omega)+\phi^{2}}
+\]</span></p>
+<p>Daha genel olarak ARMA süreci için spektral yoğunluk fonksiyonu:</p>
+<p><span class="math display">\[
+f(\omega)=\left|\frac{\theta\left(e^{i \omega}\right)}{\phi\left(e^{i \omega}\right)}\right|^{2} \sigma^{2}
+\]</span></p>
+<p>şeklinde gösterilebilir.</p>
+</section>
+<section id="spektral-yoğunluğun-yorumu" class="level2">
+<h2 class="anchored" data-anchor-id="spektral-yoğunluğun-yorumu">2.2. Spektral Yoğunluğun Yorumu</h2>
+<p><span class="math inline">\(\phi\)</span>, 0.8 ve -0.8 olduğunda <span class="math inline">\(\operatorname{AR}(1)\)</span> süreci için spektral yoğunluk fonksiyonunu çizelim:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># AR(1) sürecinin spektral yoğunluk fonksiyonu</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ar1_sd(ϕ, ω):</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span> <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> <span class="dv">2</span> <span class="op">*</span> ϕ <span class="op">*</span> np.cos(ω) <span class="op">+</span> ϕ<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>ωs <span class="op">=</span> np.linspace(<span class="dv">0</span>, np.pi, <span class="dv">180</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>num_rows, num_cols <span class="op">=</span> <span class="dv">2</span>, <span class="dv">1</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(num_rows, num_cols, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(hspace<span class="op">=</span><span class="fl">0.4</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># phi = 0.8 olduğunda özdeğişim</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, ϕ <span class="kw">in</span> <span class="bu">enumerate</span>((<span class="fl">0.8</span>, <span class="op">-</span><span class="fl">0.8</span>)):</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[i]</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    sd <span class="op">=</span> ar1_sd(ϕ, ωs)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    ax.plot(ωs, sd, <span class="st">'b-'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, lw<span class="op">=</span><span class="dv">2</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="st">'spektral yoğunluk, $\phi = {ϕ:.2}$'</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    ax.legend(loc<span class="op">=</span><span class="st">'upper center'</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    ax.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">'frekans'</span>, xlim<span class="op">=</span>(<span class="dv">0</span>, np.pi))</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-2-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Biçimsel olmayan bir şekilde, özdeğişim fonksiyonunun yaklaşık olarak büyük sönümlü döngüler sergiler gibi göründüğü <span class="math inline">\(\omega \in[0, \pi]\)</span> aralığında, spektral yoğunluğun da büyük olduğunu düşünebiliriz. Bunu görmek için, önceki grafiğin alt panelinde, <span class="math inline">\(\phi=-0.8\)</span> durumu için spektral yoğunluğun <span class="math inline">\(\omega=\pi\)</span> noktasında neden büyük olduğunu düşünelim. Spektral yoğunluk fonksiyonunun aşağıdaki gibi yazıldığını hatırlayalım:</p>
+<p><span class="math display">\[
+f(\omega)=\gamma(0)+2 \sum_{k \geq 1} \gamma(k) \cos (\omega k)=\gamma(0)+2 \sum_{k \geq 1}(-0.8)^{k} \cos (\omega k)
+\]</span></p>
+<p>Bunu <span class="math inline">\(\omega=\pi\)</span> noktasında ele alırsak, <span class="math inline">\((-0.8)^{k}\)</span> pozitif iken <span class="math inline">\(\cos (\pi k)\)</span> büyük ve pozitif olduğundan, büyük bir sayı görürüz; <span class="math inline">\((-0.8)^{k}\)</span> negatif iken, mutlak değer olarak büyük ve negatif bir sayı görürüz.</p>
+<p>Dolayısıyla çarpım her zaman büyük ve pozitiftir ve bu nedenle yukarıdaki denklemin sağ tarafındaki çarpımların toplamı büyüktür. Bunları, yatay eksende <span class="math inline">\(k\)</span> olacak şekilde çizelim:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ϕ <span class="op">=</span> <span class="op">-</span><span class="fl">0.8</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">16</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> [ϕ<span class="op">**</span>k <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> ϕ<span class="op">**</span><span class="dv">2</span>) <span class="cf">for</span> k <span class="kw">in</span> times]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> [np.cos(np.pi <span class="op">*</span> k) <span class="cf">for</span> k <span class="kw">in</span> times]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>y3 <span class="op">=</span> [a <span class="op">*</span> b <span class="cf">for</span> a, b <span class="kw">in</span> <span class="bu">zip</span>(y1, y2)]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>num_rows, num_cols <span class="op">=</span> <span class="dv">3</span>, <span class="dv">1</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(num_rows, num_cols, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(hspace<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ϕ = -0.8 iken özdeğişim</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes[<span class="dv">0</span>]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>ax.plot(times, y1, <span class="st">'bo-'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'$\gamma(k)$'</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">15</span>), yticks<span class="op">=</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>ax.hlines(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">15</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># π frekansında döngüler</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes[<span class="dv">1</span>]</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>ax.plot(times, y2, <span class="st">'bo-'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'$\cos(\pi k)$'</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">15</span>), yticks<span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>ax.hlines(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">15</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># çarpım</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes[<span class="dv">2</span>]</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>ax.stem(times, y3, label<span class="op">=</span><span class="st">'$\gamma(k) \cos(\pi k)$'</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">15</span>), ylim<span class="op">=</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>), yticks<span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>ax.hlines(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">15</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"k"</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Öte yandan, <span class="math inline">\(f(\omega)\)</span> fonksiyonunu <span class="math inline">\(\omega=\pi / 3\)</span> noktasında ele alırsak, döngüler eşleşmez, <span class="math inline">\(\gamma(k) \cos (\omega k)\)</span> dizisi hem pozitif hem de negatif terimler içerir ve bu nedenle bu terimlerin toplamı çok daha küçüktür.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ϕ <span class="op">=</span> <span class="op">-</span><span class="fl">0.8</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">16</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> [ϕ<span class="op">**</span>k <span class="op">/</span> (<span class="dv">1</span> <span class="op">-</span> ϕ<span class="op">**</span><span class="dv">2</span>) <span class="cf">for</span> k <span class="kw">in</span> times]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> [np.cos(np.pi <span class="op">*</span> k<span class="op">/</span><span class="dv">3</span>) <span class="cf">for</span> k <span class="kw">in</span> times]</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>y3 <span class="op">=</span> [a <span class="op">*</span> b <span class="cf">for</span> a, b <span class="kw">in</span> <span class="bu">zip</span>(y1, y2)]</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>num_rows, num_cols <span class="op">=</span> <span class="dv">3</span>, <span class="dv">1</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(num_rows, num_cols, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.subplots_adjust(hspace<span class="op">=</span><span class="fl">0.25</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># phi = -0.8 iken özdeğişim</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes[<span class="dv">0</span>]</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>ax.plot(times, y1, <span class="st">'bo-'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'$\gamma(k)$'</span>)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">15</span>), yticks<span class="op">=</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>))</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>ax.hlines(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">15</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># π frekansında döngüler</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes[<span class="dv">1</span>]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>ax.plot(times, y2, <span class="st">'bo-'</span>, alpha<span class="op">=</span><span class="fl">0.6</span>, label<span class="op">=</span><span class="st">'$\cos(\pi k/3)$'</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">15</span>), yticks<span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>ax.hlines(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">15</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co"># çarpım</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> axes[<span class="dv">2</span>]</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>ax.stem(times, y3, label<span class="op">=</span><span class="st">'$\gamma(k) \cos(\pi k/3)$'</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">'upper right'</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>ax.<span class="bu">set</span>(xlim<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">15</span>), ylim<span class="op">=</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>), yticks<span class="op">=</span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>))</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>ax.hlines(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">15</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"$k$"</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Özetle, spektral yoğunluk, özdeğişim fonksiyonunun sönümlü döngüler sergilediği <span class="math inline">\(\omega\)</span> frekanslarında büyüktür.</p>
+</section>
+<section id="dönüşümü-tersine-çevirme" class="level2">
+<h2 class="anchored" data-anchor-id="dönüşümü-tersine-çevirme">2.3. Dönüşümü Tersine Çevirme</h2>
+<p>Spektral yoğunluğun, ortak değişen durağan bir sürecin özdeğişim yapısı üzerinde frekansa dayalı bir bakış açısı sağlaması açısından faydalı olduğunu gördük. Spektral yoğunluğun yararlı olmasının bir başka nedeni de, <strong>ters Fourier dönüşümü (inverse Fourier Transformation)</strong> yoluyla özdeğişim fonksiyonunu kurtarmak için <em>ters çevrilebilir</em> olmasıdır.</p>
+<p>Tüm <span class="math inline">\(k \in \mathbb{Z}\)</span> için,</p>
+<p><span class="math display">\[
+\gamma(k)=\frac{1}{2 \pi} \int_{-\pi}^{\pi} f(\omega) e^{i \omega k} d \omega
+\]</span></p>
+<p>Bu, spektral yoğunluğun hesaplanması ve işlenmesinin özdeğişim fonksiyonundan daha kolay olduğu durumlarda uygun bir yöntemdir.</p>
+</section>
+<section id="periodogram" class="level2">
+<h2 class="anchored" data-anchor-id="periodogram">2.4. Periodogram</h2>
+<p>Burada, verilerden spektral yoğunlukları ve diğer ilgili miktarları tahmin etme sorununu ele alacağız. Spektral yoğunluk tahminleri, <strong>periodogram</strong> olarak bilinen araç kullanılarak hesaplanır - bu da ünlü <strong>hızlı Fourier dönüşümü (fast Fourier transformation)</strong> ile hesaplanır. Temel teknik açıklandıktan sonra, bunu birkaç temel makroekonomik zaman serisinin analizine uygulayacağız. Burada kullanacağımız özel bir çerçeve <code>quantecon</code> çerçevesi olacak. Diğer çerçeveler gibi, bu çerçeveyi de kurmak oldukça kolay:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pip install quantecon</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> quantecon <span class="im">as</span> qe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bir özdeğişimin spektral yoğunluğu <span class="math inline">\(f\)</span> durağan süreç <span class="math inline">\(\gamma\)</span> özilinti fonksiyonu ile yazılabilir:</p>
+<p><span class="math display">\[
+f(\omega)=\gamma(0)+2 \sum_{k \geq 1} \gamma(k) \cos (\omega k), \quad \omega \in \mathbb{R}
+\]</span></p>
+<p>Şimdi, <span class="math inline">\(\gamma\)</span> bilinmediğinde belirli bir zaman serisinin spektral yoğunluğunu tahmin etme problemini ele alalım. <span class="math inline">\(X_{0}, \ldots, X_{n-1}\)</span>, ortak değişen durağan olduğu varsayılan tek bir zaman serisinin <span class="math inline">\(n\)</span> adet ardışık gözlemi olsun. Bu işlemin spektral yoğunluğunun en yaygın tahmincisi, <span class="math inline">\(X_{0}, \ldots, X_{n-1}\)</span> dizisini <em>periodogramıdır</em> ve şu şekilde tanımlanır:</p>
+<p><span class="math display">\[
+I(\omega):=\frac{1}{n}\left|\sum_{t=0}^{n-1} X_{t} e^{i t \omega}\right|^{2}, \quad \omega \in \mathbb{R}
+\]</span></p>
+<p>Alternatif olarak, <span class="math inline">\(I(\omega)\)</span> aşağıdaki gibi de tanımlanabilir:</p>
+<p><span class="math display">\[
+I(\omega)=\frac{1}{n}\left\{\left[\sum_{t=0}^{n-1} X_{t} \cos (\omega t)\right]^{2}+\left[\sum_{t=0}^{n-1} X_{t} \sin (\omega t)\right]^{2}\right\}
+\]</span></p>
+<section id="peridogramın-yorumu" class="level3">
+<h3 class="anchored" data-anchor-id="peridogramın-yorumu">2.4.1. Peridogramın Yorumu</h3>
+<p>Periodogramı yorumlamak için <em>Fourier frekanslarındaki</em> değerlerine odaklanmak gerekir:</p>
+<p><span class="math display">\[
+\omega_{j}:=\frac{2 \pi j}{n}, \quad j=0, \ldots, n-1
+\]</span></p>
+<p>Hangi durumda, <span class="math inline">\(I\left(\omega_{j}\right)\)</span>, <span class="math inline">\(f\left(\omega_{j}\right)\)</span>’nin bir tahmincisidir? Bunun için birkaç cebirsel işlemden sonra aşağıdaki eşitliği elde ederiz:</p>
+<p><span class="math display">\[
+n I\left(\omega_{j}\right)=\sum_{t=0}^{n-1}\left(X_{t}-\bar{X}\right)^{2}+2 \sum_{k=1}^{n-1} \sum_{t=k}^{n-1}\left(X_{t}-\bar{X}\right)\left(X_{t-k}-\bar{X}\right) \cos \left(\omega_{j} k\right)
+\]</span></p>
+<p>Şimdi şunu düşünelim:</p>
+<p><span class="math display">\[
+\hat{\gamma}(k):=\frac{1}{n} \sum_{t=k}^{n-1}\left(X_{t}-\bar{X}\right)\left(X_{t-k}-\bar{X}\right), \quad k=0,1, \ldots, n-1
+\]</span></p>
+<p>Bu, özdeğişim fonksiyonu <span class="math inline">\(\gamma\)</span>’nın doğal <em>eklenebilir tahmincisi (plug-in estimator)</em> olan örneklem özdeğişim fonksiyonudur. Bu notasyonla aşağıdaki eşitliği yazabiliriz:</p>
+<p><span class="math display">\[
+I\left(\omega_{j}\right)=\hat{\gamma}(0)+2 \sum_{k=1}^{n-1} \hat{\gamma}(k) \cos \left(\omega_{j} k\right)
+\]</span></p>
+<p>Dolayısıyla, <span class="math inline">\(I\left(\omega_{j}\right)\)</span>, <span class="math inline">\(f\left(\omega_{j}\right)\)</span>’nin örneklem analogudur.</p>
+</section>
+<section id="periodogramın-hesaplanması" class="level3">
+<h3 class="anchored" data-anchor-id="periodogramın-hesaplanması">2.4.2. Periodogramın Hesaplanması</h3>
+<p>Periyodogramı hesaplamanın en yaygın yolu, hızlı Fourier dönüşümü algoritması aracılığıyla uygulanan ayrık Fourier dönüşümüdür. Genel olarak, <span class="math inline">\(a_{0}, \ldots, a_{n-1}\)</span> olarak verilmiş bir dizide, ayrık Fourier dönüşümü aşağıdaki diziyi hesaplar:</p>
+<p><span class="math display">\[
+A_{j}:=\sum_{t=0}^{n-1} a_{t} \exp \left\{i 2 \pi \frac{t j}{n}\right\}, \quad j=0, \ldots, n-1
+\]</span></p>
+<p><code>numpy</code> çerçevesinden çağırdığımız <code>fft</code> metodu ve <span class="math inline">\(a_{0}, \ldots, a_{n-1}\)</span> dizisini içeren <code>a</code>, <code>Numpy</code> dizesi ile <code>fft(a)</code> fonksiyonu çağırıldığında <span class="math inline">\(A_{0}, \ldots, A_{n-1}\)</span> dizisini içeren <code>Numpy</code> dizesi döner.</p>
+<p><code>x</code> dizesi içinde kayıtlı <span class="math inline">\(X_{0}, \ldots, X_{n-1}\)</span> dizisi için, Fourier frekanslarındaki <span class="math inline">\(I\left(\omega_{j}\right)\)</span> değerleri:</p>
+<p><span class="math display">\[
+\frac{1}{n}\left|\sum_{t=0}^{n-1} X_{t} \exp \left\{i 2 \pi \frac{t j}{n}\right\}\right|^{2}, \quad j=0, \ldots, n-1
+\]</span></p>
+<p><code>np.abs(fft(X))**2 / len(X)</code> ile hesaplanır.</p>
+<p>Fakat tüm bunları <code>periodogram</code> metodu tek başına yapabilir.</p>
+<p>Aşağıdaki sürece göre türetilmiş dizi için periyodogram ve spektral yoğunluğu hesaplayalım:</p>
+<p><span class="math display">\[
+X_{t}=0.5 X_{t-1}+\varepsilon_{t}-0.8 \varepsilon_{t-2}
+\]</span></p>
+<p>burada <span class="math inline">\(\left\{\varepsilon_{t}\right\}\)</span>, birim değişintiye sahip beyaz gürültü sürecidir.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># örneklem boyutu</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">40</span>                          </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># AR ve MA parametreleri </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>ϕ, θ <span class="op">=</span> <span class="fl">0.5</span>, (<span class="dv">0</span>, <span class="op">-</span><span class="fl">0.8</span>)           </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>lp <span class="op">=</span> qe.ARMA(ϕ, θ)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> lp.simulation(ts_length<span class="op">=</span>n)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>x, y    <span class="op">=</span> qe.periodogram(X)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>ax.plot(x, y, <span class="st">'b-'</span>, lw<span class="op">=</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'periyodogram'</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>x_sd, y_sd <span class="op">=</span> lp.spectral_density(two_pi<span class="op">=</span><span class="va">False</span>, res<span class="op">=</span><span class="dv">120</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>ax.plot(x_sd, y_sd, <span class="st">'r-'</span>, lw<span class="op">=</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.8</span>, label<span class="op">=</span><span class="st">'spektral yoğunluk'</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Tahminler biraz kötü görünüyor. Bu örneklem boyutundan kaynaklı olabilir. <code>n=1200</code> örneklem ile tekrar çalıştıralım:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># örneklem boyutu</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">1200</span>                          </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># AR ve MA parametreleri </span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ϕ, θ <span class="op">=</span> <span class="fl">0.5</span>, (<span class="dv">0</span>, <span class="op">-</span><span class="fl">0.8</span>)           </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>lp <span class="op">=</span> qe.ARMA(ϕ, θ)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> lp.simulation(ts_length<span class="op">=</span>n)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>x, y    <span class="op">=</span> qe.periodogram(X)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>ax.plot(x, y, <span class="st">'b-'</span>, lw<span class="op">=</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">'periyodogram'</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>x_sd, y_sd <span class="op">=</span> lp.spectral_density(two_pi<span class="op">=</span><span class="va">False</span>, res<span class="op">=</span><span class="dv">120</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>ax.plot(x_sd, y_sd, <span class="st">'r-'</span>, lw<span class="op">=</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.8</span>, label<span class="op">=</span><span class="st">'spektral yoğunluk'</span>)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Periyodogram, altta yatan spektral yoğunluğa göre çok düzensizdir. Bu da bizi, bir başka soruna götürür: <em>düzgünleştirme</em>.</p>
+</section>
+</section>
+<section id="düzgünleştirme-smoothing" class="level2">
+<h2 class="anchored" data-anchor-id="düzgünleştirme-smoothing">2.5. Düzgünleştirme (Smoothing)</h2>
+<p>Burada birbiriyle bağlantılı iki problem var. Birincisi, hızlı Fourier dönüşümünün uygulanma şekli göz önüne alındığında, <span class="math inline">\(I(\omega)\)</span> nin tahmin edildiği <span class="math inline">\(\omega\)</span> gözlem noktalarının sayısı, veri miktarına paralel olarak artar. Başka bir deyişle, daha fazla veriye sahip olmamıza rağmen, onu daha fazla değer tahmin etmek için de kullanırız. İkinci bir problem, parametrik varsayımlar olmadan her türden yoğunluğun tahmin edilmesinin temelde zor olmasıdır. Tipik olarak, yoğunlukların parametrik olmayan tahmini, bir dereceye kadar düzgünleştirme gerektirir. Düzgünleştirmenin periodogramlara uygulanmasının standart yolu, yerel ortalamaların alınmasıdır. Başka bir deyişle <span class="math inline">\(I\left(\omega_{j}\right)\)</span> yerine önceki değerlerin ağırlıklı ortalaması kullanılır:</p>
+<p><span class="math display">\[
+I\left(\omega_{j-p}\right), I\left(\omega_{j-p+1}\right), \ldots, I\left(\omega_{j}\right), \ldots, I\left(\omega_{j+p}\right)
+\]</span></p>
+<p>Bu ağırlıklı ortalama şu şekilde yazılabilir:</p>
+<p><span class="math display">\[
+I_{S}\left(\omega_{j}\right):=\sum_{\ell=-p}^{p} w(\ell) I\left(\omega_{j+\ell}\right)
+\]</span></p>
+<p>Genel olarak, daha büyük <span class="math inline">\(p\)</span> değerleri daha fazla düzgünleştirmeyi gösterir.</p>
+</section>
+</section>
+<section id="zaman-serisi-filtreleri" class="level1">
+<h1>3. Zaman Serisi Filtreleri</h1>
+<p><strong>Filtreler</strong> zaman serisinin taşıdığı trend, konjonktür, mevsimsellik ve düzensiz unsurları genellikle sabit bir hareketli ortalamalar filtresi uygulayarak ayrıştıran yöntemlerdir. Bu yöntemlerde tipik olarak serilerin ortasına denk gelen değerlere simetrik doğrusal filtreler uygulanırken, başına ve sonuna denk gelen değerlere asimetrik doğrusal filtreler uygulanmaktadır. Yöntemlerin amacı orijinal veriyi dairesel döngülerden arındırmaktır. Böylece düzgünleştirilmiş (smoothing) bir trend tahmini yapmak mümkün olacaktır.</p>
+<p>Filtre bazlı yöntemlerde unsurların açık bir model yardımıyla modellenmesi gerekmemektedir. Düzensiz unsurlar mevsimsel sıklığa bağlı olarak düzleştirilmiş bir trend tahmini sonrasında bulunur. Bu yöntemlerde düzeltme sürecinin özellikleri kullanılan filtrenin özellikleri ile doğrudan bağlantılıdır.</p>
+<p>Burada, filtrelerin nasıl çalıştığını gösterebilmek için, Türkiye için, 2000-01-01:2021-09-01 dönemine ait aylık işsizlik oranı ve TÜFE ile çeyreklik Reel GSYH verileri üzerinde çalışacağız. Verileri <code>pandas_datareader</code> çerçevesi ile <code>FRED</code> den çalışma ortamına alacağız:</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas_datareader <span class="im">as</span> pdr</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç ve bitiş tarihleri</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>başlangıç <span class="op">=</span> datetime.datetime(<span class="dv">2000</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>bitiş    <span class="op">=</span> datetime.datetime(<span class="dv">2021</span>, <span class="dv">9</span>, <span class="dv">1</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># makro iktisadi değişkenler</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>işsizlik_oranı <span class="op">=</span> pdr.DataReader(<span class="st">'LRHUTTTTTRM156S'</span>, <span class="st">'fred'</span>, start<span class="op">=</span>başlangıç, end<span class="op">=</span>bitiş).rename(columns <span class="op">=</span> {<span class="st">"LRHUTTTTTRM156S"</span>:<span class="st">'işsizlik_oranı'</span>})</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>tüfe           <span class="op">=</span> pdr.DataReader(<span class="st">'CPALTT01TRM659N'</span>, <span class="st">'fred'</span>, start<span class="op">=</span>başlangıç, end<span class="op">=</span>bitiş).rename(columns <span class="op">=</span> {<span class="st">"CPALTT01TRM659N"</span>:<span class="st">'tüfe'</span>})</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>reel_gsyh      <span class="op">=</span> pdr.DataReader(<span class="st">'NGDPRSAXDCTRQ'</span>, <span class="st">'fred'</span>, start<span class="op">=</span>başlangıç, end<span class="op">=</span>bitiş).rename(columns <span class="op">=</span> {<span class="st">"NGDPRSAXDCTRQ"</span>:<span class="st">'reel_gsyh'</span>})</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># reel gsyh için logaritmik dönüşüm</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>reel_gsyh[<span class="st">'log_gsyh'</span>] <span class="op">=</span> np.log(reel_gsyh[<span class="st">'reel_gsyh'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Verilerin grafiklerini çizip bakalım:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">9</span>))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Türkiye için Makro İktisadi Değişkenler'</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].plot(işsizlik_oranı[<span class="st">'işsizlik_oranı'</span>])</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">0</span>].set_title(<span class="st">"işsizlik oranı"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].plot(tüfe[<span class="st">'tüfe'</span>])</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>, <span class="dv">0</span>].set_title(<span class="st">"tüfe"</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].plot(reel_gsyh[<span class="st">'log_gsyh'</span>])</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>, <span class="dv">1</span>].set_title(<span class="st">"log gsyh"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>fig.delaxes(axs[<span class="dv">1</span>,<span class="dv">1</span>])</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>fig.tight_layout()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-9-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="hodrick-prescott-filtresi" class="level1">
+<h1>3.1. Hodrick-Prescott Filtresi</h1>
+<p>Hodrick-Prescott filtresi, <span class="math inline">\(y_{t}\)</span> zaman serisini trend <span class="math inline">\(\tau_{t}\)</span> ve döngüsel bileşen <span class="math inline">\(\zeta_{t}\)</span> olarak ayrıştırır:</p>
+<p><span class="math display">\[
+y_{t}=\tau_{t}+\zeta_{t}
+\]</span></p>
+<p>Bileşenler, aşağıdaki ikinci dereceden kayıp fonksiyonunu en küçükleyerek (minimization) belirlenir:</p>
+<p><span class="math display">\[
+\min _{\tau_{t}} \sum_{t}^{T} \zeta_{t}^{2}+\lambda \sum_{t=1}^{T}\left[\left(\tau_{t}-\tau_{t-1}\right)-\left(\tau_{t-1}-\tau_{t-2}\right)\right]^{2}
+\]</span></p>
+<p>Logaritmik GSYH için HP filtresini uygulayalım:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># döngüsel ve trend bileşenleri</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>gsyh_döngüsel_bileşen, gsyh_trend_bileşeni <span class="op">=</span> sm.tsa.filters.hpfilter(reel_gsyh.log_gsyh)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># bileşenlerden ayrı bir veri çerçevesi oluşturulması</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ayrıştırılmış_gsyh <span class="op">=</span> reel_gsyh[[<span class="st">"log_gsyh"</span>]].copy()</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>ayrıştırılmış_gsyh[<span class="st">"döngü"</span>] <span class="op">=</span> gsyh_döngüsel_bileşen</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>ayrıştırılmış_gsyh[<span class="st">"trend"</span>] <span class="op">=</span> gsyh_trend_bileşeni</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ayrıştırılmış_gsyh[[<span class="st">'log_gsyh'</span>, <span class="st">'trend'</span>]].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<section id="baxter-king-yaklaşık-bant-geçiren-filtre-band-pass-filter" class="level2">
+<h2 class="anchored" data-anchor-id="baxter-king-yaklaşık-bant-geçiren-filtre-band-pass-filter">3.2. Baxter-King Yaklaşık Bant-Geçiren Filtre (Band-Pass Filter)</h2>
+<p><strong>Baxter-King filtresinin</strong>, iş döngüsünün periyodikliği ile açıkça ilgilenmesi amaçlanmıştır. Bant geçiren filtrelerini bir seriye uygulayarak, konjonktürdekinden daha yüksek veya daha düşük dalgalanmalar içermeyen yeni bir seri üretirler. Spesifik olarak, BK filtresi simetrik hareketli ortalama şeklini alır:</p>
+<p><span class="math display">\[
+y_{t}^{*}=\sum_{k=-K}^{k=K} a_{k} y_{t-k}
+\]</span></p>
+<p>burada, <span class="math inline">\(a_{-k}=a_{k}\)</span> ve <span class="math inline">\(\sum_{k=-k}^{K} a_{k}=0\)</span>, serideki herhangi bir trendi ortadan kaldırmak ve serinin <span class="math inline">\(I(1)\)</span> veya <span class="math inline">\(I(2)\)</span> olması durumunda onu durağan hale getirmek içindir. Burada filtre ağırlıkları aşağıdaki gibi belirlenir:</p>
+<p><span class="math display">\[
+\begin{gathered}
+a_{j}=B_{j}+\theta \text { for } j=0, \pm 1, \pm 2, \ldots, \pm K \\
+B_{0}=\frac{\left(\omega_{2}-\omega_{1}\right)}{\pi} \\
+B_{j}=\frac{1}{\pi i}\left(\sin \left(\omega_{2} j\right)-\sin \left(\omega_{1} j\right)\right) \text { for } j=0, \pm 1, \pm 2, \ldots, \pm K
+\end{gathered}
+\]</span></p>
+<p>burada burada <span class="math inline">\(\theta\)</span>, ağırlıkların toplamı sıfıra eşit olacak şekilde bir normalleştirme sabitidir:</p>
+<p><span class="math display">\[
+\begin{gathered}
+\theta=\frac{-\sum_{j=-K^{K} b_{j}}}{2 K+1} \\
+\omega_{1}=\frac{2 \pi}{P_{H}} \\
+\omega_{2}=\frac{2 \pi}{P_{L}}
+\end{gathered}
+\]</span></p>
+<p>burada <span class="math inline">\(P_{L}\)</span> ve <span class="math inline">\(P_{H}\)</span>, düşük ve yüksek kesme frekanslarının periyodikliğidir.</p>
+<p>BK filtresini ile işsizlik ve tüfe verilerine uygulayalım:</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>bk_döngüleri_tüfe     <span class="op">=</span> sm.tsa.filters.bkfilter(tüfe[<span class="st">'tüfe'</span>])</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>bk_döngüleri_işsizlik <span class="op">=</span> sm.tsa.filters.bkfilter(işsizlik_oranı[<span class="st">'işsizlik_oranı'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))<span class="op">;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)<span class="op">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>bk_döngüleri_tüfe.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"tüfe"</span>, style<span class="op">=</span>[<span class="st">"r--"</span>])<span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>bk_döngüleri_işsizlik.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"işszilik oranı"</span>, style<span class="op">=</span>[<span class="st">"b-"</span>])<span class="op">;</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="dv">1</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Genel olarak, işsizlik düştüğünde, TÜFE’nin arttığını gözlemliyoruz.</p>
+</section>
+<section id="christiano-fitzgerald-bant-geçiren-filtre" class="level2">
+<h2 class="anchored" data-anchor-id="christiano-fitzgerald-bant-geçiren-filtre">3.3. Christiano-Fitzgerald Bant-Geçiren Filtre</h2>
+<p>Christiano-Fitzgerald filtresi, BK’nin bir genellemesidir ve bu nedenle ağırlıklı hareketli ortalama olarak da görülebilir. Bununla birlikte, CF filtresi tüm seriyi kullanmanın yanı sıra <span class="math inline">\(t\)</span> için asimetriktir. Filtrenin uygulanması, aşağıdaki ağırlıkların hesaplanmasını içerir:</p>
+<p><span class="math display">\[
+y_{t}^{*}=B_{0} y_{t}+B_{1} y_{t+1}+\cdots+B_{T-1-t} y_{T-1}+\tilde{B}_{T-t} y_{T}+B_{1} y_{t-1}+\cdots+B_{t-2} y_{2}+\tilde{B}_{t-1} y_{1}
+\]</span></p>
+<p><span class="math inline">\(t=3,4, \ldots, T-2\)</span> için, burada,</p>
+<p><span class="math display">\[
+\begin{aligned}
+B_{j} &amp;=\frac{\sin (j b)-\sin (j a)}{\pi j}, j \geq 1 \\
+B_{0} &amp;=\frac{b-a}{\pi}, a=\frac{2 \pi}{P_{u}}, b=\frac{2 \pi}{P_{L}}
+\end{aligned}
+\]</span></p>
+<p>burada <span class="math inline">\(\tilde{B}_{T-t}\)</span> ve <span class="math inline">\(\tilde{B}_{t-1}\)</span>, <span class="math inline">\(B_{j}\)</span>’nin lineer fonksiyonlarıdır ve <span class="math inline">\(t=1,2, T-1\)</span>, ve <span class="math inline">\(T\)</span> için değerler, yukarıda <span class="math inline">\(P_{U}\)</span> ve <span class="math inline">\(P_{L}\)</span> için hesaplandığı gibi hesaplanır.</p>
+<p>İşsizlik ve TÜFE verilerine CF filtresini uygulayalım:</p>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>cf_döngüleri_tüfe, cf_trend_tüfe     <span class="op">=</span> sm.tsa.filters.cffilter(tüfe[<span class="st">'tüfe'</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>cf_döngüleri_işsizlik, cf_trend_tüfe <span class="op">=</span> sm.tsa.filters.cffilter(işsizlik_oranı[<span class="st">'işsizlik_oranı'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))<span class="op">;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>)<span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>cf_döngüleri_tüfe.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"tüfe"</span>, style<span class="op">=</span>[<span class="st">"r--"</span>])<span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>cf_döngüleri_işsizlik.plot(ax<span class="op">=</span>ax, label<span class="op">=</span><span class="st">"işszilik oranı"</span>, style<span class="op">=</span>[<span class="st">"b-"</span>])<span class="op">;</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="dv">1</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

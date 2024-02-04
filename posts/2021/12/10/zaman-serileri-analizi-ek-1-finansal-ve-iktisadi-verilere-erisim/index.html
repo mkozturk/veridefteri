@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Murat Öztürkmen">
+<meta name="dcterms.date" content="2021-12-17">
+
+<title>Veri Defteri - Zaman Serileri Analizi 1-Ek: Finansal ve İktisadi Zaman Serilerine Erişim</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../img/veridefteri_ikon.png" rel="icon" type="image/png">
+<script src="../../../../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+<link rel="stylesheet" href="../../../../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../../../../index.html">
+    <span class="navbar-title">Veri Defteri</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../../../../about.html" rel="" target="">
+ <span class="menu-text">Hakkımızda</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/veridefteri" rel="" target=""><i class="bi bi-twitter" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Zaman Serileri Analizi 1-Ek: Finansal ve İktisadi Zaman Serilerine Erişim</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">Zaman serileri</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Murat Öztürkmen </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 17, 2021</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="ek-1-finansal-ve-iktisadi-zaman-serilerine-erişim" class="level1">
+<h1>Ek 1: Finansal ve İktisadi Zaman Serilerine Erişim</h1>
+<p>Zaman serileri ile çalışırken, eğer elinizde uygun bir veri kümesi yok ise, gerçek hayat verilerine ulaşmak için oldukça fazla yol ve yöntem var. Bunun en basit yolu, kullandığınız programlama dili üzerinden, hiç dışarıya çıkmadan çalışma ortamınıza veri aktarmaktır.</p>
+<p>Burada Python ile finansal, iktisadi ve diğer açık verilere erişim için birkaç çerçeve paylaşacağız.</p>
+<section id="e.1.1.-finansal-verilere-erişim-1-yfinance" class="level2">
+<h2 class="anchored" data-anchor-id="e.1.1.-finansal-verilere-erişim-1-yfinance">E.1.1. Finansal Verilere Erişim-1: <code>yfinance</code></h2>
+<p><a href="https://pypi.org/project/yfinance/">yfinance</a>, Yahoo Finance’ın tarihsel verilerine erişmek için oluşturulmuş bir çerçevedir. <code>yfinance</code> ile yalnızca hisse senedi fiyat verilerini indirmekle kalmaz, aynı zamanda bir şirketin borsada listelenmesinden bu yana tüm finansal verilerini indirmenize de izin verir. Kullanımı kolaydır ve inanılmaz derecede hızlıdır. Bu çerçeve finansal veri analizi için oldukça popülerdir.</p>
+<p>Burada örnek bir hisse senedi olarak Google fiyatlarını ve Google finansal verilerinin nasıl çalışma ortamına aktarılacağına odaklanacağız.</p>
+<p>İlk olarak <code>yfinance</code> çerçevesinin yüklü olması gerekiyor. Bunu şu işlemle kolaylıkla yapabilirsiniz:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pip install yfinance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Şimdi yüklü olan çerçeveyi, çalışma ortmanına alalım:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gereksiz uyarıları gizlemek için</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># yfinance çerçevesinin çalışma ortamına alınması</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> yfinance <span class="im">as</span> yf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>İlgili hisse senedi verisinin bilgilerine ulaşmak için <code>Ticker</code> metodunu, hisse senedinin sembolünü argüman olarak alacak şekilde kullanıyoruz. Google için sembol <code>GOOGL</code> olarak belirlenmiş:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>google <span class="op">=</span> yf.Ticker(<span class="st">"GOOGL"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Şimdi, <code>info</code> metoduyla hisse senedini çıkaran şirket hakkında paylaşılan bilgilere bakalım:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>google.info</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>{'zip': '94043',
+ 'sector': 'Communication Services',
+ 'fullTimeEmployees': 150028,
+ 'longBusinessSummary': 'Alphabet Inc. provides online advertising services in the United States, Europe, the Middle East, Africa, the Asia-Pacific, Canada, and Latin America. The company offers performance and brand advertising services. It operates through Google Services, Google Cloud, and Other Bets segments. The Google Services segment provides products and services, such as ads, Android, Chrome, hardware, Google Maps, Google Play, Search, and YouTube, as well as technical infrastructure; and digital content. The Google Cloud segment offers infrastructure and data analytics platforms, collaboration tools, and other services for enterprise customers. The Other Bets segment sells internet and TV services, as well as licensing and research and development services. The company was founded in 1998 and is headquartered in Mountain View, California.',
+ 'city': 'Mountain View',
+ 'phone': '650-253-0000',
+ 'state': 'CA',
+ 'country': 'United States',
+ 'companyOfficers': [],
+ 'website': 'https://www.abc.xyz',
+ 'maxAge': 1,
+ 'address1': '1600 Amphitheatre Parkway',
+ 'industry': 'Internet Content &amp; Information',
+ 'ebitdaMargins': 0.35616,
+ 'profitMargins': 0.29521,
+ 'grossMargins': 0.56511,
+ 'operatingCashflow': 89395003392,
+ 'revenueGrowth': 0.41,
+ 'operatingMargins': 0.303,
+ 'ebitda': 85196996608,
+ 'targetLowPrice': 1850,
+ 'recommendationKey': 'buy',
+ 'grossProfits': 97795000000,
+ 'freeCashflow': 52658749440,
+ 'targetMedianPrice': 3350,
+ 'currentPrice': 2840.03,
+ 'earningsGrowth': 0.707,
+ 'currentRatio': 2.98,
+ 'returnOnAssets': 0.14011,
+ 'numberOfAnalystOpinions': 44,
+ 'targetMeanPrice': 3286.11,
+ 'debtToEquity': 11.493,
+ 'returnOnEquity': 0.30872,
+ 'targetHighPrice': 3925,
+ 'totalCash': 142002995200,
+ 'totalDebt': 28109000704,
+ 'totalRevenue': 239210004480,
+ 'totalCashPerShare': 213.936,
+ 'financialCurrency': 'USD',
+ 'revenuePerShare': 356.562,
+ 'quickRatio': 2.862,
+ 'recommendationMean': 1.7,
+ 'exchange': 'NMS',
+ 'shortName': 'Alphabet Inc.',
+ 'longName': 'Alphabet Inc.',
+ 'exchangeTimezoneName': 'America/New_York',
+ 'exchangeTimezoneShortName': 'EST',
+ 'isEsgPopulated': False,
+ 'gmtOffSetMilliseconds': '-18000000',
+ 'quoteType': 'EQUITY',
+ 'symbol': 'GOOGL',
+ 'messageBoardId': 'finmb_29096',
+ 'market': 'us_market',
+ 'annualHoldingsTurnover': None,
+ 'enterpriseToRevenue': 7.404,
+ 'beta3Year': None,
+ 'enterpriseToEbitda': 20.79,
+ '52WeekChange': 0.56300664,
+ 'morningStarRiskRating': None,
+ 'forwardEps': 112.07,
+ 'revenueQuarterlyGrowth': None,
+ 'sharesOutstanding': 300809984,
+ 'fundInceptionDate': None,
+ 'annualReportExpenseRatio': None,
+ 'totalAssets': None,
+ 'bookValue': 367.946,
+ 'sharesShort': 2555428,
+ 'sharesPercentSharesOut': 0.0039,
+ 'fundFamily': None,
+ 'lastFiscalYearEnd': 1609372800,
+ 'heldPercentInstitutions': 0.79713,
+ 'netIncomeToCommon': 70617997312,
+ 'trailingEps': 103.805,
+ 'lastDividendValue': None,
+ 'SandP52WeekChange': 0.22927392,
+ 'priceToBook': 7.718605,
+ 'heldPercentInsiders': 0.00151,
+ 'nextFiscalYearEnd': 1672444800,
+ 'yield': None,
+ 'mostRecentQuarter': 1632960000,
+ 'shortRatio': 1.52,
+ 'sharesShortPreviousMonthDate': 1634256000,
+ 'floatShares': 578297742,
+ 'beta': 1.043636,
+ 'enterpriseValue': 1771215650816,
+ 'priceHint': 2,
+ 'threeYearAverageReturn': None,
+ 'lastSplitDate': 1396483200,
+ 'lastSplitFactor': '1998:1000',
+ 'legalType': None,
+ 'lastDividendDate': None,
+ 'morningStarOverallRating': None,
+ 'earningsQuarterlyGrowth': 0.684,
+ 'priceToSalesTrailing12Months': 7.8943477,
+ 'dateShortInterest': 1636934400,
+ 'pegRatio': 1.25,
+ 'ytdReturn': None,
+ 'forwardPE': 25.341572,
+ 'lastCapGain': None,
+ 'shortPercentOfFloat': 0.0085,
+ 'sharesShortPriorMonth': 2790225,
+ 'impliedSharesOutstanding': 663763968,
+ 'category': None,
+ 'fiveYearAverageReturn': None,
+ 'previousClose': 2859.32,
+ 'regularMarketOpen': 2873.62,
+ 'twoHundredDayAverage': 2538.3796,
+ 'trailingAnnualDividendYield': None,
+ 'payoutRatio': 0,
+ 'volume24Hr': None,
+ 'regularMarketDayHigh': 2888,
+ 'navPrice': None,
+ 'averageDailyVolume10Day': 1595490,
+ 'regularMarketPreviousClose': 2859.32,
+ 'fiftyDayAverage': 2854.9697,
+ 'trailingAnnualDividendRate': None,
+ 'open': 2873.62,
+ 'toCurrency': None,
+ 'averageVolume10days': 1595490,
+ 'expireDate': None,
+ 'algorithm': None,
+ 'dividendRate': None,
+ 'exDividendDate': None,
+ 'circulatingSupply': None,
+ 'startDate': None,
+ 'regularMarketDayLow': 2806.02,
+ 'currency': 'USD',
+ 'trailingPE': 27.35928,
+ 'regularMarketVolume': 2057050,
+ 'lastMarket': None,
+ 'maxSupply': None,
+ 'openInterest': None,
+ 'marketCap': 1888406994944,
+ 'volumeAllCurrencies': None,
+ 'strikePrice': None,
+ 'averageVolume': 1547741,
+ 'dayLow': 2806.02,
+ 'ask': 2843.99,
+ 'askSize': 800,
+ 'volume': 2057050,
+ 'fiftyTwoWeekHigh': 3019.33,
+ 'fromCurrency': None,
+ 'fiveYearAvgDividendYield': None,
+ 'fiftyTwoWeekLow': 1694,
+ 'bid': 2837.05,
+ 'tradeable': False,
+ 'dividendYield': None,
+ 'bidSize': 1100,
+ 'dayHigh': 2888,
+ 'regularMarketPrice': 2840.03,
+ 'preMarketPrice': None,
+ 'logo_url': 'https://logo.clearbit.com/abc.xyz'}</code></pre>
+</div>
+</div>
+<p>Bu metodla şirketin sektörü, çalışan sayısı, iş özeti vb. dahil olmak üzere şirketle ilgili tüm bilgileri görülebilir.</p>
+<p>Hisse senedi tarihsel fiyat verisi için <code>history</code> metodunu kullanacağız. Başlangıç (start) ve bitiş (end) gibi argümanlar ile alınacak zaman dönemi belirlenebilir ya da zaman dönemi <code>max</code> olarak ayarlanarak, hisse senedinin başlangıçtan günümüze tüm fiyat bilgilerine ulaşılabilir.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># tüm veri için</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># google_fiyatlar = google.history(period="max")</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>google_fiyatlar <span class="op">=</span> google.history(start<span class="op">=</span><span class="st">"2005-01-01"</span>, end<span class="op">=</span><span class="st">"2021-06-01"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>google_fiyatlar.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Open</th>
+<th data-quarto-table-cell-role="th">High</th>
+<th data-quarto-table-cell-role="th">Low</th>
+<th data-quarto-table-cell-role="th">Close</th>
+<th data-quarto-table-cell-role="th">Volume</th>
+<th data-quarto-table-cell-role="th">Dividends</th>
+<th data-quarto-table-cell-role="th">Stock Splits</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2004-12-31</td>
+<td>99.714714</td>
+<td>100.040039</td>
+<td>96.376373</td>
+<td>96.491493</td>
+<td>15321663</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2005-01-03</td>
+<td>98.798798</td>
+<td>101.921921</td>
+<td>97.827827</td>
+<td>101.456459</td>
+<td>31656712</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2005-01-04</td>
+<td>100.800804</td>
+<td>101.566566</td>
+<td>96.836838</td>
+<td>97.347343</td>
+<td>27484288</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2005-01-05</td>
+<td>96.821823</td>
+<td>98.548546</td>
+<td>96.211212</td>
+<td>96.851852</td>
+<td>16456727</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2005-01-06</td>
+<td>97.637634</td>
+<td>98.048050</td>
+<td>93.953957</td>
+<td>94.369370</td>
+<td>20753426</td>
+<td>0</td>
+<td>0.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Tarihsel veri içerisinde günlük açılış(open), en yüksek(high), en düşük(low), kapanış(close), kar payı(dividend) ve hisse bölünmesi(stock split) değişkenleri tarihsel olarak çalışma ortamına aktarılmış oldu.</p>
+<p>Finansal veri analistleri, şirketin hissedarlarına vermiş olduğu temettüler ve bölünmeler ile ilgili detayları talep edebilirler. Bunu <code>actions</code> metoduyla elde edebiliriz:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>google.actions</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Dividends</th>
+<th data-quarto-table-cell-role="th">Stock Splits</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014-04-03</td>
+<td>0.0</td>
+<td>1.998</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Hisse senedinin sürdürülebilirliği hakkında bilgi edinmek için <code>sustainability</code> metodu kullanılır:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>google.sustainability</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Value</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2021-9</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">palmOil</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">controversialWeapons</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">gambling</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">socialScore</td>
+<td>10.79</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">nuclear</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">furLeather</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">alcoholic</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">gmo</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">catholic</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">socialPercentile</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">peerCount</td>
+<td>99</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">governanceScore</td>
+<td>11.62</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">environmentPercentile</td>
+<td>None</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">animalTesting</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">tobacco</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">totalEsg</td>
+<td>22.89</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">highestControversy</td>
+<td>4</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">esgPerformance</td>
+<td>AVG_PERF</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">coal</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">pesticides</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">adult</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">percentile</td>
+<td>32.95</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">peerGroup</td>
+<td>Software &amp; Services</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">smallArms</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">environmentScore</td>
+<td>0.48</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">governancePercentile</td>
+<td>None</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">militaryContract</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Bir şirketin hisse senedini almak veya satmak için öneriler, farklı Finans Firmaları tarafından sağlanır. Hisse senedi fiyatını analiz edebilmek için bu firmaların ne önerdiğini bilmeliyiz. Önerileri analiz etmek için <code>recommendations</code> metodunu kullanabiliriz.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>google.recommendations</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Firm</th>
+<th data-quarto-table-cell-role="th">To Grade</th>
+<th data-quarto-table-cell-role="th">From Grade</th>
+<th data-quarto-table-cell-role="th">Action</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Date</th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2014-12-17 00:00:00</td>
+<td>Pivotal Research</td>
+<td>Buy</td>
+<td></td>
+<td>up</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2015-01-08 06:03:07</td>
+<td>Stifel</td>
+<td>Hold</td>
+<td>Buy</td>
+<td>down</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2015-01-14 09:00:00</td>
+<td>Credit Suisse</td>
+<td>Outperform</td>
+<td></td>
+<td>main</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2015-01-30 09:00:00</td>
+<td>Citigroup</td>
+<td>Buy</td>
+<td></td>
+<td>main</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2015-03-02 14:04:06</td>
+<td>Bank of America</td>
+<td>Buy</td>
+<td>Neutral</td>
+<td>up</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2021-10-27 14:48:23</td>
+<td>Wells Fargo</td>
+<td>Overweight</td>
+<td></td>
+<td>main</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2021-10-27 14:50:22</td>
+<td>Monness, Crespi, Hardt</td>
+<td>Buy</td>
+<td></td>
+<td>main</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2021-10-27 15:32:10</td>
+<td>Truist Securities</td>
+<td>Buy</td>
+<td></td>
+<td>main</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2021-10-28 14:49:56</td>
+<td>Citigroup</td>
+<td>Neutral</td>
+<td></td>
+<td>main</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2021-11-02 13:05:22</td>
+<td>Morgan Stanley</td>
+<td>Overweight</td>
+<td></td>
+<td>main</td>
+</tr>
+</tbody>
+</table>
+
+<p>262 rows × 4 columns</p>
+</div>
+</div>
+</div>
+<p><code>calendar</code> metodu, şirketin kazanç ve gelirlerini bilmek için kullanılabilir.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>google.calendar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Earnings Date</td>
+<td>2022-01-31 21:00:00</td>
+<td>2022-02-04 21:00:00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Earnings Average</td>
+<td>27.16</td>
+<td>27.16</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Earnings Low</td>
+<td>22.98</td>
+<td>22.98</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Earnings High</td>
+<td>31</td>
+<td>31</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Revenue Average</td>
+<td>72024500000</td>
+<td>72024500000</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">Revenue Low</td>
+<td>68682000000</td>
+<td>68682000000</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">Revenue High</td>
+<td>75049000000</td>
+<td>75049000000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Borsada işlem gören her şirket için benzersiz bir ISIN (Uluslararası Menkul Kıymet Kimlik Numarası) bulunur. Bu numarayı <code>isin</code> metoduyla alabiliriz.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>google.isin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>'US02079K3059'</code></pre>
+</div>
+</div>
+<p>Opsiyon alım-satımı sırasında opsiyonun bitiş tarihini bilmeliyiz. <code>options</code> metodunu kullanarak o hisse senedinin Opsiyon Bitiş Tarihini alabiliriz.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>google.options</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>('2021-12-10',
+ '2021-12-17',
+ '2021-12-23',
+ '2021-12-31',
+ '2022-01-07',
+ '2022-01-21',
+ '2022-02-18',
+ '2022-03-18',
+ '2022-04-14',
+ '2022-06-17',
+ '2022-09-16',
+ '2023-01-20',
+ '2023-03-17',
+ '2023-06-16',
+ '2024-01-19')</code></pre>
+</div>
+</div>
+</section>
+<section id="e.1.2.-makro-iktisadi-verilere-erişim-evds" class="level2">
+<h2 class="anchored" data-anchor-id="e.1.2.-makro-iktisadi-verilere-erişim-evds">E.1.2. Makro İktisadi Verilere Erişim: <code>evds</code></h2>
+<p>Türkiye’de makro ekonomik veriler TÜİK, Merkez Bankası gibi kurumlar tarafından tarihsel olarak yayınlanmakta. <a href="https://evds2.tcmb.gov.tr/index.php?">Merkez Bankası, verileri Elektronik Veri Dağıtım Sistemi (evds)</a> isminde bir ortamdan dağıtıyor. Gidip siteden veriler çekilebileceği gibi, artık Python ve R için yazılmış çerçevelerle, ücretsiz API anahtarı alarak da buradaki verilere siteye gitmeden erişebilirsiniz.</p>
+<p><code>evds</code> çerçevesini de yüklemek oldukça kolay:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pip install evds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># evdsAPI modülünün içeri aktarılması</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> evds <span class="im">import</span> evdsAPI</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Merkez Bankasından alınan ücretsiz API anahtarının tanımlanması</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>evds <span class="op">=</span> evdsAPI(<span class="st">'&lt;API anahtarı&gt;'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Eğer, aranacak özel bir makro iktisadi değişken yok ise, üst kategorilerden alt kategorilere kadar giderek ilgili değişkenler çalışma ortamına aktarılabilir.</p>
+<p>Üst kategorilere <code>main_categories</code> metodula erişilebilir:</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>evds.main_categories</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CATEGORY_ID</th>
+<th data-quarto-table-cell-role="th">TOPIC_TITLE_TR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>PİYASA VERİLERİ</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>KURLAR</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>FAİZ İSTATİSTİKLERİ</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>PARA VE BANKA İSTATİSTİKLERİ</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>MENKUL KIYMET İSTATİSTİKLERİ</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>12</td>
+<td>FİNANSAL İSTATİSTİKLER</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>13</td>
+<td>TCMB BİLANÇO VERİLERİ</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>14</td>
+<td>FİYAT ENDEKSLERİ</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>15</td>
+<td>ANKETLER</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>18</td>
+<td>ÖDEMELER DENGESİ, ULUSLARARASI YATIRIM POZİSYONU</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>19</td>
+<td>DIŞ TİCARET İSTATİSTİKLERİ</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>20</td>
+<td>KAMU MALİYESİ</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>21</td>
+<td>ÜRETİM</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">14</td>
+<td>22</td>
+<td>ÖDEME SİSTEMLERİ VE EMİSYON</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">15</td>
+<td>23</td>
+<td>İSTİHDAM</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">16</td>
+<td>6</td>
+<td>DIŞ BORÇLAR</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">17</td>
+<td>7</td>
+<td>ZORUNLU KARŞILIĞA TABİ MEVDUAT VE KATILIM FONLARI</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">18</td>
+<td>24</td>
+<td>BIS KARŞILAŞTIRMALI ÜLKE İSTATİSTİKLERİ</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">19</td>
+<td>25</td>
+<td>ALTIN VERİLERİ</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">20</td>
+<td>26</td>
+<td>KONUT VE İNŞAAT İSTATİSTİKLERİ</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">21</td>
+<td>27</td>
+<td>FİNANSAL HESAPLAR</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">22</td>
+<td>28</td>
+<td>TURİZM İSTATİSTİKLERİ</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">23</td>
+<td>95</td>
+<td>EVDS KULLANIM İSTATİSTİKLERİ</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Bir alt kategoriye, <code>CATEGORY_ID</code> argğmanıyla <code>get_sub_categories</code> metoduyla erişilebilir:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>evds.get_sub_categories(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">CATEGORY_ID</th>
+<th data-quarto-table-cell-role="th">DATAGROUP_CODE</th>
+<th data-quarto-table-cell-role="th">DATAGROUP_NAME</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2</td>
+<td>bie_dkdovytl</td>
+<td>Kurlar-Döviz Kurları</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>bie_dkefkytl</td>
+<td>Kurlar-Efektif Kurlar</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2</td>
+<td>bie_dkkurbil</td>
+<td>Kurlar-TCMB Tarafından Alım Satıma Konu Olmaya...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2</td>
+<td>bie_rktufey</td>
+<td>Kurlar-Reel Efektif Döviz Kuru-TÜFE Bazlı (200...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2</td>
+<td>bie_rkufey</td>
+<td>Kurlar-Reel Efektif Döviz Kuru-Yİ-ÜFE Bazlı (2...</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>2</td>
+<td>bie_redkurigm</td>
+<td>Kurlar-Reel Efektif Döviz Kuru-Birim İş Gücü M...</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Alt kategorilerdeki veri gruplarına <code>DATAGROUP_CODE</code> argümanıyla <code>get_series</code> metordu ile erişilebilir:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>evds.get_series(<span class="st">'bie_dkdovytl'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">SERIE_CODE</th>
+<th data-quarto-table-cell-role="th">SERIE_NAME</th>
+<th data-quarto-table-cell-role="th">START_DATE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>TP.DK.USD.A.YTL</td>
+<td>(USD) ABD Doları (Döviz Alış)</td>
+<td>02-01-1950</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>TP.DK.USD.S.YTL</td>
+<td>(USD) ABD Doları (Döviz Satış)</td>
+<td>02-01-1950</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>TP.DK.EUR.A.YTL</td>
+<td>(EUR) Euro (Döviz Alış)</td>
+<td>04-01-1999</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>TP.DK.EUR.S.YTL</td>
+<td>(EUR) Euro (Döviz Satış)</td>
+<td>04-01-1999</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>TP.DK.ATS.A.YTL</td>
+<td>(ATS) Avusturya Şilini (Döviz Alış)</td>
+<td>03-07-1961</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">84</td>
+<td>TP.DK.SEK.C.YTL</td>
+<td>(SEK) İsveç Kronu (Çapraz)</td>
+<td>02-01-2002</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">85</td>
+<td>TP.DK.XDR.C.YTL</td>
+<td>(XDR) Özel Çekme Hakkı (SDR) (Çapraz)</td>
+<td>18-04-1988</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">86</td>
+<td>TP.DK.KRW.A.YTL</td>
+<td>(KRW) Güney Kore Wonu (Döviz Alış)</td>
+<td>23-08-2021</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">87</td>
+<td>TP.DK.KRW.C.YTL</td>
+<td>(KRW) Güney Kore Wonu (Çapraz)</td>
+<td>23-08-2021</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">88</td>
+<td>TP.DK.KRW.S.YTL</td>
+<td>(KRW) Güney Kore Wonu (Döviz Satış)</td>
+<td>23-08-2021</td>
+</tr>
+</tbody>
+</table>
+
+<p>89 rows × 3 columns</p>
+</div>
+</div>
+</div>
+<p>İlgilenilen değişkene <code>SERIE_CODE</code> argümanıyla <code>get_data</code> metoduyla erişilebilir. Burada da <code>startdate</code> ve <code>enddate</code> argümanları ile ilgilenilen periyot belirlenebilir.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dolar_kuru <span class="op">=</span> evds.get_data([<span class="st">'TP.DK.USD.A.YTL'</span>], startdate<span class="op">=</span><span class="st">'01-01-2000'</span>, enddate<span class="op">=</span><span class="st">'01-12-2021'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>dolar_kuru.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Tarih</th>
+<th data-quarto-table-cell-role="th">TP_DK_USD_A_YTL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>01-01-2000</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>02-01-2000</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>03-01-2000</td>
+<td>0.540098</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>04-01-2000</td>
+<td>0.540793</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>05-01-2000</td>
+<td>0.535815</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="e.1.3.-makro-iktisadi-verilere-erişim-pandas_datareader" class="level2">
+<h2 class="anchored" data-anchor-id="e.1.3.-makro-iktisadi-verilere-erişim-pandas_datareader">E.1.3. Makro İktisadi Verilere Erişim: <code>pandas_datareader</code></h2>
+<p>Makro iktisadi ve finansal verilere çalışma ortamından erişmenin bir diğer yolu, <a href="https://pandas-datareader.readthedocs.io/en/latest/index.html">pandas_datareader</a> çerçevesidir. <code>pandas_datareader</code>, Econdb, Quandl, FRED, Dünya Bankası, OECD ve Eurostat gibi birçok kaynaktan veri aktarmak için oldukça güzel bir çerçeve.</p>
+<p><code>pandas_datareader</code> çerçevesini de yüklemek oldukça kolay:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>pip install pandas_datareader</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Dünya Bankası’ndan Türkiye için sabit dolar bazında kişi başına Gayri Safi Yurtiçi Hasıla (Gross Domestic Product per capita in constant dollars), verisini çalışma ortmanına almak için <code>search</code> metodunu kullanabiliriz:</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># wb modülünün içeri aktarılması</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas_datareader <span class="im">import</span> wb</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># eşleşen veri isimleri</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>eşleşmeler <span class="op">=</span> wb.search(<span class="st">'gdp.*capita.*const'</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>eşleşmeler</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">id</th>
+<th data-quarto-table-cell-role="th">name</th>
+<th data-quarto-table-cell-role="th">unit</th>
+<th data-quarto-table-cell-role="th">source</th>
+<th data-quarto-table-cell-role="th">sourceNote</th>
+<th data-quarto-table-cell-role="th">sourceOrganization</th>
+<th data-quarto-table-cell-role="th">topics</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">716</td>
+<td>6.0.GDPpc_constant</td>
+<td>GDP per capita, PPP (constant 2011 internation...</td>
+<td></td>
+<td>LAC Equity Lab</td>
+<td>GDP per capita based on purchasing power parit...</td>
+<td>b'World Development Indicators (World Bank)'</td>
+<td>Economy &amp; Growth</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10384</td>
+<td>NY.GDP.PCAP.KD</td>
+<td>GDP per capita (constant 2015 US$)</td>
+<td></td>
+<td>World Development Indicators</td>
+<td>GDP per capita is gross domestic product divid...</td>
+<td>b'World Bank national accounts data, and OECD ...</td>
+<td>Economy &amp; Growth</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10386</td>
+<td>NY.GDP.PCAP.KN</td>
+<td>GDP per capita (constant LCU)</td>
+<td></td>
+<td>World Development Indicators</td>
+<td>GDP per capita is gross domestic product divid...</td>
+<td>b'World Bank national accounts data, and OECD ...</td>
+<td>Economy &amp; Growth</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10388</td>
+<td>NY.GDP.PCAP.PP.KD</td>
+<td>GDP per capita, PPP (constant 2017 internation...</td>
+<td></td>
+<td>World Development Indicators</td>
+<td>GDP per capita based on purchasing power parit...</td>
+<td>b'International Comparison Program, World Bank...</td>
+<td>Economy &amp; Growth</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">10389</td>
+<td>NY.GDP.PCAP.PP.KD.87</td>
+<td>GDP per capita, PPP (constant 1987 internation...</td>
+<td></td>
+<td>WDI Database Archives</td>
+<td></td>
+<td>b''</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>İlgileneceğimiz veri kimliği <code>NY.GDP.PCAP.KD</code> olarak belirlenmiş. <code>download</code> metoduyla <code>country</code>, <code>start</code> ve <code>end</code> argümanlarıyla ilgili veriler çalışma ortamına aktarılabilir:</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>gsyh <span class="op">=</span> wb.download(indicator<span class="op">=</span><span class="st">'NY.GDP.PCAP.KD'</span>, country<span class="op">=</span>[<span class="st">'TR'</span>], start<span class="op">=</span><span class="dv">2000</span>, end<span class="op">=</span><span class="dv">2020</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>gsyh.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">NY.GDP.PCAP.KD</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td rowspan="5" data-quarto-table-cell-role="th" data-valign="top">Turkey</td>
+<td data-quarto-table-cell-role="th">2020</td>
+<td>12035.033448</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2019</td>
+<td>11956.197821</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2018</td>
+<td>12004.376912</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2017</td>
+<td>11835.261106</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2016</td>
+<td>11187.053638</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="e.1.4.-ibb-trafik-indeksi-verileri" class="level2">
+<h2 class="anchored" data-anchor-id="e.1.4.-ibb-trafik-indeksi-verileri">E.1.4. İBB Trafik İndeksi Verileri</h2>
+<p>Finans ve makro iktisat verileri dışında zaman bazlı hava durumu, trafik, cihaz verileri gibi veri kümeleri de zaman serisi olarak çalışılabilir.</p>
+<p>Burada bir örnek olarak <a href="https://data.ibb.gov.tr/dataset/trafik-indeks-degeri-web-servisi">İstanbul Trafik İndeksi</a> verisini çalışma ortamına aktarmak için yazmış olduğumuz fonksiyon ile trafik indeksi verilerini alacağız.</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> trafik_indeksini_al(periyot<span class="op">=</span><span class="dv">1</span>, frekans<span class="op">=</span><span class="st">'D'</span>):</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Trafik indeksi veri çerçevesini döndürür.</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co">        peryot (int): periyot sayısı.</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="co">        frekans (str): zaman frekansı. Y:year, M:month, D:day, H:hour, 5M:5 minutes. default:D</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co">        veri (pandas.DataFrame): trafik indeksi veri çerçevesi</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># url</span></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>    url <span class="op">=</span> <span class="st">"https://api.ibb.gov.tr/tkmservices/api/TrafficData/v1/TrafficIndexHistory/"</span> <span class="op">+</span> <span class="bu">str</span>(periyot) <span class="op">+</span> <span class="st">"/"</span> <span class="op">+</span> frekans</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># api adresinden verinin alınması</span></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    istenen_veri <span class="op">=</span> requests.get(url)</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># verinin json biçimine dönüştürülmesi</span></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>    istenen_veri_json <span class="op">=</span> istenen_veri.json()</span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># istenen verinin pandas.DataFrame biçimine dönüştürülmesi</span></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>    veri <span class="op">=</span> pd.DataFrame.from_dict(istenen_veri_json)</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> veri</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>720 günlük, 1 saatlik trafik indeks verisinin çalışma ortmanına alınması:</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>trafik_indeksi_verisi <span class="op">=</span> trafik_indeksini_al(periyot<span class="op">=</span><span class="dv">720</span>, frekans<span class="op">=</span><span class="st">'H'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>trafik_indeksi_verisi.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">TrafficIndex</th>
+<th data-quarto-table-cell-role="th">TrafficIndexDate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>43</td>
+<td>2021-12-06T10:00:00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>53</td>
+<td>2021-12-06T09:00:00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>62</td>
+<td>2021-12-06T08:00:00</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>49</td>
+<td>2021-12-06T07:00:00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>18</td>
+<td>2021-12-06T06:00:00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

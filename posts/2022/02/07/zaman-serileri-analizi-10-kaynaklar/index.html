@@ -112,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title">
 <h1 class="title">Zaman Serileri Analizi 10: Kaynaklar</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Zaman serileri</div>
   </div>
   </div>
 
@@ -140,8 +140,53 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="zaman-serileri-analizi-için-kaynaklar" class="level1">
+<h1>Zaman Serileri Analizi için Kaynaklar</h1>
+<p>Zaman serileri yazı dizisinde zaman serilerini en basitten başlayarak, olabildiğince farklı alanlarına da değinmeye çalışarak ele aldık. Yine de, bu dizide bahsetmediğimiz başka konular da var. Buraya kadar değindiğimiz konular ve belki de daha fazlası için bazı kaynakları bu son yazıda paylaşıyoruz.</p>
+</section>
+<section id="kitaplar" class="level1">
+<h1>1. Kitaplar</h1>
+<p>Belli bir sıralama olmasa da, iki grup halinde yararlanılabilecek kaynak kitapların bazılarını paylaşalım:</p>
+<p>Başlangıç seviye:</p>
+<ul>
+<li>Wooldridge, J. (2013). <em>Ekonometriye Giriş - Modern Yaklaşım</em>. Nobel Akademik Yayıncılık.</li>
+<li>Gujarati, D. M. ve Porter D. C. (2020). <em>Temel Ekonometri</em>. Literatür Yayınları.</li>
+<li>Newbold, P. ve diğ. (2019). <em>İşletme ve İktisat için İstatistik</em>. Literatür Yayınları.</li>
+<li>Hamilton, J. D. (1994). <em>Time Series Analysis</em>. Princeton University Press.</li>
+<li>Brownlee, J. (2020). <em>Introduction to Time Series Forecasting with Python</em>. Machine Learning Mastery.</li>
+<li>Hyndman, R, J. ve Athanasopoulos, G. (2021). <em>Forecasting: Principles and Practice</em>. 3rd ed.&nbsp;çevrimiçi: https://otexts.com/fpp3/</li>
+</ul>
+<p>Orta-üst seviye:</p>
+<ul>
+<li>Vishwas, B.V. ve Patel A. (2020). <em>Hands-on Time Series Analysis With Python: From Basics To Bleeding Edge Techniques</em>. Apress.</li>
+<li>Tsay, R.S. ve Chen, R. (2019). <em>Nonlinear time series analysis</em>. John Wiley &amp; Sons.</li>
+<li>Mills, T.C. (2019). <em>Applied time series analysis: a practical guide to modeling and forecasting</em>. Academic Press.</li>
+<li>Krispin, R. (2019). <em>Hands-On Time Series Analysis With R</em>. Packt Publishing.</li>
+<li>Percival, D.B. ve Walden, A.T. (2020). <em>Spectral Analysis for Univariate Time Series</em>. Cambridge University Press.</li>
+<li>Auffarth, B. (2021). <em>Machine Learning for Time-Series with Python</em>. Packt Publishing.</li>
+<li>Rafferty, G. (2021). <em>Forecasting Time Series Data with Facebook Prophet</em>. Packt Publishing.</li>
+<li>Brownlee, J. (2018). <em>Deep Learning for Time Series Forecasting</em>. Machine Learning Mastery.</li>
+</ul>
+</section>
+<section id="python-çerçeveleri" class="level1">
+<h1>2. Python Çerçeveleri</h1>
+<p>Zaman serileri analizlerinde ve modellerinde oldukça işe yarayacak bazı Python çerçevelerini de sıralayalım. Bu çerçevelerin, kullanıcı dökümanları da oldukça açıklayıcıdır:</p>
+<ul>
+<li>statsmodels: En başta, gelen çerçevedir. Birçok istatistiksel ve ekonometrik fonksiyona sahiptir.</li>
+<li>arch: Oynaklık modelleri, birim kök testleri, eşbütünleşme testleri gibi fonksiyonlara sahip bir çerçeve.</li>
+<li>sktime: scikit-learn yapısıyla uyumlu, birçok klasik ve yapay öğrenme zaman serisi modeli için kolay bir arayüz çerçevesi.</li>
+<li>prophet: Hem R, hem de Python için yazılmış, toplamsal modele dayanan, gün, hafta, ay, tatil etkisi gibi dış etkileri de kolaylıkla modelleyebileceğiniz bir çerçeve.</li>
+<li>kats: Zaman serisi verilerini analiz etmek için bir kit, temel istatistikleri ve özellikleri anlamaktan, değişim noktalarını ve anormallikleri tespit etmekten, gelecekteki eğilimleri tahmin etmeye kadar zaman serisi analizi yapmak için hafif, kullanımı kolay, genelleştirilebilir ve genişletilebilir bir çerçeve.</li>
+<li>orbit-ml: Bayesian zaman serisi modellemesi ve çıkarımı için bir Python çerçevesi.</li>
+<li>darts: Zaman serilerinin kolay manipülasyonu ve tahmini için bir Python çerçevesi. ARIMA gibi klasik modellerden derin sinir ağlarına kadar çeşitli modeller içerir.</li>
+<li>autots: autots, yüksek doğrulukta öngörüleri geniş ölçekte hızla dağıtmak için tasarlanmış Python için bir zaman serisi çerçevesidir.</li>
+<li>tsfresh: Öznitelik adı verilen çok sayıda zaman serisi değişkenini otomatik olarak hesaplar. Ayrıca çerçeve, bağlanım veya sınıflandırma görevleri için bu tür özniteliklerin açıklama gücünü ve önemini değerlendirmek için yöntemler de içerir.</li>
+<li>pycaret-timeseries: PyCaret’in yeni zaman serisi modülü henüz beta sürümünde. PyCaret’in sadeliğine sadık kalarak, mevcut API ile uyumludur ve birçok fonksiyonalite ile birlikte gelir. İstatistiksel testler, model eğitimi ve seçimi (30’dan fazla algoritma), model analizi, otomatik hiperparametre ayarı, deney günlüğü, bulutta dağıtım ve daha fazlasını içerir.</li>
+</ul>
+<p>Böylece, yazı dizimiz için ve okuyucu için kaynak olmuş/olacak bazı kitap ve çerçeveleri paylaşmış olduk. Okuyucu, yazı dizisini takip ederken, paylaştığımız kaynaklar ile zaman serileri analizi için daha derine inebilecektir. Bununla birlikte önerimiz, güncel yazını da takip etmek, bu alandaki gelişmelerden uzak kalmamak için önemlidir.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

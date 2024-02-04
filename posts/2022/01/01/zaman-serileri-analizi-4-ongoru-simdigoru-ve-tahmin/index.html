@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -62,7 +96,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../../styles.css">
 </head>
@@ -112,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title">
 <h1 class="title">Zaman Serileri Analizi 4: Öngörü, Şimdigörü ve Tahmin</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Zaman serileri</div>
   </div>
   </div>
 
@@ -140,8 +179,568 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="giriş" class="level1">
+<h1>1. Giriş</h1>
+<p>Sıklıkla birbirine karıştırılan iki kavram öngörü (forecasting) ve tahmin (prediction) kavramlarıdır. Öngörü ile birlikte</p>
+<p><strong>Tahmin (prediction)</strong>, daha önce görülmemiş test verisi için sonuçların tahmin edilmesiyle ilgilidir. Bu amaçla, yeni <span class="math inline">\(x\)</span> gözlemleri için tahminler yapabilen bir <span class="math inline">\(\hat{f}(x)\)</span> tahmincisi ile sonuçlanan, eğitim veri kümesinde bir model eğitilir.</p>
+<p><strong>Öngörü (forecasting)</strong> problemleri, hem geçmiş verileri kullanan hem de gelecekteki olaylar hakkında konuşan tahmin problemlerinin bir alt kümesidir. Tahmin ve öngörü arasındaki tek fark, öngörüde zamansal boyutun açık bir şekilde dahil edilmesidir. Öngörü, zamana dayalı bir tahmindir, yani zaman serisi verileriyle uğraşırken daha uygundur. Öte yandan, tahminin yalnızca zamana dayalı olması gerekmez, hedef değişkeni etkileyen birden çok nedensel faktöre dayanabilir.</p>
+<p><strong>Şimdigörü (nowcasting)</strong> meteorolojide sıklıkla olmak üzere, ekonomide de kullanılan bir yaklaşımdır. Ekonomide şimdigörü, bir ekonomik göstergenin bugünün, çok yakın geleceğin ve çok yakın geçmişteki durumunun tahminidir. Meteorolojide şimdigörü, tipik olarak +0-6 saatlik bir ufka atıfta bulunan kısa süreli tahmindir. Genellikle en son gözlemlerin ekstrapolasyonu gibi sayısal yöntemleri kullanır ve bir tahminde bulunmak için Lagrange veya Eulerian kalıcılığını varsayar.</p>
+<p>Öngörü genel olarak ikiye ayrılabilir: örneklem-içi öngörü ve örneklem-dișı öngörü. Tahmin sürecinde genellikle örneklem-içi performans dikkate alınır. Örneğin, en küçük kareler yönteminde kalıntı kareleri toplamı en küçük yapılarak en iyi örneklem-içi öngörü hesaplanır. Benzer șekilde olabilirlik fonksiyonu en yüksek yapıldığında en iyi örneklem-içi öngörüler olușturulmuș olur. Modellerin karșılaștırımasında bu tür örneklem-içi büyüklükler fazla yardımcı olmayabilir.</p>
+<p>Örneklem-dıșı öngörüler rakip modellerin yarștırılmasında kullanılabilir. Öngörü denilince genellikle örneklem-dıșı öngörü anlașılır. Zaman serisinin elimizde <span class="math inline">\(T\)</span> boyutlu sadece bir gerçekleșmesi olduğundan öngörülerin olușturulması için gözlemlerin bir kısmının tahmin için kalanı ise öngörü için kullanılır.</p>
+<p>Bu yazı dizimizin bu kısmında, basit öngörü teknikleri ile başlayıp, ARIMA modelleri ile öngörü ve öngörülerin değerlendirilmesine bakacağız. Basitlik olması adına, meşhur <code>Air Passengers</code> verileri ile çalışacağız. Veri kümesine <a href="https://www.analyticsvidhya.com/wp-content/uploads/2016/02/AirPassengers.csv">buradan</a> erişebilirsiniz.</p>
+<p>Veri kümesini içeri alalım:</p>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pandas çerçevesinin içeri alınması</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"AirPassengers.csv"</span>, parse_dates<span class="op">=</span>[<span class="st">'Month'</span>])</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.set_index(<span class="st">"Month"</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.resample(<span class="st">'M'</span>).first()</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<div>
 
 
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">#Passengers</th>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">Month</th>
+<th data-quarto-table-cell-role="th"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1949-01-31</td>
+<td>112</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1949-02-28</td>
+<td>118</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1949-03-31</td>
+<td>132</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1949-04-30</td>
+<td>129</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1949-05-31</td>
+<td>121</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Seriyi görselleştirelim:</p>
+<div class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>plt.plot(df[<span class="st">'#Passengers'</span>])</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.grid()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Seiriyi, eğitim ve test veri kümesi olarak iki kümeye bölelim:</p>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi <span class="op">=</span> df[df.index <span class="op">&lt;</span> <span class="st">'1960-01-01'</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>test_verisi   <span class="op">=</span> df[df.index <span class="op">&gt;=</span> <span class="st">'1960-01-01'</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>))</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="basit-öngörü-yöntemleri" class="level1">
+<h1>2. Basit Öngörü Yöntemleri</h1>
+<section id="naif-yöntem-naive-method" class="level2">
+<h2 class="anchored" data-anchor-id="naif-yöntem-naive-method">2.1. Naif Yöntem (Naive Method)</h2>
+<p>Bu en ilkel öngörü yöntemidir. Naif yöntemin öncülü, beklenen gözlem noktasının son gözlemlenen noktaya eşit olmasıdır:</p>
+<p><span class="math display">\[
+\hat{y}_{t+1}=y_{t}
+\]</span></p>
+<p>Naif yöntem ile yolcu sayılarının öngörüsünü gerçekleştirelim. Bunun için <code>sktime</code> çerçevesinden <code>NaiveForecaster</code> nesnesini kullanacağız:</p>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.naive <span class="im">import</span> NaiveForecaster</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sktime.forecasting.base <span class="im">import</span> ForecastingHorizon</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>öngörü_dönemi <span class="op">=</span> ForecastingHorizon(test_verisi.index, is_relative<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>öngörü_modeli <span class="op">=</span> NaiveForecaster(strategy<span class="op">=</span><span class="st">"last"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>öngörü_modeli.fit(eğitim_verisi[<span class="st">'#Passengers'</span>])</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>naif_model_öngörüleri <span class="op">=</span> öngörü_modeli.predict(fh<span class="op">=</span>öngörü_dönemi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>naif_model_öngörüleri.plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"naif model"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Naif Model Öngörüleri"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="basit-ortalama-simple-average" class="level2">
+<h2 class="anchored" data-anchor-id="basit-ortalama-simple-average">2.2. Basit Ortalama (Simple Average)</h2>
+<p>Çoğu zaman, zaman periyodu boyunca küçük bir farkla değişen, ancak her zaman periyodundaki ortalaması sabit kalan bir zaman serisi ile karşılaşılır. Böyle bir durumda, bir sonraki dönemin öngörüsünü, geçmiş dönemlerin ortalamasına yakın bir şekilde öngörebiliriz.</p>
+<p>Önceden gözlemlenen tüm noktaların ortalamasına eşit beklenen değeri öngören bu tür öngörü yaklaşımına <strong>Basit Ortalama (Simple Average)</strong> tekniği denilir:</p>
+<p><span class="math display">\[
+\hat{y}_{\mathrm{x}+1}=\frac{1}{x} \sum_{i=1}^{x} y_{i}
+\]</span></p>
+<p>Basit ortalama ile yolcu sayılarının öngörüsünü gerçekleştirelim:</p>
+<div class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>basit_ortalama_öngörüleri <span class="op">=</span> test_verisi.copy()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>basit_ortalama_öngörüleri[<span class="st">"basit_ortalama"</span>] <span class="op">=</span> eğitim_verisi[<span class="st">"#Passengers"</span>].mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>basit_ortalama_öngörüleri[<span class="st">"basit_ortalama"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"basit ortalama"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Basit Ortalama Öngörüleri"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="basit-hareketli-ortalama-simple-moving-average" class="level2">
+<h2 class="anchored" data-anchor-id="basit-hareketli-ortalama-simple-moving-average">2.3. Basit Hareketli Ortalama (Simple Moving Average)</h2>
+<p>Serinin gözlemlerinin birkaç zaman önce keskin bir şekilde arttığı/azaldığı bir veri kümesi ile karşılaşabiliriz. Basit ortalama yöntemini kullanmak için önceki tüm verilerin ortalamasını kullanmalıyız, ancak önceki tüm verileri kullanmak, böyle bir durumda doğru olmaz.</p>
+<p>İlk dönem gözlemlerinin kullanılması, bir sonraki dönem için öngörüleri büyük ölçüde etkileyecektir. Bu nedenle, basit ortalamanın üzerinde bir iyileştirme olarak, yalnızca son birkaç dönem için gözlemlerin ortalamasını alacağız. Buradaki temel düşünce, yalnızca son gözlemlerin önemli olduğudur. Ortalamayı hesaplamak için zaman aralığı penceresini kullanan bu tür öngörü yöntemine <strong>Hareketli Ortalama (moving average)</strong> yöntemi denir. Hareketli ortalamanın hesaplanması, bazen <span class="math inline">\(n\)</span> boyutunda “kayan pencere (sliding window)” olarak adlandırılan yöntemi içerir.</p>
+<p>Basit hareketli ortalama ile, önceki gözlemlerin sabit sonlu <span class="math inline">\(p\)</span> adedinin ortalamasına dayalı olarak, serideki sonraki değerleri öngörebiliriz. Tüm <span class="math inline">\(i &gt; p\)</span> için:</p>
+<p><span class="math display">\[
+\widehat{y_{l}}=\frac{1}{p}\left(y_{i-1}+y_{i-2}+y_{i-3} \ldots \ldots+y_{i-p}\right)
+\]</span></p>
+<p>Basit hareketli ortalama ile yolcu sayılarının öngörüsünü gerçekleştirelim. Geçmiş 12 dönemi alacağız:</p>
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>basit_hareketli_ortalama_öngörüleri <span class="op">=</span> test_verisi.copy()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>basit_hareketli_ortalama_öngörüleri[<span class="st">"basit_hareketli_ortalama"</span>] <span class="op">=</span> eğitim_verisi[<span class="st">"#Passengers"</span>].rolling(<span class="dv">12</span>).mean().iloc[<span class="op">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="68">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>basit_hareketli_ortalama_öngörüleri[<span class="st">"basit_hareketli_ortalama"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"basit hareketli ortalama"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Basit Hareketli Ortalama Öngörüleri"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Hareketli ortalama yöntemine göre bir adım daha bir iyileştirme, ağırlıklı hareketli ortalama yöntemidir. Hareketli ortalama yönteminde, geçmiş <span class="math inline">\(n\)</span> adet gözlemi eşit olarak tartıyoruz. Ancak geçmişteki <span class="math inline">\(n\)</span> gözlemin her birinin, öngörüleri farklı bir şekilde etkilediği durumlarla karşılaşabiliriz. Geçmiş gözlemleri farklı şekilde tartan bu yaklaşıma <strong>Ağırlıklı Hareketli Ortalama (Weighted Moving Average)</strong> denilir.</p>
+<p>Ağırlıklı hareketli ortalama, kayan pencere içindeki gözlemlere farklı ağırlıkların verildiği, genel olarak daha yeni noktaların daha önemli olduğu bir hareketli ortalamadır:</p>
+<p><span class="math display">\[
+\widehat{y_{l}}=\frac{1}{m}\left(w_{1} * y_{i-1}+w_{2} * y_{i-2}+w_{3} * y_{i-3} \ldots \ldots+w_{m} * y_{i-m}\right)
+\]</span></p>
+</section>
+<section id="üstel-düzgünleştirme-exponential-smoothing" class="level2">
+<h2 class="anchored" data-anchor-id="üstel-düzgünleştirme-exponential-smoothing">2.5. Üstel Düzgünleştirme (Exponential Smoothing)</h2>
+<p>Gözlem noktalarını farklı şekilde tartarken tüm gözlemleri hesaba katan bu hareketli ortalama ve ağırlıklı hareketli ortalama yaklaşımları arasında bir şeye ihtiyacımız olur. Örneğin, uzak geçmişten gelen gözlemlere göre daha yakın tarihli gözlemlere daha büyük ağırlıklar vermek mantıklı olabilir. Bu prensibe göre çalışan yaklaşım, <strong>Basit Üstel Düzgünleştirme (Simple Exponential Smoothing)</strong> olarak adlandırılır. Öngörüler, ağırlıklı ortalamalar kullanılarak hesaplanır, burada gözlemler geçmişten geldikçe üstel olarak azalır, en küçük ağırlıklar en eski gözlemlerle ilişkilendirilir:</p>
+<p><span class="math display">\[
+\hat{y}_{t+1 \mid t}=\alpha y_{t}+\alpha(1-\alpha)_{y_{t}-1}+\alpha(1-\alpha)^{2}{y_{t}-2}+\cdots
+\]</span></p>
+<p>Burada, <span class="math inline">\(0 \leq \alpha \leq 1\)</span>, düzgünleştirme parametresidir.</p>
+<p>Basit üstel düzgünleştirme ile yolcu sayılarının öngörüsünü gerçekleştirelim. Burada <span class="math inline">\(\alpha\)</span> parametresini iki şekilde belirleyeceğiz: ilkinde el ile, ikincisinde ise <code>statsmodels</code> çerçevesinin parametreyi ayarlamasını sağlayarak:</p>
+<div class="cell" data-execution_count="72">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> ExponentialSmoothing, SimpleExpSmoothing, Holt</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme1 <span class="op">=</span> SimpleExpSmoothing(eğitim_verisi[<span class="st">'#Passengers'</span>], initialization_method<span class="op">=</span><span class="st">"heuristic"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme2 <span class="op">=</span> SimpleExpSmoothing(eğitim_verisi[<span class="st">'#Passengers'</span>], initialization_method<span class="op">=</span><span class="st">"estimated"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_öngörüleri <span class="op">=</span> test_verisi.copy()</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>model1 <span class="op">=</span> basit_üstel_düzgünleştirme1.fit(smoothing_level<span class="op">=</span><span class="fl">0.6</span>, optimized<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_öngörüleri[<span class="st">"basit_üstel_düzgünleştirme1"</span>] <span class="op">=</span> model1.forecast(<span class="bu">len</span>(test_verisi))</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>model2 <span class="op">=</span> basit_üstel_düzgünleştirme2.fit()</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_öngörüleri[<span class="st">"basit_üstel_düzgünleştirme2"</span>] <span class="op">=</span> model2.forecast(<span class="bu">len</span>(test_verisi))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_öngörüleri[<span class="st">"basit_üstel_düzgünleştirme1"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="vs">r"$\alpha=0.6$"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_öngörüleri[<span class="st">"basit_üstel_düzgünleştirme2"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="vs">r"$\alpha=0.995$"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Basit Üstel Düzgünleştirme Öngörüleri"</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="holt-doğrusal-trend-yöntemi" class="level2">
+<h2 class="anchored" data-anchor-id="holt-doğrusal-trend-yöntemi">2.6. Holt Doğrusal Trend Yöntemi</h2>
+<p>Holt, trendi dikkate alarak, gelecek dönem öngörülerini gerçekleştirmek için basit üstel düzügünleştirme yaklaşımını gliştirir. Bu yaklaşım, hem seviyeye (serideki ortalama değer) hem de trende uygulanan üstel düzgünleştirmeden başka bir şey değildir. Bunu matematiksel gösterimle ifade etmek için şimdi üç denkleme ihtiyacımız var: biri seviye için, biri trend için ve biri de beklenen öngörüyü elde edecek şekilde için seviye ve trendi birleştirmek için <span class="math inline">\(ŷ\)</span>:</p>
+<p><span class="math display">\[
+\text{Öngörü denklemi :} \hat{y}_{t+h \mid t}=\ell_{t}+h b_{t}
+\]</span></p>
+<p><span class="math display">\[
+\text{Seviye denklemi :} \ell_{t}=\alpha y_{t}+(1-\alpha)\left(\ell_{t-1}+b_{t-1}\right)
+\]</span></p>
+<p><span class="math display">\[
+\text{Trend denklemi :} b_{t}=\beta *\left(\ell_{t}-\ell_{t-1}\right)+(1-\beta) b_{t-1}
+\]</span></p>
+<p>Holt doğrusal trend yöntemi ile yolcu sayılarının öngörüsünü gerçekleştirelim:</p>
+<div class="cell" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>holt <span class="op">=</span> Holt(eğitim_verisi[<span class="st">'#Passengers'</span>]).fit(smoothing_level <span class="op">=</span> <span class="fl">0.9</span>,smoothing_slope <span class="op">=</span> <span class="fl">0.01</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>holt_öngörüleri <span class="op">=</span> test_verisi.copy()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>holt_öngörüleri[<span class="st">"holt"</span>] <span class="op">=</span> holt.forecast(<span class="bu">len</span>(test_verisi))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>holt_öngörüleri[<span class="st">"holt"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"holt"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Holt Doğrusal Trend Öngörüleri"</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="holt-winters-yöntemi" class="level2">
+<h2 class="anchored" data-anchor-id="holt-winters-yöntemi">2.7. Holt-Winters Yöntemi</h2>
+<p>Yukarıda bahsedilen modeller, öngörüleri gerçekleştirirken gözlemlerin mevsimselliğini hesaba katmaz. Dolayısıyla, gelecekteki gözlemleri öngörmek için hem trendi hem de mevsimselliği hesaba katan bir yönteme ihtiyacımız var. Böyle bir senaryoda kullanabileceğimiz böyle bir algoritma Holt’un Winters yöntemidir. Üçlü üstel düzgünleştirmenin (triple exponential smoothing-Holt’s Winter) arkasında yatan teml fikir, seviye ve trende ek olarak mevsimsel bileşenlere üstel düzgünleştirme uygulamaktır.</p>
+<p>Mevsimsellik faktörü nedeniyle Holt-Winters yöntemini kullanmak diğer modeller arasında en iyi seçenek olacaktır. Holt-Winters mevsimsel yöntemi, bir önörü denkleminden, ve biri <span class="math inline">\(\ell_{t}\)</span> düzeyi için, biri trend <span class="math inline">\(b_{t}\)</span> için ve diğeri α, β ve γ yumuşatma parametreleriyle birlikte <span class="math inline">\(s_{t}\)</span> ile gösterilen mevsimsel bileşen için olmak üzere üç düzleştirme denkleminden oluşur.</p>
+<p><span class="math display">\[
+\begin{aligned}
+\text { seviye } \quad L_{t} &amp;=\alpha\left(y_{t}-S_{t-s}\right)+(1-\alpha)\left(L_{t-1}+b_{t-1}\right) \\
+\text { trend } \quad b_{t} &amp;=\beta\left(L_{t}-L_{t-1}\right)+(1-\beta) b_{t-1} \\
+\text { mevsimsel } \quad S_{t} &amp;=\gamma\left(y_{t}-L_{t}\right)+(1-\gamma) S_{t-s} \\
+\text { öngörü } F_{t+k} &amp;=L_{t}+k b_{t}+S_{t+k-s}
+\end{aligned}
+\]</span></p>
+<p>Holt-Winters yöntemi ile yolcu sayılarının öngörüsünü gerçekleştirelim:</p>
+<div class="cell" data-execution_count="85">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>holt_winters <span class="op">=</span> ExponentialSmoothing(eğitim_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                                    seasonal_periods<span class="op">=</span><span class="dv">12</span>, </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                                    trend<span class="op">=</span><span class="st">'add'</span>, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                                    seasonal<span class="op">=</span><span class="st">'mul'</span>, </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                                    initialization_method<span class="op">=</span><span class="st">"estimated"</span>).fit()</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>holt_winters_öngörüleri <span class="op">=</span> test_verisi.copy()</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>holt_winters_öngörüleri[<span class="st">"holt_winters"</span>] <span class="op">=</span> holt_winters.forecast(<span class="bu">len</span>(test_verisi))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>holt_winters_öngörüleri[<span class="st">"holt_winters"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"holt winters"</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Holt Winters Öngörüleri"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="arima-modelleri-ile-öngörü" class="level1">
+<h1>3.ARIMA Modelleri ile Öngörü</h1>
+<p>Durağan doğrusal modeller yardimıyla <span class="math inline">\(y_{t}\)</span> ’nin gelecek değerlerine ilișkin öngörü olușturmak istediğimizi düșünelim.</p>
+<p>Box ve Jenkins’in geliștirdiği <span class="math inline">\(\operatorname{ARIMA}(p, d, q)\)</span> modelleme yaklașımının pratikteki amacı çoğunlukla öngörü olușturmaktır.</p>
+<p><span class="math inline">\(j\)</span> dönem sonrası için öngörü olușturmak isteyen arastırmacının bilgi kümesinde <span class="math inline">\(t\)</span> dönemi ve ön cesine ilișkin <span class="math inline">\(y_{t}\)</span> değerlerinin yer aldığını vars ayalım Öng örü hata varyansını en küçük yapan öngörünün <span class="math inline">\(y_{t+j}\)</span> ’nin koșullu beklentisi olduğu kolayca gösterilebilir. Bir bașka ifadeyle, olușturulacak öng örü așağıdaki gibi yazıabilir:</p>
+<p><span class="math display">\[
+\mathrm{E}\left(y_{t+j} \mid y_{t}, y_{t-1}, y_{t-2}, \ldots, y_{1}\right) \equiv \mathrm{E}_{t}\left(y_{t+j}\right)
+\]</span></p>
+<p>Örnek olarak <span class="math inline">\(y_{t} \sim A R(1)\)</span> olduğunu düșünelim:</p>
+<p><span class="math display">\[
+y_{t}=c+\phi y_{t-1}+\epsilon_{t}, \quad \epsilon_{t} \sim w n\left(0, \sigma^{2}\right)
+\]</span></p>
+<p><span class="math inline">\(j=1\)</span> dönemi için model:</p>
+<p><span class="math display">\[
+y_{t+1}=c+\phi y_{t}+\epsilon_{t+1}
+\]</span></p>
+<p>Bir dönem sonrası için koșullu beklenen değer:</p>
+<p><span class="math display">\[
+\mathrm{E}_{t}\left(y_{t+1}\right)=c+\phi y_{t}
+\]</span></p>
+<p>ve öngörü hatası</p>
+<p><span class="math display">\[
+e_{t}(1)=y_{t+1}-\mathrm{E}_{t}\left(y_{t+1}\right)=\epsilon_{t+1}
+\]</span></p>
+<p>Benzer șekilde <span class="math inline">\(j=2\)</span> iccin model ve koșullu beklenen değer, sırasıyla:</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{t+2}=&amp; c+\phi y_{t+1}+\epsilon_{t+2} \\
+\mathrm{E}_{t}\left(y_{t+2}\right) &amp;=c+\mathrm{E}_{t}\left(y_{t+1}\right) \\
+&amp;=c+\phi\left(c+\phi y_{t}\right) \\
+&amp;=c(1+\phi)+\phi^{2} y_{t}
+\end{aligned}
+\]</span></p>
+<p>Öng örü hatası ise</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp; e_{t}(2)=c+\phi y_{t+1}+\epsilon_{t+2}, \\
+e_{t}(2)=&amp; y_{t+2}-\mathrm{E}_{t}\left(y_{t+2}\right) \\
+=&amp; c+\phi y_{t+1}+\epsilon_{t+2}-c(1+\phi)-\phi^{2} y_{t} \\
+=&amp; \phi(\underbrace{\left.y_{t+1}-c-\phi y_{t}\right)}_{\epsilon_{t+1}}+\epsilon_{t+2}\\
+=&amp; \phi \epsilon_{t+1}+\epsilon_{t+2}
+\end{aligned}
+\]</span></p>
+<p>Genel olarak <span class="math inline">\(j\)</span> dönem sonrası için koșullu beklenen değer (öngörü):</p>
+<p><span class="math display">\[
+\mathrm{E}_{t}\left(y_{t+j}\right)=c\left(1+\phi+\phi^{2}+\ldots+\phi^{j-1}\right)+\phi^{j} y_{t}
+\]</span></p>
+<p>Açktır ki <span class="math inline">\(|\phi|&lt;1\)</span> durağanlik koșulu altında <span class="math inline">\(\mathrm{AR}(1)\)</span> modelinin öngörü fonksiyonu <span class="math inline">\(j\)</span> limitsiz büyürken koșulsuz beklentiye yaklașır:</p>
+<p><span class="math display">\[
+j \rightarrow \infty, \quad \mathrm{E}_{t}\left(y_{t+j}\right) \rightarrow \mathrm{E}\left(y_{t}\right)=\frac{c}{1-\phi}
+\]</span></p>
+<p>dönem sonrası için öngörü hatasının:</p>
+<p><span class="math display">\[
+e_{t}(j)=\epsilon_{t+j}+\phi \epsilon_{t+j-1}+\phi^{2} \epsilon_{t+j-2}+\ldots+\phi^{j-1} \epsilon_{t+1}
+\]</span></p>
+<p>olduğu gösterilebilir.</p>
+<p>Gelecekte ne kadar uzağa öngörü yapılirsa yapilsın öngörü hatasının beklenen değeri sıfırdır. Ancak, öngörünün değișkenliği <span class="math inline">\(j\)</span> ile birlikte artmaktadır. Genel durum için öngörü hatasının varyansı</p>
+<p><span class="math display">\[
+\operatorname{Var}\left(e_{t}(j)\right)=\sigma^{2}\left(1+\phi+\phi^{2}+\phi^{4}+\ldots+\phi^{2(j-1)}\right)
+\]</span></p>
+<p>olur 1 - dönem sonrası için öngörü varyansı <span class="math inline">\(\sigma^{2}\)</span> iken 2 - dönem sonrası için öngörü varyansı <span class="math inline">\(\sigma^{2}\left(1+\phi^{2}\right)\)</span> olmaktadır. Öngörü ufku arttıkça belirsizlik de artmaktadır. Limitte öngörü varyansının koșulsuz varyansa yaklașacağı açıktır:</p>
+<p><span class="math display">\[
+j \rightarrow \infty, \quad \operatorname{Var}\left(e_{t}(j)\right) \rightarrow \frac{\sigma^{2}}{1-\phi^{2}}
+\]</span></p>
+<p><span class="math inline">\(\epsilon_{t}\)</span> ’nin normal dağıldığı varsayımı altında olușturulan öngörüler için standart güven aralıkları hesaplanabilir.</p>
+<p>Genel <span class="math inline">\(\operatorname{ARMA}(p, q)\)</span> modelleri çerçevesinde olușturulan öngörüler de benzer yapıya sahiptir. Durağan modellerde <span class="math inline">\(y_{t+j}\)</span> ’nin koșullu beklenen değeri <span class="math inline">\(j\)</span> artarken ARMA sürecinin koșulsuz beklentisine yaklașmaktadır. Ayrıca öngörü ufku arttıkça öngörülerin kesinliği azalmaktadır. Pratikte yakın dönemlere ilișkin öngörü olușturulması tercih edilir.</p>
+<p>ARIMA üzerinde bir geliştürme, Mevsimsel ARIMA (Seasonal ARIMA)’ dır. Holt-Winters yöntemi gibi gözlemlerin mevsimselliğini hesaba katar.</p>
+<p>Mevrimsel ARIMA (SARIMAX) yöntemi ile yolcu sayılarının öngörüsünü gerçekleştirelim:</p>
+<div class="cell" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>sarima_modeli <span class="op">=</span> sm.tsa.statespace.SARIMAX(eğitim_verisi[<span class="st">'#Passengers'</span>], order<span class="op">=</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">4</span>),seasonal_order<span class="op">=</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">12</span>)).fit()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>sarima_öngörüleri <span class="op">=</span> test_verisi.copy()</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>sarima_öngörüleri[<span class="st">"sarima"</span>] <span class="op">=</span> sarima_modeli.predict(start<span class="op">=</span><span class="st">"1960-01-31"</span>, end<span class="op">=</span><span class="st">"1960-12-31"</span>, dynamic<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tahminleri, eğitim verisini ve test verisini görselleştirelim:</p>
+<div class="cell" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>eğitim_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"eğitim"</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>test_verisi[<span class="st">'#Passengers'</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"test"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sarima_öngörüleri[<span class="st">"sarima"</span>].plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>), label<span class="op">=</span><span class="st">"sarima"</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Tarih"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Aylık Yolcu Sayısı"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"SARIMA Öngörüleri"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'best'</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="öngörülerin-değerlendirilmesi" class="level1">
+<h1>3.Öngörülerin Değerlendirilmesi</h1>
+<p>Box-Jenkins yaklașımında gözlemlenen serilerdeki dinamiği iyi yakalayan (white noise kalıntılı) ve fazla büyük olmayan modellerin tercih edilmesi önerilir. Uygulamada bu özellikleri sağlayan birden fazla rakip ARMA modellerine ulașılabilir. Bu modeller arasından hangisinin seçileceğine bilgi kriterleri <span class="math inline">\((\mathrm{AlC}, \mathrm{SBC}\)</span>, etc) yardımcı olabilir. Bunun yanı sıra, rakip modeller öngörü performansları açısından da karșıaștırılabilir.</p>
+<p>1-dönem sonrası öngörüler için pratikte takip edilecek adımlar șöyle sıralanabilir:</p>
+<ol type="1">
+<li>Aday modelleri belirle: <span class="math inline">\(M_{1}, M_{2}\)</span></li>
+<li>Tahminde kullanılacak örneklem hacmini <span class="math inline">\(\left(T_{1}\right)\)</span> belirle (not: <span class="math inline">\(n=T-T_{1}\)</span> dönem için 1 -dönem sonrasına öngörüler olușturulacaktır.)</li>
+<li><span class="math inline">\(i=1 \mathrm{icin} T_{1}+i-1\)</span> gözlemden hareketle <span class="math inline">\(M_{1}\)</span> ve <span class="math inline">\(M_{2}\)</span> modellerini tahmin et, ve 1 dönem sonrası icin öngörüyü oluștur. Bunlara sırasıyla, <span class="math inline">\(\hat{y}_{T_{1}+1}^{(1)}\)</span> ve <span class="math inline">\(\hat{y}_{T_{1}+1}^{(2)}\)</span> ile gösterelim. Öngörü hataları her iki alternatif model için sırasıyla <span class="math display">\[
+e_{1}^{(1)}=y_{T_{1}+1}-\hat{y}_{T_{1}+1}^{(1)}, \quad e_{1}^{(2)}=y_{T_{1}+1}-\hat{y}_{T_{1}+1}^{(2)}
+\]</span></li>
+<li><span class="math inline">\(i=2,3, \ldots, n\)</span> icin 2 . ve 3. adımları tekrarla. Her tahminde örneklem boyutuna bir gözlemin eklendiğine dikkat edilmelidir. Bu hesapla maların sonucunda elimizde <span class="math inline">\(n\)</span> boyutlu öngörü ve hata serileri olacaktır: <span class="math display">\[
+\begin{array}{ll}
+\left\{\hat{y}_{t}^{(1)}\right\}_{t=T_{1}+1}^{T}, &amp; \left\{e_{i}^{(1)}\right\}_{i=1}^{n} \\
+\left\{\hat{y}_{t}^{(2)}\right\}_{t=T_{1}+1}^{T}, &amp; \left\{e_{i}^{(2)}\right\}_{i=1}^{n}
+\end{array}
+\]</span></li>
+<li>Öngörü hatalarından hareketle alternatif modellerin performanslarını karșılaștır.</li>
+</ol>
+<p>Öngörü performanslarının karșıaștırıImasında çeșitli ölçütler ve testler kullanılmaktadır. Yaygın olarak kullanılan ölçütler șunlardır:</p>
+<p>Hata Karelerinin Ortalamasının Karekökü (Root Mean Squared Error) <span class="math display">\[
+R M S E=\sqrt{\frac{1}{n} \sum_{i=1}^{n} e_{i}^{2}}
+\]</span></p>
+<p>Mutlak Hatanın Ortalaması (Mean Absolute Error): <span class="math display">\[
+M A E=\frac{1}{n} \sum_{i=1}^{n}\left|e_{i}\right|
+\]</span></p>
+<p>Kestirim Hatalarının Karelerinin Ortalaması (Mean Squared Prediction Error): <span class="math display">\[
+M S P E=\frac{1}{n} \sum_{i=1}^{n} e_{i}^{2}
+\]</span></p>
+<p>Bu formüllerde <span class="math inline">\(e_{i}\)</span> öngörü hatasını göstermektedir.</p>
+<p><span class="math inline">\(e_{i}=(t+i)\)</span> zamanında gözlenen değer- <span class="math inline">\((t+i)\)</span> zama nında öngörülen değer</p>
+<p>Yukarıda gerçekleştirmiş olduğumuz öngörüleri, RMSE ölçütü bazında karşılaştıralım:</p>
+<div class="cell" data-execution_count="95">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> math <span class="im">import</span> sqrt</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>naif_yöntem_performansı <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                                                  naif_model_öngörüleri))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>basit_ortalama_performansı <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                                                     basit_ortalama_öngörüleri.basit_ortalama))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>basit_hareketli_ortalama_performansı <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                                                              basit_hareketli_ortalama_öngörüleri.basit_hareketli_ortalama))</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_performansı<span class="dv">1</span> <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>                                                                 basit_üstel_düzgünleştirme_öngörüleri.basit_üstel_düzgünleştirme1))</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>basit_üstel_düzgünleştirme_performansı<span class="dv">2</span> <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>                                                                 basit_üstel_düzgünleştirme_öngörüleri.basit_üstel_düzgünleştirme2))</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>holt_performansı <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>                                           holt_öngörüleri.holt))</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>holt_winters_performansı <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>                                                   holt_winters_öngörüleri.holt_winters))</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>sarima_performansı <span class="op">=</span> sqrt(mean_squared_error(test_verisi[<span class="st">'#Passengers'</span>], </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>                                             sarima_öngörüleri.sarima))</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>öngörü_performansı <span class="op">=</span> pd.DataFrame(</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>        <span class="st">"model"</span> : [<span class="st">"naif yöntem"</span>, <span class="st">"basit ortalama"</span>, <span class="st">"basit hareketli_ortalama"</span>, <span class="st">"basit üstel düzgünleştirme1"</span>, </span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"basit üstel düzgünleştirme2"</span>, <span class="st">"holt"</span>, <span class="st">"holt winters"</span>, <span class="st">"sarima"</span>],</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>        <span class="st">"performans"</span> : [naif_yöntem_performansı, basit_ortalama_performansı, basit_hareketli_ortalama_performansı,</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>                       basit_üstel_düzgünleştirme_performansı<span class="dv">1</span>, basit_üstel_düzgünleştirme_performansı<span class="dv">2</span>, holt_performansı,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>                       holt_winters_performansı, sarima_performansı]</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(öngörü_performansı.sort_values(by<span class="op">=</span><span class="st">"performans"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         model  performans
+6                 holt winters   15.809645
+7                       sarima   20.765954
+2     basit hareketli_ortalama   88.473160
+5                         holt   95.413292
+0                  naif yöntem  102.976535
+4  basit üstel düzgünleştirme2  103.124454
+3  basit üstel düzgünleştirme1  106.127007
+1               basit ortalama  226.265671</code></pre>
+</div>
+</div>
+<p>RMSE ölçütüne göre, en düşük hata Holt Winters yöntemi ile elde edilen öngörüler ile elde edilmiştir.</p>
+<p>Modellerin değerlendirilmesinde başka istatistiksel ölçütler de kullanılabilir. Bunlardan bazıları F testi, Granger-Newbold testi, Diebold-Mariano testi ve Uzun Dönem Varyans testidir.</p>
+<section id="f-testi" class="level2">
+<h2 class="anchored" data-anchor-id="f-testi">3.1.F Testi</h2>
+<p>Elimizde rakip iki model olduğunu düșünelim ve bunlara ait MSPE değerlerini sırasyla, <span class="math inline">\(M S P E_{1}\)</span> ve <span class="math inline">\(M S P E_{2}\)</span> ile gösterelim.</p>
+<p>Öngörü performanslarının aynı olduğunu söyleyen boș hipotez altında MSPE değerlerinin oranı <span class="math inline">\((n, n)\)</span> serbestlik derecesiyle <span class="math inline">\(F\)</span> dağılımına uyar:</p>
+<p><span class="math display">\[
+\frac{M S P E_{1}}{M S P E_{2}} \sim F(n, n)
+\]</span></p>
+<p>Boș hipotezin reddedilmesi <span class="math inline">\(M S P E_{1}\)</span> ’in <span class="math inline">\(M S P E_{2}\)</span> ’den daha büyük olduğu anlamına gelir. Bu durumda daha kücük öngörü hata varyansına sahip olan ikinci model tercih edilir.</p>
+<p>Ancak, bu testin geçerli olması için așağıdaki varsayımların sağlanması șarttır:</p>
+<ol type="1">
+<li>Öngörü hataları sıfır ortalama ile normal dağılıma uyar,</li>
+<li>Farklı modellerden elde edilen öngörü hataları cari dönem itibariyle ilișkisizdir,</li>
+<li>Öngörü hatalarında dizisel korelasyon yoktur.</li>
+</ol>
+<p>Özellikle 2. ve 3. varsayımların sağlanmaması sonucu MSPE oranları F dağılımına uymaz ve test geçersiz olur. Literatürde çeșitli öngörü testleri önerilmiștir.</p>
+</section>
+<section id="granger-newbold-gn-testi" class="level2">
+<h2 class="anchored" data-anchor-id="granger-newbold-gn-testi">3.2.Granger-Newbold (GN) Testi</h2>
+<p>Cari dönem itibariyle ilișkili olmasına izin vermektedir ancak öngörü hatalarında otokorelasyon olmamalıdır. <span class="math inline">\(e_{1 i}\)</span> ve <span class="math inline">\(e_{2 i}\)</span> rakip iki modelden elde edilen öngörü hataları olmak üzere GN testi așağıdaki iki ya pay zaman serisine dayanır:</p>
+<p><span class="math display">\[
+\begin{array}{l}
+z_{i}^{+}=e_{1 i}+e_{2 i}, \quad i=1,2, \ldots, n \\
+z_{i}^{-}=e_{1 i}-e_{2 i}, \quad i=1,2, \ldots, n
+\end{array}
+\]</span></p>
+<p>Öngörü hatalarının normal dağılması ve dizisel özilintinin olmaması varsayımları altında <span class="math inline">\(z_{i}^{+}\)</span> ve <span class="math inline">\(z_{i}^{-}\)</span> serilerinin ilișkisiz olması beklenir.</p>
+<p>Populasyon korelasyon katsayısı <span class="math display">\[
+\rho=\mathrm{E}\left(z_{i}^{+} z_{i}^{-}\right)=\left(e_{1 i}^{2}-e_{2 i}^{2}\right)
+\]</span></p>
+<p><span class="math inline">\(\rho=0\)</span> ise öngörü performansları eșittir. <span class="math inline">\(\rho&gt;0\)</span> ise ilk modelin varyansı daha büyüktür <span class="math inline">\(\left(M S P E_{1}&gt;M S P E_{2}\right) . \rho&lt;0\)</span> ise ikinci modelin varyansı daha büyüktür <span class="math inline">\(\left(M S P E_{1}&lt;M S P E_{2}\right)\)</span>. <span class="math inline">\(H_{0}: \rho=0\)</span> hipotezi altında GN test istatistiği</p>
+<p><span class="math display">\[
+G N=\frac{\hat{\rho}}{\sqrt{\left(1-\hat{\rho}^{2}\right) /(n-1)}} \sim t_{n-1}
+\]</span></p>
+<p>Burada <span class="math inline">\(\hat{\rho}\)</span> örneklem korelasyon katsayısıdır. Pozitif ve anlamlı bir sonuc çıkarsa ikinci model tercih edilecektir ( <span class="math inline">\(M S P E_{1}\)</span> daha büyük). Negatif ve anlamlı bir sonuç çıkarsa birinci model tercih edilecektir.</p>
+<p>Testin anlamsız çıkması öngörü performanslarının eșdeğer olduğuna ișaret eder.</p>
+</section>
+<section id="diebold-mariano-dm-testi" class="level2">
+<h2 class="anchored" data-anchor-id="diebold-mariano-dm-testi">3.3.Diebold-Mariano (DM) Testi</h2>
+<p><span class="math inline">\(\left\{e_{1 i}\right\}_{i=1}^{n}\)</span> ve <span class="math inline">\(\left\{e_{2 i}\right\}_{i=1}^{n}\)</span> rakip iki modelden elde edilen öngörü hataları olsun.</p>
+<p>DM testi bu iki öngörü hatası serisinden hareketle hesaplanan loss fonksiyonlarını karșılaștırır. <span class="math inline">\(L_{i}^{j} j\)</span> modelinden elde edilen loss fonksiyonu olmak üzere DM test istatistigi öngörü performansının eșit olup olmadığını test eder:</p>
+<p><span class="math display">\[
+\begin{array}{l}
+H_{0}: \mathrm{E}\left(d_{i}\right)=0 \\
+H_{1}: \mathrm{E}\left(d_{i}\right) \neq 0
+\end{array}
+\]</span></p>
+<p>Burada <span class="math inline">\(d_{i}\)</span> kullanıan kriter fonksiyonları arasındaki farktır:</p>
+<p><span class="math display">\[
+d_{i}=L_{i}^{1}-L_{i}^{2}
+\]</span></p>
+<p>Pratikte yaygın olarak karesel, mutlak hata ya da dördüncü kuvvet kriter (loss) fonksiyonları kullanılır:</p>
+<p><span class="math display">\[
+L_{i}=e_{i}^{2}, \quad L_{i}=\left|e_{i}\right|, \quad L_{i}=e_{i}^{4}
+\]</span></p>
+<p>DM test istatistiğinin hesa planması oldukça basittir. Loss fonksiyonları arasındaki farkın standardize edilmesine dayanır. Öngörü hatalarında otokorelasyon olduğundan DM uzun dönem varyans tahmin edicisinin kulla nılmasını önermișlerdir. DM test istatistiği șu șekilde hesaplanır:</p>
+<p><span class="math display">\[
+D M=\frac{\bar{d}}{\sqrt{L \hat{R} V(\bar{d}) /(n-1)}}
+\]</span></p>
+<p>Burada <span class="math inline">\(L \hat{R} V\)</span> uzun dönem varyansının (long run variance) bi tahminidir.</p>
+</section>
+<section id="uzun-dönem-varyans-long-run-variance-lrv" class="level2">
+<h2 class="anchored" data-anchor-id="uzun-dönem-varyans-long-run-variance-lrv">3.4.Uzun Dönem Varyans (Long Run Variance-LRV)</h2>
+<p><span class="math inline">\(y_{t}\)</span> durağan ve ergodik bir zaman serisi ise gösterilebilir ki</p>
+<p><span class="math display">\[
+\sqrt{T}(\bar{y}-\mu) \stackrel{d}{\longrightarrow} N\left(0, \sum_{j=-\infty}^{\infty} \gamma_{j}\right)
+\]</span> ya da</p>
+<p><span class="math display">\[
+\bar{y} \stackrel{a}{\sim} N\left(\mu, \frac{1}{T} \sum_{j=-\infty}^{\infty} \gamma_{j}\right)
+\]</span></p>
+<p>Uzun dönem varyansı ise <span class="math display">\[
+L R V_{y}=T \cdot \frac{1}{T} \sum_{j=-\infty}^{\infty} \gamma_{j}=\sum_{j=-\infty}^{\infty} \gamma_{j}
+\]</span></p>
+<p><span class="math inline">\(\gamma_{-j}=\gamma_{j}\)</span> olduğundan așaıdaki gibi yazılabilir:</p>
+<p><span class="math display">\[
+L R V_{y}=\gamma_{0}+2 \sum_{j=1}^{\infty} \gamma_{j}
+\]</span></p>
+<p><span class="math inline">\(L R V\)</span> ’nin tahmininde parametrik ya da parametrik olmayan yöntemler kullanılabilir. Serideki otokorelasyonun yapısını temsil edebilen yeterince uz un gecikmeye sahip bir <span class="math inline">\(\mathrm{AR}(\mathrm{p})\)</span> modeli tahmin edilerek așağıdaki gibi hesaplanabilir.</p>
+<p><span class="math display">\[
+L \hat{R} V_{y}=\frac{\hat{\sigma}^{2}}{\left(1-\hat{\phi}_{1}-\hat{\phi}_{2}-\ldots-\hat{\phi}_{p}\right)^{2}}
+\]</span></p>
+<p>Burada <span class="math inline">\(\hat{\phi}_{j}\)</span> AR katsay ılarının tahminidir. Alternatif bir parametrik olmayan tahmin edici Newey ve West (1987) tarafından önerilmiștir:</p>
+<p><span class="math display">\[
+L \hat{R} V_{y}=\hat{\gamma}_{0}+2 \sum_{j=1}^{q} w_{j} \hat{\gamma}_{j}
+\]</span></p>
+<p><span class="math inline">\(w_{j}\)</span> otokovaryansların ağırlıklarını, <span class="math inline">\(q\)</span> ise pencere aralığını temsil etmektedir. Newey-West Bartlett ağırlıklarını önermiștir:</p>
+<p><span class="math display">\[
+w_{j}=1-\frac{j}{q+1}
+\]</span></p>
+<p>Pratikte pencere araluıının seçiminde <span class="math inline">\(q=4(T / 100)^{2 / 9}\)</span> formülü kullanıabilir (tamsayı kısmı).</p>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

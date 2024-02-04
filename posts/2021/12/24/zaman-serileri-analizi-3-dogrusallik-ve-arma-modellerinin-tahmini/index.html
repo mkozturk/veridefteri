@@ -9,7 +9,7 @@
 <meta name="author" content="Murat Öztürkmen">
 <meta name="dcterms.date" content="2021-12-24">
 
-<title>Veri Defteri - Zaman Serileri Analizi 3: Doğrusallık ve ARMA modellerinin tahmini</title>
+<title>Veri Defteri - Zaman Serileri Analizi 3: ARMA Modellerinin Tahmini</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -63,6 +97,8 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../../styles.css">
 </head>
@@ -110,9 +146,9 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Zaman Serileri Analizi 3: Doğrusallık ve ARMA modellerinin tahmini</h1>
+<h1 class="title">Zaman Serileri Analizi 3: ARMA Modellerinin Tahmini</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Zaman serileri</div>
   </div>
   </div>
 
@@ -140,8 +176,319 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="giriş" class="level1">
+<h1>1.Giriş</h1>
+<p>ARMA modellerinin tutarlı ve etkin şekilde tahmini için uygulamada genellikle koşullu Maksimum Olabilirlik (ML - Maximum Likelihood) yöntemi kullanılır. MA kısmı olmayan pür AR(p) modellerinin tahmininde ise standart En Küçük Kareler (OLS) yöntemi uygulanabilir. Pür rassal şok serisi <span class="math inline">\(\epsilon_{t}\)</span> gözlenemediğinden MA modellerinin tahmininde OLS yöntemi uygulanamaz. Kalman filtresi ya da koşullu ML yöntemlerinin uygulanması gerekir.</p>
+</section>
+<section id="zaman-serilerinde-doğrusallık" class="level1">
+<h1>2. Zaman Serilerinde Doğrusallık</h1>
+<p>Bir önceki yazıda doğrusal zaman serilerinden bahsetmiştik. Doğrusallık üzerine birkaç not daha ekleyip ARMA modelinin tahminlemesine başlayabiliriz.</p>
+<p>Bir <span class="math inline">\(\left\{X_{t}\right\}\)</span> zaman serisi, aşağıdaki eşitliği sağlıyorsa, <strong>doğrusal</strong> olduğu söylenir:</p>
+<p><span class="math display">\[
+X_{t}=\sum_{k=-\infty}^{\infty} \beta_{k} Z_{t-k}
+\]</span></p>
+<p>burada <span class="math inline">\(\beta_{k}\)</span> katsayıları (en küçük) karelerin toplanırlığıdır, ve <span class="math inline">\(\left\{Z_{t}\right\}\)</span> serisi, sıfır ortalama ve <span class="math inline">\(\sigma^{2}&gt;0\)</span> varyans ile bağımsız ve türdeş dağılımlıdır (independent, identically distributed - i.i.d). <span class="math inline">\(\beta\)</span> parametresinin, ölçek parametresi <span class="math inline">\(\sigma\)</span> ile karışmasından kaçınmak için <span class="math inline">\(\beta_{0}=1\)</span> olduğunu varsaymak işimize yarar.</p>
+<section id="zaman-serilerinde-doğrusallığın-doğrusal-olmamanın-testi-bds-testi" class="level2">
+<h2 class="anchored" data-anchor-id="zaman-serilerinde-doğrusallığın-doğrusal-olmamanın-testi-bds-testi">Zaman Serilerinde Doğrusallığın (Doğrusal Olmamanın) Testi: BDS Testi</h2>
+<p>Brock, Dechert, Scheinkman ve LeBaron (1996) tarafından önerilen BDS testi, bir seride zamana dayalı bağımlılık için bir portmanteau testidir. Doğrusal bağımlılık, doğrusal olmayan bağımlılık veya kaos dahil olmak üzere bağımsızlıktan çeşitli olası sapmalara karşı test etmek için kullanılabilir.</p>
+<p>Test, kalıntıların bağımsız ve türdeş (i.i.d.) dağılmış olup olmadığını kontrol etmek için bir dizi tahmini kalıntıya uygulanabilir. Örneğin, bir ARMA modelinden gelen artıklar, lineer ARMA modeli takıldıktan sonra seride herhangi bir lineer olmayan bağımlılık olup olmadığını görmek için test edilebilir.</p>
+<p>BDS testi iki kuyruklu bir testtir, BDS test istatistiği kritik değerlerden büyük veya küçükse boş hipotezi reddetmemiz gerekir (örneğin a=0.05 ise kritik değer = ±1.96).</p>
+<p>Hipotez testinde genellikle <span class="math inline">\(\alpha\)</span> %5 anlamlılık düzeyi alınır. Boş ve alternatif hipotezle aşağıdaki gibi ifade edilir:</p>
+<p><span class="math inline">\(H_{0}\)</span>: Seri doğrusal bağımlıdır</p>
+<p><span class="math inline">\(H_{1}\)</span>: Seri doğrusal bağımlı değildir.</p>
+<p><strong><em>Örnek: Logaritmik GSYH Serisinin Doğrusallığı</em></strong></p>
+<p>Önceki yazıda görselleştirmesini yaptığımız, Türkiye GSYH’sinin doğrusal olup olmadığını, BDS testi ile tes edelim. Bunun için, <code>statsmodels</code> çerçevesi içindeli <code>bds</code> metodunu kullanacağız.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># gereksiz uyarıları gizlemek için</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>warnings.filterwarnings(<span class="st">"ignore"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># gerekli çerçevelerin içeri alınması</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas_datareader <span class="im">import</span> wb</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.stattools <span class="im">import</span> bds</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># verinin düzenlenmesi</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>gsyh <span class="op">=</span> wb.download(indicator<span class="op">=</span><span class="st">'NY.GDP.PCAP.KD'</span>, country<span class="op">=</span>[<span class="st">'TR'</span>], start<span class="op">=</span><span class="dv">1960</span>, end<span class="op">=</span><span class="dv">2020</span>).reset_index()</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>gsyh <span class="op">=</span> gsyh.rename(columns<span class="op">=</span>{<span class="st">'NY.GDP.PCAP.KD'</span>:<span class="st">"gsyh"</span>})</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>gsyh[<span class="st">'log_gsyh'</span>] <span class="op">=</span> np.log(gsyh[<span class="st">'gsyh'</span>])</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>gsyh <span class="op">=</span> gsyh.sort_values(by<span class="op">=</span><span class="st">"year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bds_testi <span class="op">=</span> bds(gsyh.log_gsyh)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Test istatistiği: </span><span class="sc">{</span>bds_testi[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"p-değeri        : </span><span class="sc">{</span>bds_testi[<span class="dv">1</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Test istatistiği: 36.88254893179127
+p-değeri        : 8.801183687448895e-298</code></pre>
+</div>
+</div>
+<p>p-değeri, 0.05’ten oldukça küçük olduğundan, serinin doğrusal olduğunu söyleyen boş hipotezi reddedebiliriz.</p>
+</section>
+</section>
+<section id="armapq-modelinin-koşullu-ml-tahmini" class="level1">
+<h1>3.ARMA(p,q) Modelinin Koşullu ML Tahmini</h1>
+<p>ARMA modelinin gecikme değerleri <span class="math inline">\(p\)</span> ve <span class="math inline">\(q\)</span> biliniyorsa, önceki alt bölümlerdekine benzer șekilde koșullu log-olabilirlik fonksiyonu kolaylıkla türetilebilir. Bunun için <span class="math inline">\(y\)</span> ’nin <span class="math inline">\(p\)</span> bașlangıç değerine, <span class="math inline">\(\epsilon_{t}\)</span> ’nin de <span class="math inline">\(q\)</span> başlangıç değerine ihtiyaç duyulur. Pratikte genellikle <span class="math inline">\(y_{t}\)</span> ’nin ilk <span class="math inline">\(p\)</span> değeri bașlangıç koșulu olarak alınır. <span class="math inline">\(\epsilon_{t}\)</span> ’nin bașlangıç değerleri ise genellikle 0 kabul edilir. zamanındaki gözlenemeyen șoku</p>
+<p><span class="math display">\[
+\epsilon_{t}=y_{t}-c-\phi_{1} y_{t-1}-\ldots-\phi_{p} y_{t-p}-\theta_{1} \epsilon_{t-1}-\ldots-\theta_{q} \epsilon_{t-q}
+\]</span></p>
+<p>olarak yazarsak log-olabilirlik fonksiyonu așağıdaki gibi yazılabilir:</p>
+<p><span class="math display">\[
+\log L(\Theta)=-\frac{(T-p)}{2} \log (2 \pi)-\frac{(T-p)}{2} \log \left(\sigma^{2}\right)-\sum_{t=p+1}^{T} \frac{\epsilon_{t}^{2}}{2 \sigma^{2}}
+\]</span></p>
+<p>ARMA modelinin ML tahmini için aşağıdaki prosedür izlenebilir:</p>
+<ol type="1">
+<li>{<span class="math inline">\(\epsilon_{t}\)</span>} nin bağımsız ve türdeş, <span class="math inline">\(N\left(0, \sigma^{2}\right)\)</span> dağılıma uyduğunu varsayılır.</li>
+<li><span class="math inline">\(ARMA(p,q)\)</span> modeli durum-uzay biçiminde ifade edilir.</li>
+<li>Log-olabilirlik fonksiyonunun, tahmin-hata ayrıştırması uygulanır.</li>
+<li>Son olarak aşağıdaki yöntemlerden herhangi bir tanesi ya da her ikisi uygulanır:
+<ul>
+<li>Sınırlı Bilgi Maksimum-Olabilirlik (Limited Information Maximum-Likelihood, LIML) Yöntemi
+<ul>
+<li><span class="math inline">\(\left\{X_{t}\right\}\)</span> serisin ilk <span class="math inline">\(p\)</span> değerine kısıt konulur.</li>
+<li>{<span class="math inline">\(\epsilon_{t}\)</span>} nin ilk <span class="math inline">\(q\)</span> değerinin sıfır olduğu varsayılır.</li>
+</ul></li>
+<li>Tam Bilgi Maksimum-Olabilirlik (Full Information Maximum-Likelihood, FIML) Yöntemi
+<ul>
+<li>Tam olabilirliği belirleyebilmek için ilk <span class="math inline">\(p\)</span> değerin durağan dağılımı kullanılır.</li>
+</ul></li>
+</ul></li>
+</ol>
+<p><strong><em>Örnek: Güneş lekeleri verisi için ARMA Modelinin koşullu ML tahmini</em></strong></p>
+<p>Bu örnek için <code>statsmodels</code> çerçevesinin <code>sunspots</code> verisini kullanacağız. ARMA modelini de aynı çerçevede <code>method</code> parametresini “mle” olarak belirleyerek gerçekleştirceğiz.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima.model <span class="im">import</span> ARIMA</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.arima_model <span class="im">import</span> ARMA</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Veri hakkında özet bilgi:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sm.datasets.sunspots.NOTE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>::
+
+    Number of Observations - 309 (Annual 1700 - 2008)
+    Number of Variables - 1
+    Variable name definitions::
+
+        SUNACTIVITY - Number of sunspots for each year
+
+    The data file contains a 'YEAR' variable that is not returned by load.
+</code></pre>
+</div>
+</div>
+<p>Veride 1700-2008 yılları için 309 gözlem ve tek değişken bulunuyor.</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># verinin çalışma ortamına alınması</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dta <span class="op">=</span> sm.datasets.sunspots.load_pandas().data</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># zaman indeksinin belirlenmesi</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>dta.index <span class="op">=</span> pd.Index(sm.tsa.datetools.dates_from_range(<span class="st">'1700'</span>, <span class="st">'2008'</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> dta[<span class="st">"YEAR"</span>]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># verinin grafiği</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>dta.plot(figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">8</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># acf ve pacf grafikleri</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">8</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>ax1 <span class="op">=</span> fig.add_subplot(<span class="dv">211</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> sm.graphics.tsa.plot_acf(dta.values.squeeze(), lags<span class="op">=</span><span class="dv">40</span>, ax<span class="op">=</span>ax1)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>ax2 <span class="op">=</span> fig.add_subplot(<span class="dv">212</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> sm.graphics.tsa.plot_pacf(dta, lags<span class="op">=</span><span class="dv">40</span>, ax<span class="op">=</span>ax2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-7-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>ARMA(3,0) modeli:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>arma_mod30 <span class="op">=</span> ARMA(dta, order<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">0</span>)).fit(method<span class="op">=</span><span class="st">"mle"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Model çıktısı:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(arma_mod30.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                              ARMA Model Results                              
+==============================================================================
+Dep. Variable:            SUNACTIVITY   No. Observations:                  309
+Model:                     ARMA(3, 0)   Log Likelihood               -1304.702
+Method:                           mle   S.D. of innovations             16.435
+Date:                Fri, 24 Dec 2021   AIC                           2619.404
+Time:                        11:54:28   BIC                           2638.070
+Sample:                    12-31-1700   HQIC                          2626.867
+                         - 12-31-2008                                         
+=====================================================================================
+                        coef    std err          z      P&gt;|z|      [0.025      0.975]
+-------------------------------------------------------------------------------------
+const                49.7501      2.778     17.907      0.000      44.305      55.195
+ar.L1.SUNACTIVITY     1.3008      0.056     23.079      0.000       1.190       1.411
+ar.L2.SUNACTIVITY    -0.5081      0.088     -5.744      0.000      -0.681      -0.335
+ar.L3.SUNACTIVITY    -0.1296      0.056     -2.298      0.022      -0.240      -0.019
+                                    Roots                                    
+=============================================================================
+                  Real          Imaginary           Modulus         Frequency
+-----------------------------------------------------------------------------
+AR.1            0.9690           -0.6149j            1.1476           -0.0900
+AR.2            0.9690           +0.6149j            1.1476            0.0900
+AR.3           -5.8569           -0.0000j            5.8569           -0.5000
+-----------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</section>
+<section id="box-jenkins-modelleme-yaklaşımı" class="level1">
+<h1>4.Box-Jenkins Modelleme Yaklaşımı</h1>
+<p>ARMA modellerinin tahmin edilebilmesi için öncelikle <span class="math inline">\(p\)</span> ve <span class="math inline">\(q\)</span> ’nun belirlenmesi gerekir. Ayrica serinin kovaryans durağan olması şarttır. Uygulamada serilerin öncelikle durağan hale gelecek şekilde dönüștürülmesi gerekebilir. Bunun için genellikle <span class="math inline">\(1 .\)</span> fark alma, detrend etme ya da üstel yumușatma gibi yöntemler kullanılır.</p>
+<p>B-J yaklaşımının adımları aşağıdaki gibi özetlenebilir:</p>
+<ol type="1">
+<li>Eğer gerekliyse serinin durağan olması için gerekli dönüştürmenin yapılması,</li>
+<li>Dönüștürülmüș serinin ACF ve PACF’larını inceleyerek <span class="math inline">\(p\)</span> ve <span class="math inline">\(q\)</span> değerlerini belirleyerek aday ARMA( <span class="math inline">\(p, q)\)</span> modellerinin oluşturulması,</li>
+<li>AR ve MA parametrelerini tahmin edilmesi,</li>
+<li>Ceșitli diagnostik testler yardımıyla modeli uygunluğunun saptanması Box ve Jenkins açıklama gücü yüksek, küçük (az parametreli parsimonous, Occum’s razor) modellerin tercih edilmesini önerir.</li>
+</ol>
+<p>Örneklem kısmi otokorelasyon fonksiyonu (Partial Autocorrelation Function - PACF) ardıșik AR(p) modellerinin kurularak OLS yöntemiyle tahmin edilmesine dayanır. Bu șekilde gecikmeli değerlerin etkisi arındırildıktan sonraki etkiye bakılır. Örneğin</p>
+<p><span class="math display">\[
+\begin{aligned}
+y_{t} &amp;=\mu_{1}+\rho_{1,1} y_{t-1}+\varepsilon_{1 t} \\
+y_{t} &amp;=\mu_{2}+\rho_{2,1} y_{t-1}+\rho_{2,2} y_{t-2}+\varepsilon_{2 t} \\
+y_{t} &amp;=\mu_{3}+\rho_{3,1} y_{t-1}+\rho_{3,2} y_{t-2}+\rho_{3,3} y_{t-3}+\varepsilon_{3 t} \\
+y_{t} &amp;=\mu_{4}+\rho_{4,1} y_{t-1}+\rho_{4,2} y_{t-2}+\rho_{4,3} y_{t-3}+\rho_{4,4} y_{t-4}+\varepsilon_{4 t} \\
+\vdots &amp;=\vdots
+\end{aligned}
+\]</span></p>
+<p>Birinci denklemden elde edilen katsayı tahmini, <span class="math inline">\(\hat{\rho}_{1,1}\)</span>, birinci gecikmedeki örneklem PACF degeridir. Benzer șekilde, ikinci denklemden hesaplanan <span class="math inline">\(\hat{\rho}_{2,2}\)</span> katsayısı ikinci gecikmedeki PACF degeridir. Diğer gecikmelerdeki PACF değerleri benzer șekilde hesaplanabilir. Bu PACF degerlerinin gecikmeye göre grafiği çizilerek davranışına bakılabilir.</p>
+<span class="math display">\[\begin{array}{|c|c|c|c|}
+\hline &amp; \operatorname{AR}(p) &amp; \operatorname{MA}(p) &amp; \operatorname{ARMA}(p, q) \\
+\text { ACF } &amp; \text { Üstel 0'a yaklașır } &amp; q \text { 'dan sonra } 0 &amp; \text { Üstel 0'a yaklașır }(&gt;q) \\
+\text { PACF } &amp; p \text { 'den sonra 0 } &amp; \text { Üstel 0'a yaklașır } &amp; \text { Üstel 0'a yaklașır }(&gt;p) \\
+\hline
+\end{array}\]</span>
+</section>
+<section id="mevsimsellik" class="level1">
+<h1>5.Mevsimsellik</h1>
+<p>Klasik zaman serisi ayrıștırmasında bir zaman serisinin dört bileșenden oluștuğu düșünülür:</p>
+<p><span class="math display">\[
+y_{t}=m_{t}+s_{t}+x_{t}
+\]</span></p>
+<p>Burada <span class="math inline">\(m_{t}\)</span> trend bileșenini, <span class="math inline">\(s_{t}\)</span> mevsim bileșenini ve <span class="math inline">\(x_{t}\)</span> düzensiz rassal șok bileșenini göstermektedir. Özellikle aylık, çeyreklik (3-aylık) ya da 6-aylık verilerde mevsimsel etkiler görülebilir. Mevsimsel davranıș genellikle önceden bilinir. Yılın aynı dönemlerinde benzer davranıșların olușması çevrimsel davranıșla karıștırımamalıdır. ARMA modellemesi yapılmadan önce verilerden mevsimsel etkiler arındırilabilir.</p>
+<p>Bunun için uygulamada kullanılabilecek en basit yöntem kukla değișken regresyonudur. Aylık veriler için 11 kukla değișken, çeyreklik veriler için ise 3 mevsimsel kukla değișken olușturularak serinin bu kuklalar üzerine regresyonu kurulur. Bu regresyondan elde edilen kalıntılar mevsimsel düzeltmesi yapılmıș seriler olarak düșünülebilir. Bunun yanı sıra seride belirgin bir trend varsa modele deterministik trend terimi eklenebilir. Ancak, serinin stokastik trend içermesi durumunda birinci farklarının alınması uygundur. Mevsimsel farkların alınması da bașka bir yöntem olarak düșünülebilir. Hem olasılıksal trend hem de mevsimsel davranıș varsa birinci farkın mevsimsel farkı alınarak dönüștürme yapılabilir.</p>
+<p><strong><em>Örnek: Atmosferdeki CO2 Miktarı</em></strong></p>
+<p>Buradaki veriler Cleveland, Cleveland, McRae, ve Terpenning (1990) çalışmasında kullanılan Ocak 1959 - Aralık 1987 dönemine ait aylık gözlemlerden oluşmaktadır.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># co2 verileri</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>co2 <span class="op">=</span> [<span class="fl">315.58</span>, <span class="fl">316.39</span>, <span class="fl">316.79</span>, <span class="fl">317.82</span>, <span class="fl">318.39</span>, <span class="fl">318.22</span>, <span class="fl">316.68</span>, <span class="fl">315.01</span>, <span class="fl">314.02</span>, <span class="fl">313.55</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>       <span class="fl">315.02</span>, <span class="fl">315.75</span>, <span class="fl">316.52</span>, <span class="fl">317.10</span>, <span class="fl">317.79</span>, <span class="fl">319.22</span>, <span class="fl">320.08</span>, <span class="fl">319.70</span>, <span class="fl">318.27</span>, <span class="fl">315.99</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>       <span class="fl">314.24</span>, <span class="fl">314.05</span>, <span class="fl">315.05</span>, <span class="fl">316.23</span>, <span class="fl">316.92</span>, <span class="fl">317.76</span>, <span class="fl">318.54</span>, <span class="fl">319.49</span>, <span class="fl">320.64</span>, <span class="fl">319.85</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>       <span class="fl">318.70</span>, <span class="fl">316.96</span>, <span class="fl">315.17</span>, <span class="fl">315.47</span>, <span class="fl">316.19</span>, <span class="fl">317.17</span>, <span class="fl">318.12</span>, <span class="fl">318.72</span>, <span class="fl">319.79</span>, <span class="fl">320.68</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>       <span class="fl">321.28</span>, <span class="fl">320.89</span>, <span class="fl">319.79</span>, <span class="fl">317.56</span>, <span class="fl">316.46</span>, <span class="fl">315.59</span>, <span class="fl">316.85</span>, <span class="fl">317.87</span>, <span class="fl">318.87</span>, <span class="fl">319.25</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>       <span class="fl">320.13</span>, <span class="fl">321.49</span>, <span class="fl">322.34</span>, <span class="fl">321.62</span>, <span class="fl">319.85</span>, <span class="fl">317.87</span>, <span class="fl">316.36</span>, <span class="fl">316.24</span>, <span class="fl">317.13</span>, <span class="fl">318.46</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>       <span class="fl">319.57</span>, <span class="fl">320.23</span>, <span class="fl">320.89</span>, <span class="fl">321.54</span>, <span class="fl">322.20</span>, <span class="fl">321.90</span>, <span class="fl">320.42</span>, <span class="fl">318.60</span>, <span class="fl">316.73</span>, <span class="fl">317.15</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>       <span class="fl">317.94</span>, <span class="fl">318.91</span>, <span class="fl">319.73</span>, <span class="fl">320.78</span>, <span class="fl">321.23</span>, <span class="fl">322.49</span>, <span class="fl">322.59</span>, <span class="fl">322.35</span>, <span class="fl">321.61</span>, <span class="fl">319.24</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>       <span class="fl">318.23</span>, <span class="fl">317.76</span>, <span class="fl">319.36</span>, <span class="fl">319.50</span>, <span class="fl">320.35</span>, <span class="fl">321.40</span>, <span class="fl">322.22</span>, <span class="fl">323.45</span>, <span class="fl">323.80</span>, <span class="fl">323.50</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>       <span class="fl">322.16</span>, <span class="fl">320.09</span>, <span class="fl">318.26</span>, <span class="fl">317.66</span>, <span class="fl">319.47</span>, <span class="fl">320.70</span>, <span class="fl">322.06</span>, <span class="fl">322.23</span>, <span class="fl">322.78</span>, <span class="fl">324.10</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>       <span class="fl">324.63</span>, <span class="fl">323.79</span>, <span class="fl">322.34</span>, <span class="fl">320.73</span>, <span class="fl">319.00</span>, <span class="fl">318.99</span>, <span class="fl">320.41</span>, <span class="fl">321.68</span>, <span class="fl">322.30</span>, <span class="fl">322.89</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>       <span class="fl">323.59</span>, <span class="fl">324.65</span>, <span class="fl">325.30</span>, <span class="fl">325.15</span>, <span class="fl">323.88</span>, <span class="fl">321.80</span>, <span class="fl">319.99</span>, <span class="fl">319.86</span>, <span class="fl">320.88</span>, <span class="fl">322.36</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>       <span class="fl">323.59</span>, <span class="fl">324.23</span>, <span class="fl">325.34</span>, <span class="fl">326.33</span>, <span class="fl">327.03</span>, <span class="fl">326.24</span>, <span class="fl">325.39</span>, <span class="fl">323.16</span>, <span class="fl">321.87</span>, <span class="fl">321.31</span>,</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>       <span class="fl">322.34</span>, <span class="fl">323.74</span>, <span class="fl">324.61</span>, <span class="fl">325.58</span>, <span class="fl">326.55</span>, <span class="fl">327.81</span>, <span class="fl">327.82</span>, <span class="fl">327.53</span>, <span class="fl">326.29</span>, <span class="fl">324.66</span>,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>       <span class="fl">323.12</span>, <span class="fl">323.09</span>, <span class="fl">324.01</span>, <span class="fl">325.10</span>, <span class="fl">326.12</span>, <span class="fl">326.62</span>, <span class="fl">327.16</span>, <span class="fl">327.94</span>, <span class="fl">329.15</span>, <span class="fl">328.79</span>,</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>       <span class="fl">327.53</span>, <span class="fl">325.65</span>, <span class="fl">323.60</span>, <span class="fl">323.78</span>, <span class="fl">325.13</span>, <span class="fl">326.26</span>, <span class="fl">326.93</span>, <span class="fl">327.84</span>, <span class="fl">327.96</span>, <span class="fl">329.93</span>,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>       <span class="fl">330.25</span>, <span class="fl">329.24</span>, <span class="fl">328.13</span>, <span class="fl">326.42</span>, <span class="fl">324.97</span>, <span class="fl">325.29</span>, <span class="fl">326.56</span>, <span class="fl">327.73</span>, <span class="fl">328.73</span>, <span class="fl">329.70</span>,</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>       <span class="fl">330.46</span>, <span class="fl">331.70</span>, <span class="fl">332.66</span>, <span class="fl">332.22</span>, <span class="fl">331.02</span>, <span class="fl">329.39</span>, <span class="fl">327.58</span>, <span class="fl">327.27</span>, <span class="fl">328.30</span>, <span class="fl">328.81</span>,</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>       <span class="fl">329.44</span>, <span class="fl">330.89</span>, <span class="fl">331.62</span>, <span class="fl">332.85</span>, <span class="fl">333.29</span>, <span class="fl">332.44</span>, <span class="fl">331.35</span>, <span class="fl">329.58</span>, <span class="fl">327.58</span>, <span class="fl">327.55</span>,</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>       <span class="fl">328.56</span>, <span class="fl">329.73</span>, <span class="fl">330.45</span>, <span class="fl">330.98</span>, <span class="fl">331.63</span>, <span class="fl">332.88</span>, <span class="fl">333.63</span>, <span class="fl">333.53</span>, <span class="fl">331.90</span>, <span class="fl">330.08</span>,</span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>       <span class="fl">328.59</span>, <span class="fl">328.31</span>, <span class="fl">329.44</span>, <span class="fl">330.64</span>, <span class="fl">331.62</span>, <span class="fl">332.45</span>, <span class="fl">333.36</span>, <span class="fl">334.46</span>, <span class="fl">334.84</span>, <span class="fl">334.29</span>,</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>       <span class="fl">333.04</span>, <span class="fl">330.88</span>, <span class="fl">329.23</span>, <span class="fl">328.83</span>, <span class="fl">330.18</span>, <span class="fl">331.50</span>, <span class="fl">332.80</span>, <span class="fl">333.22</span>, <span class="fl">334.54</span>, <span class="fl">335.82</span>,</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>       <span class="fl">336.45</span>, <span class="fl">335.97</span>, <span class="fl">334.65</span>, <span class="fl">332.40</span>, <span class="fl">331.28</span>, <span class="fl">330.73</span>, <span class="fl">332.05</span>, <span class="fl">333.54</span>, <span class="fl">334.65</span>, <span class="fl">335.06</span>,</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>       <span class="fl">336.32</span>, <span class="fl">337.39</span>, <span class="fl">337.66</span>, <span class="fl">337.56</span>, <span class="fl">336.24</span>, <span class="fl">334.39</span>, <span class="fl">332.43</span>, <span class="fl">332.22</span>, <span class="fl">333.61</span>, <span class="fl">334.78</span>,</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>       <span class="fl">335.88</span>, <span class="fl">336.43</span>, <span class="fl">337.61</span>, <span class="fl">338.53</span>, <span class="fl">339.06</span>, <span class="fl">338.92</span>, <span class="fl">337.39</span>, <span class="fl">335.72</span>, <span class="fl">333.64</span>, <span class="fl">333.65</span>,</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>       <span class="fl">335.07</span>, <span class="fl">336.53</span>, <span class="fl">337.82</span>, <span class="fl">338.19</span>, <span class="fl">339.89</span>, <span class="fl">340.56</span>, <span class="fl">341.22</span>, <span class="fl">340.92</span>, <span class="fl">339.26</span>, <span class="fl">337.27</span>,</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>       <span class="fl">335.66</span>, <span class="fl">335.54</span>, <span class="fl">336.71</span>, <span class="fl">337.79</span>, <span class="fl">338.79</span>, <span class="fl">340.06</span>, <span class="fl">340.93</span>, <span class="fl">342.02</span>, <span class="fl">342.65</span>, <span class="fl">341.80</span>,</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>       <span class="fl">340.01</span>, <span class="fl">337.94</span>, <span class="fl">336.17</span>, <span class="fl">336.28</span>, <span class="fl">337.76</span>, <span class="fl">339.05</span>, <span class="fl">340.18</span>, <span class="fl">341.04</span>, <span class="fl">342.16</span>, <span class="fl">343.01</span>,</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>       <span class="fl">343.64</span>, <span class="fl">342.91</span>, <span class="fl">341.72</span>, <span class="fl">339.52</span>, <span class="fl">337.75</span>, <span class="fl">337.68</span>, <span class="fl">339.14</span>, <span class="fl">340.37</span>, <span class="fl">341.32</span>, <span class="fl">342.45</span>,</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>       <span class="fl">343.05</span>, <span class="fl">344.91</span>, <span class="fl">345.77</span>, <span class="fl">345.30</span>, <span class="fl">343.98</span>, <span class="fl">342.41</span>, <span class="fl">339.89</span>, <span class="fl">340.03</span>, <span class="fl">341.19</span>, <span class="fl">342.87</span>,</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>       <span class="fl">343.74</span>, <span class="fl">344.55</span>, <span class="fl">345.28</span>, <span class="fl">347.00</span>, <span class="fl">347.37</span>, <span class="fl">346.74</span>, <span class="fl">345.36</span>, <span class="fl">343.19</span>, <span class="fl">340.97</span>, <span class="fl">341.20</span>,</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>       <span class="fl">342.76</span>, <span class="fl">343.96</span>, <span class="fl">344.82</span>, <span class="fl">345.82</span>, <span class="fl">347.24</span>, <span class="fl">348.09</span>, <span class="fl">348.66</span>, <span class="fl">347.90</span>, <span class="fl">346.27</span>, <span class="fl">344.21</span>,</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>       <span class="fl">342.88</span>, <span class="fl">342.58</span>, <span class="fl">343.99</span>, <span class="fl">345.31</span>, <span class="fl">345.98</span>, <span class="fl">346.72</span>, <span class="fl">347.63</span>, <span class="fl">349.24</span>, <span class="fl">349.83</span>, <span class="fl">349.10</span>,</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>       <span class="fl">347.52</span>, <span class="fl">345.43</span>, <span class="fl">344.48</span>, <span class="fl">343.89</span>, <span class="fl">345.29</span>, <span class="fl">346.54</span>, <span class="fl">347.66</span>, <span class="fl">348.07</span>, <span class="fl">349.12</span>, <span class="fl">350.55</span>,</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>       <span class="fl">351.34</span>, <span class="fl">350.80</span>, <span class="fl">349.10</span>, <span class="fl">347.54</span>, <span class="fl">346.20</span>, <span class="fl">346.20</span>, <span class="fl">347.44</span>, <span class="fl">348.67</span>]</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>co2 <span class="op">=</span> pd.Series(co2, index<span class="op">=</span>pd.date_range(<span class="st">'1-1-1959'</span>, periods<span class="op">=</span><span class="bu">len</span>(co2), freq<span class="op">=</span><span class="st">'M'</span>), name <span class="op">=</span> <span class="st">'CO2'</span>)</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>co2.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>count    348.000000
+mean     330.123879
+std       10.059747
+min      313.550000
+25%      321.302500
+50%      328.820000
+75%      338.002500
+max      351.340000
+Name: CO2, dtype: float64</code></pre>
+</div>
+</div>
+<p>Verinin grafiği:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>co2.plot(figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">8</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Mevsimsel ayrıştırma için <code>statsmodels</code> kütüphanesinden <code>seasonal_decompose</code> yöntemini kullanacağız. Mevsimsel ayrıştırma için 2 seçenek bulunuyor: toplamsal (additive) ya da çarpımsal (multiplicative) ayrıştırma. Doğru modeli seçmenin temel bir kuralı, trend ve mevsimsel değişimin zaman içinde nispeten sabit, başka bir deyişle doğrusal olup olmadığını grafiğimizde görmektir. Cevabınız evet ise, toplamsal modelini seçeceğiz. Aksi takdirde, trend ve mevsimsel değişim zamanla artarsa veya azalırsa, o zaman Çarpımsal modeli kullanırız.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.seasonal <span class="im">import</span> seasonal_decompose</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># mevsimsel ayrıştırma</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>sonuç <span class="op">=</span> seasonal_decompose(co2, model<span class="op">=</span><span class="st">"multiplicative"</span>, period<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mevsimsel bileşen</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>sonuç.seasonal.plot(figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">8</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># trend bileşeni</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sonuç.trend.plot(figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">8</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-13-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># serinin tüm bileşenleri</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>plt.rc(<span class="st">"figure"</span>, figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">8</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>sonuç.plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="model-seçimi" class="level1">
+<h1>6. Model Seçimi</h1>
+<p>ARMA süreci için <span class="math inline">\((p, q)\)</span> sırasının seçimi için istatistiksel model seçim kriterleri kullanılabilir:</p>
+<ol type="1">
+<li>Tüm <span class="math inline">\(A R M A(p, q)\)</span> modelleri <span class="math inline">\(0 \leq p \leq p_{\max }\)</span> ve <span class="math inline">\(0 \leq q \leq q_{\max }\)</span>, ile, seçilen maksimum sıra sayıları ile tahmin edilir.</li>
+<li><span class="math inline">\(\tilde{\sigma}^{2}(p, q)\)</span>, Gausyen/Normal varsayım altında ARMA inovasyonlarının varyansı <span class="math inline">\(\sigma^{2}=\operatorname{Var}\left(\eta_{t}\right)\)</span> nın en yüksek olabilirlik tahmini olsun.</li>
+<li>Aşağıdaki kriterlerden birini en küçükleyen <span class="math inline">\((p,q)\)</span> sırası seçilir:</li>
+</ol>
+<ul>
+<li>Akaike Bilgi Kriteri: <span class="math display">\[
+\operatorname{AlC}(p, q)=\log \left(\tilde{\sigma}^{2}(p, q)\right)+2 \frac{p+q}{n}
+\]</span></li>
+<li>Bayes Bilgi Kriteri: <span class="math display">\[
+B I C(p, q)=\log \left(\tilde{\sigma}^{2}(p, q)\right)+\log (n) \frac{p+q}{n}
+\]</span></li>
+<li>Hannan-Quinn Bilgi Kriteri: <span class="math display">\[
+H Q(p, q)=\log \left(\tilde{\sigma}^{2}(p, q)\right)+2 \log (\log (n)) \frac{p+q}{n}
+\]</span></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

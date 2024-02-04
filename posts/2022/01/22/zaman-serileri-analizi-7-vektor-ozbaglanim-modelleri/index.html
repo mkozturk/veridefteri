@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -62,7 +96,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../../../../styles.css">
 </head>
@@ -112,7 +151,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-title">
 <h1 class="title">Zaman Serileri Analizi 7: Vektör Özbağlanım Modelleri</h1>
   <div class="quarto-categories">
-    <div class="quarto-category">Genel</div>
+    <div class="quarto-category">Zaman serileri</div>
   </div>
   </div>
 
@@ -140,8 +179,528 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="giriş" class="level1">
+<h1>1. Giriş</h1>
+<p>Tek değişkenli bir zaman serisi verileri yalnızca tek bir zamana bağlı değişken içerirken, çok değişkenli bir zaman serisi verileri birden çok zamana bağlı değişkenden oluşur. Değişkenler arasındaki ilginç karşılıklı bağımlılıkları ve ortak hareketleri modellemek ve açıklamak için genellikle çok değişkenli zaman serisi analizini kullanırız. Çok değişkenli analizde - varsayım, zamana bağlı değişkenlerin yalnızca geçmiş değerlerine bağlı olmadığı, aynı zamanda aralarında bağımlılık da gösterdiğidir. Çok değişkenli zaman serisi modelleri, belirli bir veri için daha güvenilir ve doğru tahminler sağlamak için bağımlılıklardan yararlanır, ancak tek değişkenli analiz genel olarak çok değişkenliden daha iyi performans gösterir.</p>
+<p>Burada <strong>vektör özbağlanım modelleri’ni (vector autoregression model-VAR)</strong> inceleyeceğiz. VAR modeli eşanlı denklem sistemlerine benzer. Eşanlı denklem sistemlerinde bazı değişkenler modeldeki diğer değişkenler tarafından açıklanırken, bazıları da sadece açıklayıcı değişken görevini üstlenirler ve açıklayıcı değişkenlerin değerleri önceden belirlenmiştir. Fakat Sims(1980); değişkenler arasında gerçekten bir eşanlılık söz konusuysa içsel ve dışsal değişkenler arasında bir ayrım yapılmaması gerektiğini söylemiş ve buradan hareketle VAR modelini ileri sürmüştür. VAR modelde değişkenlerin tümü içseldir. Bu özelliği dolayısıyla VAR modelleri eşanlı denklem sistemlerinden ayrılmaktadır.</p>
+</section>
+<section id="vektör-özbağlanım-modelinin-genel-gösterimi" class="level1">
+<h1>2. Vektör Özbağlanım Modelinin Genel Gösterimi</h1>
+<p>VAR’ın özelliği, tekdeğişkenli özbağlanım modelini birden çok zaman serisi içeren bir seriler yöneyine genellemesidir. <span class="math inline">\(k\)</span> değişkenli bir VAR modelinde herbir değişkenin sırayla bağımlı değişken olduğu <span class="math inline">\(k\)</span> sayıda denklem olur. Her bir denklemdeki gecikme sayısı da p’ye eşittir. <span class="math inline">\(k\)</span> değişkenli ve <span class="math inline">\(p\)</span> gecikmeli böyle bir denklem sistemine <span class="math inline">\(\operatorname{VAR}(p)\)</span> denir ve aşağıdaki şekilde gösterilir:</p>
+<span class="math display">\[\begin{aligned}
+&amp;Y_{1 t}=\alpha_{10}+\sum_{j=1}^{p} \beta_{1 p} Y_{1 t-p}+\ldots+\sum_{j=1}^{p} \lambda_{1 p} Y_{k t-p}+u_{1 t}\\
+&amp;\vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots \quad \vdots\\
+&amp;Y_{k t}=\alpha_{k 0}+\sum_{j=1}^{p} \beta_{k p} Y_{1 t-p}+\ldots+\sum_{j=1}^{p} \lambda_{k p} Y_{k t-p}+u_{k t}
+\end{aligned}\]</span>
+<p>Bu yazıda, Türkiye için 2000-Q1:2021-Q3 dönemi için özel nihai tüketim harcamaları, devlet nihai tüketim harcamaları ve GSYH verilerinin logartimik dönüşümlü biçimlerini kullanacağız.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas_datareader <span class="im">as</span> pdr</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> datetime</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># başlangıç ve bitiş tarihleri</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>başlangıç <span class="op">=</span> datetime.datetime(<span class="dv">2000</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>bitiş    <span class="op">=</span> datetime.datetime(<span class="dv">2021</span>, <span class="dv">9</span>, <span class="dv">1</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co"># makro iktisadi değişkenler</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>özel_nihai_tüketim <span class="op">=</span> pdr.DataReader(<span class="st">'TURPFCEQDSMEI'</span>, <span class="st">'fred'</span>, start<span class="op">=</span>başlangıç, end<span class="op">=</span>bitiş).rename(columns <span class="op">=</span> {<span class="st">"TURPFCEQDSMEI"</span>:<span class="st">'özel_nihai_tüketim'</span>})</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>devlet_nihahi_tüketim <span class="op">=</span> pdr.DataReader(<span class="st">'TURGFCEQDSMEI'</span>, <span class="st">'fred'</span>, start<span class="op">=</span>başlangıç, end<span class="op">=</span>bitiş).rename(columns <span class="op">=</span> {<span class="st">"TURGFCEQDSMEI"</span>:<span class="st">'devlet_nihai_tüketim'</span>})</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>gsyh      <span class="op">=</span> pdr.DataReader(<span class="st">'TURGDPNQDSMEI'</span>, <span class="st">'fred'</span>, start<span class="op">=</span>başlangıç, end<span class="op">=</span>bitiş).rename(columns <span class="op">=</span> {<span class="st">"TURGDPNQDSMEI"</span>:<span class="st">'gsyh'</span>})</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># reel gsyh ve tüketim harcamaları için logaritmik dönüşüm</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>gsyh[<span class="st">'log_gsyh'</span>] <span class="op">=</span> np.log(gsyh[<span class="st">'gsyh'</span>])</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>özel_nihai_tüketim[<span class="st">'log_özel_tüketim'</span>] <span class="op">=</span> np.log(özel_nihai_tüketim[<span class="st">'özel_nihai_tüketim'</span>])</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>devlet_nihahi_tüketim[<span class="st">'log_devlet_tüketim'</span>] <span class="op">=</span> np.log(devlet_nihahi_tüketim[<span class="st">'devlet_nihai_tüketim'</span>])</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co"># veri çerçevelerinin birleştirilmesi</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>makro_veri <span class="op">=</span> gsyh[[<span class="st">'log_gsyh'</span>]].merge(</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    özel_nihai_tüketim[[<span class="st">'log_özel_tüketim'</span>]],</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    left_index<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    right_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>).merge(</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>    devlet_nihahi_tüketim[[<span class="st">'log_devlet_tüketim'</span>]],</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    left_index<span class="op">=</span><span class="va">True</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    right_index<span class="op">=</span><span class="va">True</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Verinin görünümüne bakalım:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(makro_veri.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>             log_gsyh  log_özel_tüketim  log_devlet_tüketim
+DATE                                                       
+2000-01-01  24.361417         23.996256           22.218192
+2000-04-01  24.446563         24.037710           22.323838
+2000-07-01  24.518549         24.115512           22.401991
+2000-10-01  24.585704         24.162953           22.460808
+2001-01-01  24.658585         24.233973           22.509961</code></pre>
+</div>
+</div>
+<p>Verilerin grafiğini çizelim:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>makro_veri.plot(figsize<span class="op">=</span>(<span class="dv">12</span>,<span class="dv">8</span>))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Makro İktisadi Veriler"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.grid()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="var-modeli-uygulaması" class="level1">
+<h1>3. VAR Modeli Uygulaması</h1>
+<p>VAR modellerinde durağanlık çok önemlidir. Çünkü VAR modelleri de durağan serilerle çalışmaktadır. Durağanlığın açıklanmasına geçilmeden önce dikkat edilmesi gereken noktalar bulunmaktadır. VAR modellerinin eşanlı denklem sistemleriyle benzer olduğu belirtilmiştir. Ancak VAR modelleri, modelde yer alan bağımsız değişkenler arasında şimdiki değerleri içermemesi sebebiyle eşanlı denklem sistemlerinden ayrılmaktadır.</p>
+<p>Bu yazıda değişkenlerin durağanlığıyla birlikte gerçekleştireceğimiz diğer istatistiksel testler için hazırladığımız Python betiğine <a href="https://gist.github.com/homodigitus/16120b29bcc52a85e37611a417400fd7">buradan</a> erişebilirsiniz.</p>
+<section id="durağanlık-testi-genişletilmiş-dickey-fuller-testi" class="level2">
+<h2 class="anchored" data-anchor-id="durağanlık-testi-genişletilmiş-dickey-fuller-testi">3.1. Durağanlık Testi: Genişletilmiş Dickey-Fuller Testi</h2>
+<p>Durağanlık kavramına önceki yazılarımızda değinmiş, durağanlığın olmadığı durumlarda ortaya çıkabilecek durumları tartışmıştık. Bununla birlikte VAR modelleri için de farklı yaklaşımlar sözkonusudur. Pagan (1987)’ye göre VAR modeli için öncelikle zaman serilerinin durağan olması gerekmektedir. Fakat durağanlığı sağlamak amacıyla fark alımının bilgi kaybına sebep olması tartışma konusudur. Sims (1980) ve Doan (1992) birim kökün var olması durumunda dahi fark alınmasına karşı görüş belirtmişler ve VAR analizinin amacının parametre tahmini değil, değişkenler arası ilişkilerin belirlenmesi olduğunu söylemişlerdir. İlk olarak verilerimizin durağanlık sınamalarını gerçekleştireceğiz:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> var_model <span class="im">import</span> adf_test, granger_causality_matrix, cointegration_test</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>sonuçlar <span class="op">=</span> adf_test(makro_veri, trend<span class="op">=</span><span class="st">'ct'</span>, max_lags<span class="op">=</span><span class="dv">4</span>, method<span class="op">=</span><span class="st">'aic'</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>sonuçlar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+
+ADF test with constant and linear trend<br><table style="text-align:center"><tbody><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td colspan="3"><em>Dependent variable:y</em></td></tr><tr><td style="text-align:left"></td></tr><tr><td></td><td colspan="1">log_gsyh</td><td colspan="1">log_özel_tüketim</td><td colspan="1">log_devlet_tüketim</td></tr><tr><td style="text-align:left"></td><td>(1)</td><td>(2)</td><td>(3)</td></tr><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Diff.L1</td><td>-0.056<sup></sup></td><td>-0.163<sup></sup></td><td>-0.238<sup>**</sup></td></tr><tr><td style="text-align:left"></td><td>(0.105)</td><td>(0.104)</td><td>(0.101)</td></tr><tr><td style="text-align:left">Diff.L2</td><td>0.241<sup>**</sup></td><td>0.155<sup></sup></td><td></td></tr><tr><td style="text-align:left"></td><td>(0.103)</td><td>(0.103)</td><td></td></tr><tr><td style="text-align:left">Diff.L3</td><td>0.188<sup>*</sup></td><td>0.212<sup>**</sup></td><td></td></tr><tr><td style="text-align:left"></td><td>(0.107)</td><td>(0.102)</td><td></td></tr><tr><td style="text-align:left">Diff.L4</td><td></td><td>0.182<sup>*</sup></td><td></td></tr><tr><td style="text-align:left"></td><td></td><td>(0.104)</td><td></td></tr><tr><td style="text-align:left">Level.L1</td><td>-0.111<sup>***</sup></td><td>-0.149<sup>***</sup></td><td>-0.139<sup>***</sup></td></tr><tr><td style="text-align:left"></td><td>(0.033)</td><td>(0.035)</td><td>(0.031)</td></tr><tr><td style="text-align:left">const</td><td>2.814<sup>***</sup></td><td>3.714<sup>***</sup></td><td>3.250<sup>***</sup></td></tr><tr><td style="text-align:left"></td><td>(0.819)</td><td>(0.865)</td><td>(0.716)</td></tr><tr><td style="text-align:left">trend</td><td>0.004<sup>***</sup></td><td>0.005<sup>***</sup></td><td>0.005<sup>***</sup></td></tr><tr><td style="text-align:left"></td><td>(0.001)</td><td>(0.001)</td><td>(0.001)</td></tr><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align: left">Observations</td><td>83</td><td>82</td><td>85</td></tr><tr><td style="text-align: left">R<sup>2</sup></td><td>0.259</td><td>0.333</td><td>0.247</td></tr><tr><td style="text-align: left">Adjusted R<sup>2</sup></td><td>0.211</td><td>0.280</td><td>0.219</td></tr><tr><td style="text-align: left">Residual Std. Error</td><td>0.034 (df=77)</td><td>0.032 (df=75)</td><td>0.040 (df=81)</td></tr><tr><td style="text-align: left">F Statistic</td><td>5.389<sup>***</sup> (df=5; 77)</td><td>6.247<sup>***</sup> (df=6; 75)</td><td>8.868<sup>***</sup> (df=3; 81)</td></tr><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align: left">Note:</td>
+ <td colspan="3" style="text-align: right">
+  <sup>*</sup>p&lt;0.1;
+  <sup>**</sup>p&lt;0.05;
+  <sup>***</sup>p&lt;0.01
+ </td></tr></tbody></table>
+</div>
+</div>
+<p>Seriler seviyelerinde durağan değildir. Dolayısıyla serilerin birinci farkını alıp durağan hale gelip gelmediklerine bakalım:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>makro_veri_farkı_alınmış <span class="op">=</span> makro_veri.diff().dropna()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sonuçlar <span class="op">=</span> adf_test(makro_veri_farkı_alınmış, trend<span class="op">=</span><span class="st">'ct'</span>, max_lags<span class="op">=</span><span class="dv">4</span>, method<span class="op">=</span><span class="st">'aic'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>sonuçlar</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+ADF test with constant and linear trend<br><table style="text-align:center"><tbody><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left"></td><td colspan="3"><em>Dependent variable:y</em></td></tr><tr><td style="text-align:left"></td></tr><tr><td></td><td colspan="1">log_gsyh</td><td colspan="1">log_özel_tüketim</td><td colspan="1">log_devlet_tüketim</td></tr><tr><td style="text-align:left"></td><td>(1)</td><td>(2)</td><td>(3)</td></tr><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align:left">Diff.L1</td><td>-0.518<sup>***</sup></td><td>-0.667<sup>***</sup></td><td>-0.414<sup>**</sup></td></tr><tr><td style="text-align:left"></td><td>(0.156)</td><td>(0.185)</td><td>(0.175)</td></tr><tr><td style="text-align:left">Diff.L2</td><td>-0.222<sup>*</sup></td><td>-0.429<sup>**</sup></td><td>-0.231<sup>**</sup></td></tr><tr><td style="text-align:left"></td><td>(0.113)</td><td>(0.169)</td><td>(0.113)</td></tr><tr><td style="text-align:left">Diff.L3</td><td></td><td>-0.172<sup></sup></td><td></td></tr><tr><td style="text-align:left"></td><td></td><td>(0.115)</td><td></td></tr><tr><td style="text-align:left">Level.L1</td><td>-0.503<sup>***</sup></td><td>-0.430<sup>**</sup></td><td>-0.763<sup>***</sup></td></tr><tr><td style="text-align:left"></td><td>(0.171)</td><td>(0.190)</td><td>(0.211)</td></tr><tr><td style="text-align:left">const</td><td>0.024<sup>*</sup></td><td>0.019<sup></sup></td><td>0.044<sup>**</sup></td></tr><tr><td style="text-align:left"></td><td>(0.013)</td><td>(0.013)</td><td>(0.017)</td></tr><tr><td style="text-align:left">trend</td><td>-0.000<sup></sup></td><td>-0.000<sup></sup></td><td>-0.000<sup></sup></td></tr><tr><td style="text-align:left"></td><td>(0.000)</td><td>(0.000)</td><td>(0.000)</td></tr><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align: left">Observations</td><td>83</td><td>82</td><td>83</td></tr><tr><td style="text-align: left">R<sup>2</sup></td><td>0.537</td><td>0.568</td><td>0.606</td></tr><tr><td style="text-align: left">Adjusted R<sup>2</sup></td><td>0.513</td><td>0.540</td><td>0.585</td></tr><tr><td style="text-align: left">Residual Std. Error</td><td>0.036 (df=78)</td><td>0.035 (df=76)</td><td>0.044 (df=78)</td></tr><tr><td style="text-align: left">F Statistic</td><td>22.608<sup>***</sup> (df=4; 78)</td><td>20.000<sup>***</sup> (df=5; 76)</td><td>29.955<sup>***</sup> (df=4; 78)</td></tr><tr><td colspan="4" style="border-bottom: 1px solid black"></td></tr><tr><td style="text-align: left">Note:</td>
+ <td colspan="3" style="text-align: right">
+  <sup>*</sup>p&lt;0.1;
+  <sup>**</sup>p&lt;0.05;
+  <sup>***</sup>p&lt;0.01
+ </td></tr></tbody></table>
+</div>
+</div>
+<p>Böylece, tüm değişkenlerimiz birinci farkında durağan hale gelmiştir.</p>
+</section>
+<section id="eş-bütünleşme-cointegration-testleri" class="level2">
+<h2 class="anchored" data-anchor-id="eş-bütünleşme-cointegration-testleri">3.2. Eş Bütünleşme (Cointegration) Testleri</h2>
+<p>Düzeyde durağan olmayan zaman serilerinin uzun dönemde birlikte hareket edip etmediklerini araştıran koentegrasyon analizine göre, durağan olmayan seriler koentegre ise, bu değişkenlerin farklarının alınması pek uygun olmayacaktır. Değişkenlerin birlikte hareket eden bir trende sahip olmaları dolayısıyla, farklarının alınması bu ortak trendi ortadan kaldıracaktır. Buna bağlı olarak koentegre olan ve diğer bir ifade ile uzun dönemde birlikte hareket eden serilerin düzey değerleriyle yapılan analizlerde sahte regresyon söz konusu olmayacaktır. Engel-Granger (1987) tarafından ileri sürülen Engel-Granger iki aşamalı koentegrasyon testi ve daha sonra Johansen (1988) ve Johansen-Juselius (1990) tarafından geliştirilen koentegrasyon testleri, durağan olmayan zaman serilerinin aynı düzeyde farkları alındığında durağanlıklarının sağlanmasını gerektirmektedir.</p>
+<section id="engle-granger-eş-bütünleşme-testi" class="level3">
+<h3 class="anchored" data-anchor-id="engle-granger-eş-bütünleşme-testi">3.2.1. Engle-Granger Eş Bütünleşme Testi</h3>
+<p>İki aşamalı Engel-Granger yöntemine göre, birinci aşamada En Küçük Kareler (OLS) yöntemi yardımıyla model tahmin edilerek hata terimleri elde edilir. İkinci aşamada ise elde edilen hata terimlerine birim kök sınaması yapılır. Sonuçta hata terimleri durağan çıkarsa eş bütünleşme söz konusudur. Hata terimlerinin birim köklü olması ise ele alınan seriler arasında eş bütünleşme ilişkisinin olmadığını göstermektedir. Engel-Granger yöntemi basit uygulanabilir olmasına rağmen 2’den fazla değişken söz konusu olduğunda, değişken sayısıyla birlikte eş bütünleşme sayısı da artacağından dolayı sağlıklı sonuç verememektedir ve farklı normalleştirmelerde sonuçlar değişebilmektedir.</p>
+</section>
+<section id="johansen-eş-bütünleşme-testi" class="level3">
+<h3 class="anchored" data-anchor-id="johansen-eş-bütünleşme-testi">3.2.2. Johansen Eş Bütünleşme Testi</h3>
+<p>Johansen-Juselius çoklu eş bütünleşme yönteminde öncelikle aşağıda ifade edilen vektör otoregresif (VAR) model ele alınmaktadır:</p>
+<p><span class="math display">\[
+X_{t}=\pi_{1} X_{t-1}+\pi_{2} X_{t-2}+\ldots . .+\pi_{k} X_{t-k}+\mu+e_{t}
+\]</span></p>
+<p>Durağan olmayan X değişkenlerinin 1. farklar1 alındığında ise, hata düzeltme formundaki;</p>
+<p><span class="math display">\[
+\Delta X_{t}=\Gamma_{1} \Delta X_{t-1}+\ldots+\Gamma_{k-1} \Delta X_{t-k+1}+\pi X_{t-k}+\mu+e_{t}
+\]</span></p>
+<p>süreci elde edilmektedir. Burada,</p>
+<p><span class="math display">\[
+\begin{aligned}
+&amp;\Gamma_{i}=-I+\pi_{1}+\ldots+\pi_{i} \\
+&amp;\pi=I-\pi_{1}-\ldots-\pi_{k} \quad t=1 \ldots . t
+\end{aligned}
+\]</span></p>
+<p>ile ifade edilmektedir. Modelde; <span class="math inline">\(\quad X_{t} \quad I(1)\)</span> ’de bütünleşik olan değişkenlerin <span class="math inline">\((p \times 1)\)</span> boyutlu vektörü, <span class="math inline">\(e_{t}\)</span> hata terimi, <span class="math inline">\(\Gamma_{i}(p \times p)\)</span> boyutlu parametreler matrisidir. <span class="math inline">\(\pi\)</span> ise değişkenlerin uzun dönem ilişkileri hakkinda bilgi veren, <span class="math inline">\(\Gamma_{i}\)</span> ile aynı boyutta <span class="math inline">\((p \times p)\)</span> boyutlu bir matristir. <span class="math inline">\(\pi\)</span> matrisinin rank1; değişkenlerin doğrusal şekilde bağımsız ve durağan doğrusal kombinasyon sayısıdır. Matris rankının tam olması, <span class="math inline">\(X_{t}\)</span> ’de yer alan tüm değişkenlerin durağan olduğunu ifade etmektedir. Rankın 0 olması halinde ise, <span class="math inline">\(X_{t}\)</span> 1. farklar formunda bir vektör özbağlanım (VAR) modele dönüşür. Bu, modelde yer alan değişkenler arasında uzun dönem ilişkisi olmadığının bir ifadesidir.</p>
+<p><span class="math inline">\(\pi\)</span> matrisinin rank1 1 yada 1 ’den fazla ise, bu durumda 1 yada daha fazla eş bütünleşik vektör söz konusu olacağından bu, uzun dönem ilişkisini ifade edecektir. Çoklu eş bütünleşme analizinde en az l eş bütünleşik vektörün olması beklenmektedir. 1 ve ya daha fazla eş bütünleşik vektör bulunması durumunda eş bütünleşmenin olmadığını söyleyen <span class="math inline">\(H_{0}\)</span> hipotezi reddedilecektir.</p>
+<p>Johansen-Juselius (1990); eş bütünleşik vektör sayısını ya da diğer anlamda <span class="math inline">\(\pi\)</span> matrisinin rankını bulmak amacıyla 2 farklı istatistik ileri sürmüştür. İz istatistiği;</p>
+<p><span class="math display">\[
+\lambda_{\text {Trace }}=-T \cdot \sum_{i=r+1}^{p} \ln \left(1-\lambda_{i}\right)
+\]</span></p>
+<p>ve maksimum öz değer istatistiği;</p>
+<p><span class="math display">\[
+\lambda_{\max }=-T \cdot \ln \left(1-\lambda_{r+1}\right) \quad 0 \leq \mathrm{r} \leq \mathrm{p}
+\]</span></p>
+<p>olarak bilinen bu istatistiklerin sonuçları Johansen ve Juselius tarafından önerilen tablo kritik değerleri ile karşılaştırılmaktadır. Johansen testinin kritik değerleri tahmin edilen modele doğrusal trendlerin ve mevsimsel gölge değişkenlerin nasıl ilave edildiğine bağlı olup 3 kısımdan oluşmaktadır. Birincisinde sabit terim modele hiçbir kısıt olmadan ilave edilmiştir. 2. kısımda yine sabit terim modele ilave edilmiştir fakat bu koentegre vektörlere göre kısıtlanmıştır. 3. kısımda ise sabit terim ilave edilmemiştir.</p>
+<p>Makro verilerimizin farkı alınmış biçimi için, Johansen eş bütünleşme ilişkilerine bakalım:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cointegration_test(makro_veri_farkı_alınmış)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Name   ::  Test Stat &gt; C(95%)    =&gt;   Signif  
+ ----------------------------------------
+log_gsyh ::  54.02     &gt; 24.2761   =&gt;   True
+log_özel_tüketim ::  19.93     &gt; 12.3212   =&gt;   True
+log_devlet_tüketim ::  3.78      &gt; 4.1296    =&gt;   False</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="granger-nedensellik-testi" class="level2">
+<h2 class="anchored" data-anchor-id="granger-nedensellik-testi">3.3. Granger Nedensellik Testi</h2>
+<p>Vektör özbağlanım modelinin arkasındaki temel, sistemdeki zaman serilerinin her birinin birbirini etkilemesidir. Yani sistemdeki diğer serilerle birlikte kendi geçmiş değerleri ile seriyi tahmin edebiliriz. Granger nedensellik Testini kullanarak, modeli oluşturmadan önce bu ilişkiyi test etmek mümkündür. Aslında, Granger (1969) tarafindan önerilen Granger nedensellik testi klasik anlamda bir nedensellik testinden ziyade bir öngörülebilirlik testidir. Bu kavrama göre <span class="math inline">\(x_{t}\)</span> bașka bir değișkeni, <span class="math inline">\(y_{t}\)</span>, öngörmekte bașarilı ise <span class="math inline">\(x y\)</span> ’nin Granger-nedenidir. Daha formel olarak, sadece <span class="math inline">\(x_{t}\)</span> ’nin gecikmeli değerlerini içeren bir modelden hareketle her <span class="math inline">\(s&gt;0\)</span> için hesaplanan <span class="math inline">\(y_{t+s}\)</span> öngörüsünün ortalama hata karesi, hem <span class="math inline">\(x_{t}\)</span> ’nin hem de <span class="math inline">\(y_{t}\)</span> ’nin gecikmeli değerlerini içeren modelden elde edilen öngörü ortalama hata karesi ile aynıysa, <span class="math inline">\(x\)</span> değișkeni <span class="math inline">\(y\)</span> değișkeninin Granger-nedeni değildir. Bașka bir ifadeyle <span class="math inline">\(x\)</span> ’in gecikmeli değerleri <span class="math inline">\(y\)</span> ’yi öngörmekte bașarisızdır.</p>
+<p><span class="math inline">\(x^{\prime}\)</span> in <span class="math inline">\(y\)</span> ’nin Granger-nedeni olmadığını söyleyen boş hipotez:</p>
+<p><span class="math display">\[
+H_{0}: \phi_{12}^{1}=0, \phi_{12}^{2}=0
+\]</span></p>
+<p>birinci denklemden hareketle standart <span class="math inline">\(F\)</span> testiyle sınanabilir. Yeterince büyük bir <span class="math inline">\(F\)</span> istatistigi <span class="math inline">\(x\)</span> değișkeninin <span class="math inline">\(y\)</span> değișkenini öngörmede bașarılı olduğuna, yani Granger-nedeni olduğuna ișaret eder. Granger-nedenselliği <span class="math inline">\(Y_{1}\)</span> ve <span class="math inline">\(Y_{2}\)</span> gibi iki grup değișken arasında da hesaplanabilir. <span class="math inline">\(Y_{2}\)</span> grubunda yer alan değișkenler <span class="math inline">\(Y_{1}\)</span> grubunda yer alan değișkenleri öngörmede bașarısız ise <span class="math inline">\(Y_{2}\)</span> blok dışsaldır (block exogenous). Bu durumda F testi yerine Wald ya da LR testlerinin uygulanması gerekir.</p>
+<p>Makro verilerimiz için, nedensellik ilişkilerini görebileceğimiz nedensellik matrisini çıkalarım:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>nedensellik_matrisi <span class="op">=</span> granger_causality_matrix(data<span class="op">=</span>makro_veri_farkı_alınmış, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                               variables<span class="op">=</span>makro_veri_farkı_alınmış.columns, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                               maxlag<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>nedensellik_matrisi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<div>
 
 
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">log_gsyh_x</th>
+<th data-quarto-table-cell-role="th">log_özel_tüketim_x</th>
+<th data-quarto-table-cell-role="th">log_devlet_tüketim_x</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">log_gsyh_y</td>
+<td>1.0000</td>
+<td>0.5559</td>
+<td>0.4011</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">log_özel_tüketim_y</td>
+<td>0.3197</td>
+<td>1.0000</td>
+<td>0.0964</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">log_devlet_tüketim_y</td>
+<td>0.0091</td>
+<td>0.0202</td>
+<td>1.0000</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Nedensellik matrisine göre, gsyh değişkeninin devlet tüketim harcamalarının Granger nedeni olduğunu; özel sektör tüketim harcamalarının devlet tüketim harcamalarının Granger nedeni olduğunu söyleyebiliriz.</p>
+</section>
+<section id="var-modelinin-kurulması" class="level2">
+<h2 class="anchored" data-anchor-id="var-modelinin-kurulması">3.4. VAR Modelinin Kurulması</h2>
+<p>VAR modeli için <code>statsmodels</code> çerçevesinden <code>VAR</code> nesnesini kullanacağız. Modeli oluşturmadan önce de, öngörülerin nasıl olduğunu görebilmek için verimizi eğitim ve test verisi olarak böleceğiz</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.tsa.api <span class="im">import</span> VAR</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>gözlem_sayısı <span class="op">=</span> <span class="dv">4</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>eğitim_verisi, test_verisi <span class="op">=</span> makro_veri_farkı_alınmış[<span class="dv">0</span>:<span class="op">-</span>gözlem_sayısı], makro_veri_farkı_alınmış[<span class="op">-</span>gözlem_sayısı:]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># VAR modeli</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> VAR(eğitim_verisi)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\GTUSR0319\Anaconda3\lib\site-packages\statsmodels\tsa\base\tsa_model.py:524: ValueWarning: No frequency information was provided, so inferred frequency QS-OCT will be used.
+  warnings.warn('No frequency information was'</code></pre>
+</div>
+</div>
+<p>VAR modeli için uygun gecikme sayısı seçimi zor bir problem olabilir. Bunun için, olabilirlik testi (likelihood test) veya bilgi kriterlerine dayalı gecikme sayısı seçiçi kullanılabilir. Bunun için, <code>select_order</code> metodunu kullanacağız:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>gecikme_sayısı <span class="op">=</span> model.select_order(maxlags<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>gecikme_sayısı.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<table class="simpletable table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>VAR Order Selection (* highlights the minimums)</caption>
+<tbody>
+<tr class="odd">
+<td></td>
+<td data-quarto-table-cell-role="th">AIC</td>
+<td data-quarto-table-cell-role="th">BIC</td>
+<td data-quarto-table-cell-role="th">FPE</td>
+<td data-quarto-table-cell-role="th">HQIC</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">0</td>
+<td>-21.72</td>
+<td>-21.63*</td>
+<td>3.679e-10</td>
+<td>-21.68</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>-21.87*</td>
+<td>-21.48</td>
+<td>3.176e-10*</td>
+<td>-21.72*</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>-21.72</td>
+<td>-21.05</td>
+<td>3.700e-10</td>
+<td>-21.45</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>-21.66</td>
+<td>-20.70</td>
+<td>3.937e-10</td>
+<td>-21.28</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>-21.57</td>
+<td>-20.32</td>
+<td>4.347e-10</td>
+<td>-21.07</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>-21.41</td>
+<td>-19.87</td>
+<td>5.173e-10</td>
+<td>-20.79</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>-21.38</td>
+<td>-19.55</td>
+<td>5.386e-10</td>
+<td>-20.66</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>-21.33</td>
+<td>-19.21</td>
+<td>5.818e-10</td>
+<td>-20.49</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>-21.27</td>
+<td>-18.86</td>
+<td>6.402e-10</td>
+<td>-20.31</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>-21.12</td>
+<td>-18.43</td>
+<td>7.724e-10</td>
+<td>-20.05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>-20.99</td>
+<td>-18.00</td>
+<td>9.358e-10</td>
+<td>-19.80</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>-20.98</td>
+<td>-17.70</td>
+<td>1.011e-09</td>
+<td>-19.68</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>-20.87</td>
+<td>-17.30</td>
+<td>1.240e-09</td>
+<td>-19.45</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Uygun gecikme sayısını AIC baz alarak 1 olarak belirleyelim ve modeli oluşturalım:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sonuçlar <span class="op">=</span> model.fit(maxlags<span class="op">=</span><span class="dv">1</span>, ic<span class="op">=</span><span class="st">'aic'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Model çıktısına da bakalım:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>sonuçlar.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>  Summary of Regression Results   
+==================================
+Model:                         VAR
+Method:                        OLS
+Date:           Sat, 22, Jan, 2022
+Time:                     12:18:15
+--------------------------------------------------------------------
+No. of Equations:         3.00000    BIC:                   -20.9570
+Nobs:                     81.0000    HQIC:                  -21.1694
+Log likelihood:           530.324    FPE:                5.55300e-10
+AIC:                     -21.3118    Det(Omega_mle):     4.80536e-10
+--------------------------------------------------------------------
+Results for equation log_gsyh
+========================================================================================
+                           coefficient       std. error           t-stat            prob
+----------------------------------------------------------------------------------------
+const                         0.038849         0.007305            5.318           0.000
+L1.log_gsyh                  -0.161084         0.294664           -0.547           0.585
+L1.log_özel_tüketim           0.138520         0.289111            0.479           0.632
+L1.log_devlet_tüketim         0.116976         0.109211            1.071           0.284
+========================================================================================
+
+Results for equation log_özel_tüketim
+========================================================================================
+                           coefficient       std. error           t-stat            prob
+----------------------------------------------------------------------------------------
+const                         0.036118         0.007068            5.110           0.000
+L1.log_gsyh                   0.036795         0.285100            0.129           0.897
+L1.log_özel_tüketim          -0.090303         0.279726           -0.323           0.747
+L1.log_devlet_tüketim         0.151017         0.105667            1.429           0.153
+========================================================================================
+
+Results for equation log_devlet_tüketim
+========================================================================================
+                           coefficient       std. error           t-stat            prob
+----------------------------------------------------------------------------------------
+const                         0.039787         0.008402            4.735           0.000
+L1.log_gsyh                   0.441732         0.338945            1.303           0.192
+L1.log_özel_tüketim           0.004687         0.332556            0.014           0.989
+L1.log_devlet_tüketim        -0.279299         0.125623           -2.223           0.026
+========================================================================================
+
+Correlation matrix of residuals
+                      log_gsyh  log_özel_tüketim  log_devlet_tüketim
+log_gsyh              1.000000          0.920998            0.476790
+log_özel_tüketim      0.920998          1.000000            0.381554
+log_devlet_tüketim    0.476790          0.381554            1.000000
+</code></pre>
+</div>
+</div>
+</section>
+<section id="hataların-dizisel-ilişkisinin-kontrol-edilmesi" class="level2">
+<h2 class="anchored" data-anchor-id="hataların-dizisel-ilişkisinin-kontrol-edilmesi">3.5. Hataların Dizisel İlişkisinin Kontrol Edilmesi</h2>
+<p>Hatalarda (errors) herhangi bir artık model olup olmadığını kontrol etmek için hataların dizisel ilişkisi (serial correlation) kullanılır. Bu bizim için ne anlama geliyor? Hatalarda herhangi bir ilişki varsa, o zaman, zaman serilerinde hala model tarafından açıklanmaya bırakılan bir şeyler vardır. Bu durumda, yapılacak olan ya modelin gecikme sayısını arttırmak ya da sisteme daha fazla tahmin edici dahil etmek ya da zaman serisini modellemek için farklı bir algoritma aramaktır. Bu nedenle, dizisel ilişkiyi kontrol etmek, modelin zaman serilerindeki varyansları ve kalıpları yeterince açıklayabildiğinden emin olmaktır. Hataların dizisel ilişkisini kontrol etmenin yaygın bir yolu, Durbin-Watson test istatistiği kullanmaktır:</p>
+<p><span class="math display">\[
+D W=\frac{\sum_{t=2}^{T}\left(\left(e_{t}-e_{t-1}\right)^{2}\right)}{\Sigma_{t=1}^{T} e_{t}^{2}}
+\]</span></p>
+<p>Bu istatistiğin değeri 0 ile 4 arasında değişebilir. 2 değerine ne kadar yakınsa, anlamlı bir dizisel ilişki yoktur. 0’a ne kadar yakınsa pozitif bir dizisel ilşki vardır ve 4’e ne kadar yakınsa negatif dizisel ilişki vardır anlamına gelir.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> statsmodels.stats.stattools <span class="im">import</span> durbin_watson</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>hata_kontrolü <span class="op">=</span> durbin_watson(sonuçlar.resid)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col, val <span class="kw">in</span> <span class="bu">zip</span>(eğitim_verisi.columns, hata_kontrolü):</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(col, <span class="st">':'</span>, <span class="bu">round</span>(val, <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>log_gsyh : 1.79
+log_özel_tüketim : 1.78
+log_devlet_tüketim : 2.09</code></pre>
+</div>
+</div>
+<p>Dizisel ilişki olmadığını yaklaşık olarak söyleyebiliriz.</p>
+</section>
+<section id="öngörü" class="level2">
+<h2 class="anchored" data-anchor-id="öngörü">3.6. Öngörü</h2>
+<p>Doğrusal tahminci, ortalama kare hatası açısından en uygun h-adımlı öngörüdür:</p>
+<p><span class="math display">\[
+y_{t}(h)=\nu+A_{1} y_{t}(h-1)+\cdots+A_{p} y_{t}(h-p)
+\]</span></p>
+<p>Bu öngörüleri üretmek için <code>forecast</code> metodunu kullanabiliriz. Öngörü için “ilk değeri (initial value)” belirtmemiz gerekir:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>gecikme_sayısı <span class="op">=</span> sonuçlar.k_ar</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sonuçlar.forecast(test_verisi.values[<span class="op">-</span>gecikme_sayısı:], <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>array([[0.05016013, 0.0488857 , 0.04938092],
+       [0.0433173 , 0.04100672, 0.04838135],
+       [0.04321125, 0.04131548, 0.0456009 ],
+       [0.04294585, 0.0408638 , 0.04633208]])</code></pre>
+</div>
+</div>
+<p><code>forecast_interval</code> metodu, asimptotik standart hatalarla birlikte yukarıdaki öngörüleri üretecektir. Bunlar, <code>plot_forecast</code> metodu kullanılarak görselleştirilebilir:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sonuçlar.plot_forecast(<span class="dv">4</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="etki-tepki-analizi-impulse-response-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="etki-tepki-analizi-impulse-response-analysis">3.7. Etki-Tepki Analizi (Impulse Response Analysis)</h2>
+<p>VAR analizi ile, hata terimleri üzerinde değişkenlerin beklenmedik şoklarının ortaya çıkarılması bu yöntemin önemli bir özelliğidir. Etki tepki fonksiyonları, sistemde yer alan değişkenlere birer birimlik şok uygulandığında diğer değişkenlerin gösterdikleri tepkiyi göstermektedir. Buna bağlı olarak ilgili değişkenler üzerinde en etkili değişkenin bir politika aracı olarak kullanılıp kullanılamayacağı ortaya koyulmaktadır. Uygulamada, <span class="math inline">\(VAR(p)\)</span> sürecinin <span class="math inline">\(\mathrm{MA}(\infty)\)</span> temsili kullanılarak hesaplanır:</p>
+<p><span class="math display">\[
+Y_{t}=\mu+\sum_{i=0}^{\infty} \Phi_{i} u_{t-i}
+\]</span></p>
+<p>Etki-tepki analizini <code>irf</code> metodu ile gerçekleştirebiliriz:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>etki_tepki <span class="op">=</span> sonuçlar.irf(<span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Bunlar, ortogonalize edilmiş veya ortogonalize edilmemiş biçimde, <code>plot</code> metodu kullanılarak görselleştirilebilir. Asimptotik standart hatalar, varsayılan olarak, kullanıcı tarafından değiştirilebilen %95 önem düzeyinde çizilir.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>etki_tepki.plot(orth<span class="op">=</span><span class="va">False</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Bu çıktı şöyle yorumlanabilir: örneğin, özel tüketim harcamalarındaki şokun gsyh üzerindeki etkisi bir dönem sonra geçmektedir diyebiliriz.</p>
+<p><span class="math inline">\(\Psi_{n}=\sum_{i=0}^{n} \Phi_{i}\)</span> kümülatif etkileri, uzun dönem etkilerle birlikte çizilebilir:</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>etki_tepki.plot_cum_effects(orth<span class="op">=</span><span class="va">False</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+<section id="öngörü-hatası-değişinti-ayrıştırması-forecast-error-variance-decomposition-fevd" class="level2">
+<h2 class="anchored" data-anchor-id="öngörü-hatası-değişinti-ayrıştırması-forecast-error-variance-decomposition-fevd">3.8. Öngörü Hatası Değişinti Ayrıştırması (Forecast Error Variance Decomposition-FEVD)</h2>
+<p>Değişinti ayrıştırma yolu ile, değişkenlerin birbirini etkileme dereceleri bulunmaktadır. Bir i-adım ileri öngörüde j bileşeninin k üzerindeki öngörü hataları, ortogonalleştirilmiş etki-tepkiler <span class="math inline">\(\Theta_{i}\)</span>, kullanılarak ayrıştırılabilir:</p>
+<p><span class="math display">\[
+\begin{gathered}
+\omega_{j k, i}=\sum_{i=0}^{h-1}\left(e_{j}^{\prime} \Theta_{i} e_{k}\right)^{2} / \operatorname{MSE}_{j}(h) \\
+\operatorname{MSE}_{j}(h)=\sum_{i=0}^{h-1} e_{j}^{\prime} \Phi_{i} \Sigma_{u} \Phi_{i}^{\prime} e_{j}
+\end{gathered}
+\]</span></p>
+<p><code>fevd</code> metodunu burada hesaplama için kullanabiliriz:</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>değişinti_ayrıştırması <span class="op">=</span> sonuçlar.fevd(<span class="dv">4</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>değişinti_ayrıştırması.summary()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>FEVD for log_gsyh
+     log_gsyh  log_özel_tüketim  log_devlet_tüketim
+0    1.000000          0.000000            0.000000
+1    0.985582          0.001029            0.013388
+2    0.984642          0.001086            0.014273
+3    0.984469          0.001095            0.014435
+
+FEVD for log_özel_tüketim
+     log_gsyh  log_özel_tüketim  log_devlet_tüketim
+0    0.848238          0.151762            0.000000
+1    0.825404          0.151090            0.023505
+2    0.823303          0.150581            0.026117
+3    0.822877          0.150473            0.026650
+
+FEVD for log_devlet_tüketim
+     log_gsyh  log_özel_tüketim  log_devlet_tüketim
+0    0.227329          0.021838            0.750833
+1    0.259599          0.021038            0.719363
+2    0.259089          0.020734            0.720177
+3    0.259270          0.020691            0.720039
+
+</code></pre>
+</div>
+</div>
+<p>Bunlar, <code>fevd</code> metoduna bağlı <code>plot</code> metodu ile görselleştirilebilir:</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sonuçlar.fevd(<span class="dv">10</span>).plot()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="index_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
